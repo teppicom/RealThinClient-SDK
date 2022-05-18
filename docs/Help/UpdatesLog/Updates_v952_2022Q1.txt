@@ -1,0 +1,37 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************
+*                                                      *
+* RealThinClient SDK v9.52, released Janary 13th 2022. *
+*                                                      *
+********************************************************
+
+!!IMPORTANT!! In RTC SDK v9.00 and v9.50 updates, breaking changes were introduced.
+If you are updating from any older RTC SDK version (v6.x, v7.x or v8.x), 
+please read "Updates_v900_2017Q4.txt" and "Updates_v950_2019Q1.txt" files!
+
+---------------------------------------------------------
+* Changes in v9.52
+---------------------------------------------------------
+
+This update fixes the Error message that's been popping up when closing Delphi,
+which was caused by the ISAPI Application object being destroyed from ExitProc,
+when it should have been destroyed from the ISAPI App units finalization section.
+
+---------------------------------------------------------
+* Changes in v9.51
+---------------------------------------------------------
+
+This is a minor update to the "rtsSSecTest.pas" unit in the "LibPlugins" folder, 
+which makes it very easy to disable old cipher suites when using StreamSec Tools.
+
+As of March 2020, the major browsers no longer support TLS 1.0 and TLS 1.1.
+StreamSec Tools version 2.3 and version 4.0 both support TLS 1.2, so your
+server will continue to function, even without any changes to the settings.
+
+However, if you need security certification, you might have to show that your
+server only supports TLS 1.2 and up, and in such case you have to use
+StreamSec Tools 4.0 or later and set EnableLegacyTLS to False.
+
+By default, EnableLegacyTLS is set to TRUE.
+

@@ -9,16 +9,13 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = rtc_Raw.bpl rtc_DBA.bpl rtc_Gate.bpl
+PROJECTS = TcpMessages.exe UdpMessages.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-rtc_Raw.bpl: Lib\rtc_Raw.dpk
-  $(DCC)
-  
-rtc_DBA.bpl: Lib\rtc_DBA.dpk
+TcpMessages.exe: Raw_TCP\TcpMessages.dpr
   $(DCC)
 
-rtc_Gate.bpl: Lib\rtc_Gate.dpk
+UdpMessages.exe: Raw_UDP\UdpMessages.dpr
   $(DCC)

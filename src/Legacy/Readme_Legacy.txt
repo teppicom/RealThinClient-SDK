@@ -1,0 +1,1 @@
+Legacy components and examples, no longer supported, can be found here.

@@ -9,16 +9,30 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = rtc_Raw.bpl rtc_DBA.bpl rtc_Gate.bpl
+PROJECTS = RTCGateChatClient.exe RTCGateChatClient2.exe RTCGateChatClient3.exe \
+  RTCGateChatServer.exe RTCSimpleGateway.exe RTCGateTestClient.exe RTCGateNode.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-rtc_Raw.bpl: Lib\rtc_Raw.dpk
-  $(DCC)
-  
-rtc_DBA.bpl: Lib\rtc_DBA.dpk
+RTCGateChatClient.exe: GateChatClient\RTCGateChatClient.dpr
   $(DCC)
 
-rtc_Gate.bpl: Lib\rtc_Gate.dpk
+RTCGateChatClient2.exe: GateChatClient\RTCGateChatClient2.dpr
   $(DCC)
+
+RTCGateChatClient3.exe: GateChatClient\RTCGateChatClient3.dpr
+  $(DCC)
+
+RTCGateChatServer.exe: GateChatServer\RTCGateChatServer.dpr
+  $(DCC)
+
+RTCSimpleGateway.exe: GatewayTest\RTCSimpleGateway.dpr
+  $(DCC)
+
+RTCGateTestClient.exe: GatewayTest\RTCGateTestClient.dpr
+  $(DCC)
+
+RTCGateNode.exe: GatewayNode\RTCGateNode.dpr
+  $(DCC)
+

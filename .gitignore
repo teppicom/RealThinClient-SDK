@@ -1,5 +1,40 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# RTC-SDK-specific file extensions to ignore while committing changes
+*.bdsgroup
+*.groupproj*
+*.groupproj
+*.xml
+*.dpu
+*.otares
+*.il?
+*.err
+*.out
+*.lst
+*.dcuosx
+*.dcpil
+*.pdb
+*.bpl
+*.dcp
+*.rsp
+*.dcc
+*.bpl
+*.dof
+*.bak
+*.dll
+*.stat
+*.mps
+*.mpt
+*.map
+*.dsk
+*.ddp
+*.drc
+*.dproj*
+*.bdsproj
+*.lib
+*.compiled
+*.ppu
+
 # Delphi compiler-generated binaries (safe to delete)
 *.exe
 *.dll
@@ -35,11 +70,9 @@
 __history/
 __recovery/
 *.~*
-/src/fbReact/src/.vscode
-
-/data
-/out
-/sample
-/src/fbReact/build
-
-node_modules
+ModelSupport/
+Backup/
+Release/
+Release_Build/
+Debug/
+Debug_Build/

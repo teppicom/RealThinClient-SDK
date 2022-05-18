@@ -1,0 +1,51 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*****************************************************************
+*                                                               *
+* RealThinClient SDK v6.09 (2013.Q1), released March 30th 2013. *
+*                                                               *
+*****************************************************************
+
+---------------------------------------------------------
+* Changes in v6.09 (2013.Q1)
+---------------------------------------------------------
+
+1) "TRtcLoadBalanceClient:TRtcDataClientClass" added as a global variable to the rtcLoadBalancer unit, 
+   allowing the use of custom TRtcDataClient classes for Load Balancing (default class = TRtcHttpClient).
+
+---------------------------------------------------------
+* Changes in v6.08
+---------------------------------------------------------
+
+1) Fixed the "TRtcFileStream.ReadEx" method to work correctly with a negative Size parameter.
+
+2) Updated all Copyrights.
+
+---------------------------------------------------------
+* Changes in v6.07
+---------------------------------------------------------
+
+1) Quick Fix for the C++Builder XE3 problem with the "rtcDB.pas" unit.
+
+---------------------------------------------------------
+* Changes in v6.06
+---------------------------------------------------------
+
+1) Simple JSON Test Server used in the latest RTC SDK Stress-Tests 
+   was added (with source code) to the QuickStart folder.
+
+2) WebStress_Client was updated to include all the changes introduced in 
+   the latest RTC SDK Stress-Tests and is now available in the Tools folder.
+
+NOTE: There were no Library changes, this is a stable release.
+
+---------------------------------------------------------
+* Changes in v6.05 (2012.Q4)
+---------------------------------------------------------
+
+1) FireMonkey FishFact Client example extended with a "ModuleFileName" field,
+   so it can be used to communicate with a Server running as an ISAPI extension.
+
+2) "SDK" prefix added to all RTC SDK Package names.
+
+NOTE: This is a stable quarterly release.

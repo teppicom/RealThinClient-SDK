@@ -1,0 +1,17 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************************
+*                                                                  *
+* RealThinClient SDK v9.30 (2018.Q4), released November 29th 2018. *
+*                                                                  *
+********************************************************************
+
+!!IMPORTANT!! In the RTC SDK v9.00 update, some breaking changes were introduced.
+If you are updating from any older RTC SDK version (v6.x, v7.x or v8.x), read the
+"Updates_v900_2017Q4.txt" file if you get any compile errors in your Project(s)!
+
+---------------------------------------------------------
+* Changes between v9.29 and v9.30 (2018.Q4)
+---------------------------------------------------------
+
+1. Official Delphi 10.3 Rio support (added compiler defines and checked compatibility)

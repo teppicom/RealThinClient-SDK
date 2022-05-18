@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpl_usraccess.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Access settings</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+
+<!-- InstanceParam name="sections_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tab" -->
+
+<!-- InstanceParam name="usr_sections_tab_class" type="text" value="tab2" -->
+<!-- InstanceParam name="usr_packages_tab_class" type="text" value="tab2sel" -->
+
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both">
+<div id=adminarea>
+<p class="page_header">Administration Panel</p>
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsections&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab"  onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" --><strong>User: <%user%>. Package <%package_name%>. Edit access settings. </strong><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody">
+            
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab2" onMouseOver="this.bgColor='#F0F0F0';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsectionsaccess&user=<%user_login_enc%>&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab2sel" onMouseOver="this.bgColor='#F0F0F0';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacksaccess&user=<%user_login_enc%>&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table>  
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+			  <tr><!-- InstanceBeginEditable name="AccessRegion" --><td><form method="post" enctype="multipart/form-data"  onSubmit="return xValidateDate(this.expiredate);">
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="editpack">
+                <tr>
+                  <td width="200">Grant access to package</td>
+                  <td height="30" ><input name="grant" type="checkbox" <%grant_checked%>>
+                    </td>
+                </tr>
+                <tr>
+				  <td width="200">Expire date (YYYY-MM-DD)</td>
+                  <td height="30"><input id="expiredate" name="expiredate" type="text" class="expiredate" value="<%expiredate%>" maxlength="10">
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td height="30" colspan="2">
+                      <div align="center">
+                      <input name="cmd" type="hidden" value="savepacksaccess">
+                      <input name="pack_id" type="hidden" value="<%pack_id%>">
+                      <input name="user" type="hidden" value="<%user%>">
+                      <input name="sid" type="hidden" value="<%sid%>">
+                      <input type="submit" class="button" value="Submit">
+                      <input name="Cancel" type="button" class="button" id="Cancel" value="Cancel" onClick="document.location='?cmd=showpacksaccess&user=<%user%>&sid=<%sid%>'">
+                      </div></td>
+                </tr>
+                
+              </table>
+              </form></td><!-- InstanceEndEditable --></tr>
+ 			  <tr>
+ 			    <td>
+ 			      <form action="#" method="get">                       <div align="center">
+                          
+                      <input name="Back" type="button" class="button" id="Back" value="Back" onclick="document.location='?cmd=showusers&sid=<%sid%>'" />
+		                </div>
+			    </form></td></tr>
+            </table>
+            
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table></div>
+  </div>
+</body>
+<!-- InstanceEnd --></html>

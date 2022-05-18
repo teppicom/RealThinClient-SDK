@@ -1,0 +1,42 @@
+Ich glaube dass das Problem nicht mal so kompliziert ist, 
+wenn es generell bei FlashFxp und hl2 auftritt, 
+denn diese Anwendungen arbeiten ja dauerhaft mit hohen Ports.
+
+1. Starten Sie den Registrierungseditor (Start, Ausführen, "regedit").
+2. Suchen Sie folgenden Schlüssel in der Registrierung:
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+
+3. Klicken Sie im Menü Bearbeiten auf Wert hinzufügen und fügen Sie anschließend den folgenden Wert zur Registrierung hinzu:
+
+Name des Werts: MaxUserPort Datentyp: REG_DWORD Wert: 65534 (zum Beispiel)
+
+Gültiger Bereich: 5000-65534 (dezimal)
+Standardwert: 0x1388 (5000 dezimal)
+
+Beschreibung: Mit diesem Parameter wird die maximale Anzahl an Anschlüssen gesteuert, die verwendet wird, 
+wenn eine Anwendung einen verfügbaren Benutzeranschluss vom System anfordert. 
+Normalerweise werden kurzfristige Anschlüsse zwischen den Werten 1024 und 5000 (einschließlich) zugewiesen.
+
+4. Beenden Sie den Registrierungseditor.
+
+
+-------------------
+
+In Windows 95/98, this error may occur if you need to increase the maximum number of available TCP ports. 
+To increase the number of available ports, you will need to add or modify a value in the registry.
+
+Execute "regedit.exe".
+
+Go to HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VxD\MSTCP
+
+Windows 95
+Create a new DWORD named "MaxConnections". Set its value to something higher than 100 (Hex 64). 100 ports are default.
+
+Windows 98
+Create a new STRING named "MaxConnections". Set its value to something more than 100, e.g. to 256 (100 ports are default). 
+After restarting Windows the problem should be gone. These changes affect only the TCP/IP protocol!
+
+In Windows NT this step isn't necessary. Make sure you have enough RAM as well as virtual memory (1 GB min for NT, 2 GB for Windows 2K). 
+MaxConnections defaults to 12,800 for NT or 25,600 for 2K.
+

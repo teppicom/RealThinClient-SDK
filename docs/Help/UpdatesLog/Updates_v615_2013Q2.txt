@@ -1,0 +1,76 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+****************************************************************
+*                                                              *
+* RealThinClient SDK v6.15 (2013.Q2), released June 26th 2013. *
+*                                                              *
+****************************************************************
+
+---------------------------------------------------------
+* Changes in v6.15 (2013.Q2)
+---------------------------------------------------------
+
+1) Fixed a problem in the TRtcHttpServer component which could have caused an 
+   endless loop when reading Request content sent with Chunked Transfer Encoding.
+
+---------------------------------------------------------
+* Changes in v6.14
+---------------------------------------------------------
+
+1) Fixed a problem in the "rtcLog" unit which caused the "LOG" folder to be created 
+   directly under the root directory ("C:/") and the log file name to be set to ".LOG"
+   if the RTC_DEBUG compiler directive was declared (used for RTC DEBUG logging).
+
+2) Reduced WinInet and WinHTTP input buffers from 30KB to 16KB for 
+   improved reading performance and better bandwidth control.
+
+3) DisconnectNow(TRUE) updated to call "SkipRequests" if the connection is already closed,
+   to keep the results identical to calling DisconnectNow(TRUE) when the connection is open.
+
+---------------------------------------------------------
+* Changes in v6.13
+---------------------------------------------------------
+
+1) Fixed problems in the rtcTimer and rtcThrPool units, which could have resulted in
+   Applications using RTC Timers and/or Threads to wait up to 20 seconds before closing.
+
+2) RTC WebServer Demo updated to work a Windows Service with StreamSec Tools 2.1 (SSL encryption).
+   You need to have StreamSec Tools 2.1 or 2.2 installed in Delphi, and declare the 
+   compiler directive "StreamSecII" to compile the RTC WebServer Demo with SSL support.
+
+---------------------------------------------------------
+* Changes in v6.12
+---------------------------------------------------------
+
+1) Optimized WinInet and WinHTTP connection providers to reduce API calls to 1 (where possible)
+   and fixed a bug which could have caused the first request content chunk to be sent twice,
+   or the internal content length counters to get out-of-sync and start causing problems
+   when sending request content body in smaller pieces using the WinInet or WinHTTP APIs
+   (for example: when the "useProxy", "useSSL" or "useWinHTTP" property is set to TRUE).
+
+2) Added "ExpectedBytes" property to the "Response" object on the TRtcHttpClient
+   component to make it possible to read custom formatted input binary streams.
+
+NOTE: Delphi XE4 iOS support is still in BETA.
+
+---------------------------------------------------------
+* Changes in v6.11 (BETA)
+---------------------------------------------------------
+
+1) Replaced all "TList" declarations with a new TObjectList class (TList<TObject>)
+   to fix problems caused by ARC (Automatic Refference Counting), where objects 
+   inside a List where auto-destroyed when their original pointers went out of scope.
+
+2) Fixed a compile error in the rtcZLib unit (compression and decompression)
+
+---------------------------------------------------------
+* Changes in v6.10 (BETA)
+---------------------------------------------------------
+
+1) First RTC SDK version which compiles with Delphi XE4 and shows the
+   first signs of functionality on the iOS Simulator and the iOS Device.
+
+   There have been a LOT of changes in this release (over 50 files) and
+   a number of them will probably have an effect on other platforms as well,
+   so ... do NOT use this release for your production environments!
+

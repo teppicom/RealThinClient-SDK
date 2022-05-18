@@ -1,0 +1,10 @@
+;This help file was created with HelpScribble 7.7.1
+;Licensed to: SandSpeaker Software
+
+:BASE WizHelp.hlp
+:TITLE RTC Remote Functions Wizard
+1 Remote Functions Wizard
+2 Overview=Scribble10
+2 Setup Page=Scribble20
+2 Functions Page=Scribble30
+2 Valid Datatypes=Scribble40

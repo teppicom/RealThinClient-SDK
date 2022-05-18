@@ -1,0 +1,96 @@
+  <!DOCTYPE html>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+  <script language="javascript" type="text/javascript">
+
+  var wsUri = "ws://localhost/";
+  var output;
+  var cnt = 15;
+
+  function init()
+  {
+    output = document.getElementById("output");
+    testWebSocket();
+  }
+
+  function testWebSocket()
+  {
+    websocket = new WebSocket(wsUri);
+    websocket.binaryType = "arraybuffer";
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt)
+  {
+    writeToScreen("CONNECTED");
+    doSend("WebSocket rocks");
+  }
+
+  function onClose(evt)
+  {
+    writeToScreen("DISCONNECTED");
+  }
+
+  // For todays date;
+  Date.prototype.today = function () { 
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+  }
+
+// For the time now
+  Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+  }
+  
+  function onMessage(evt)
+  {
+    var newDate = new Date(); 
+    var datetime = " -> Received at " + newDate.today() + " @ " + newDate.timeNow();
+    
+    if(evt.data instanceof ArrayBuffer)
+      {
+      var bytearray = new Uint8Array(evt.data);
+      writeToScreen('<span style="color: blue;">RECEIVED ' + bytearray.buffer.byteLength+' (BINARY) Bytes '+datetime+'</span>');
+      websocket.send(bytearray.buffer);
+      }
+    else
+      {
+      writeToScreen('<span style="color: blue;">' + evt.data+' '+datetime+'</span>');
+      websocket.send(evt.data);
+      }
+  }
+
+  function onError(evt)
+  {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+    websocket.close();
+  }
+
+  function doSend(message)
+  {
+    writeToScreen("SENT: " + message);
+    websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+
+    if (cnt>0) {cnt=cnt-1;}
+    else {output.removeChild(output.lastChild);}
+    
+    output.insertBefore(pre,output.firstChild); // appendChild(pre);
+  }
+
+  window.addEventListener("load", init, false);
+
+  </script>
+
+  <h2>WebSocket Test</h2>
+
+  <div id="output"></div>
+          

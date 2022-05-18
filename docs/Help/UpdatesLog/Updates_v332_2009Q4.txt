@@ -1,0 +1,636 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+**********************************************************
+*                                                        *
+* RealThinClient SDK v3.32 (2009.Q4), October 30th 2009. *
+*                                                        *
+**********************************************************
+
+---------------------------------------------------------
+* RTC SDK 3.32
+---------------------------------------------------------
+
+1) Updated the rtcSSecPlugin unit with the latest version from StreamSec.
+
+2) Multiple Cookies received in a single HTTP request/response will now be read as separate HTTP header values.
+
+3) Demos updated to work out-of-the-box on the latest Windows versions.
+   The problem with some RTC SDK Demos was a too small stack size value, because of which sockets did not work 
+   after Microsoft has released some updates in the WinSock API which require more stack for sockets to be created.
+
+---------------------------------------------------------
+* RTC SDK 3.31
+---------------------------------------------------------
+
+1) "TimeoutsOfAPI" property added to TRtcHttpClient, TRtcHttpServer, TRtcTCPClient and TRtcTCPServer components.
+
+   This new property can be used to directly set all timout parameters for the underlying WinSock, WinInet or WinHTTP API.
+
+   Available sub-properties of the "TimeoutOfAPI" property are:
+
+    { A value of type integer that specifies the time-out value, in seconds, to use for name
+      resolution. If resolution takes longer than this time-out value, the action is canceled.
+      Applies to WinHTTP
+      Set to zero (0) to use the operating system default. }
+    property ResolveTimeout:Integer read fResolveTimeout write fResolveTimeout default 0;
+
+    { A value of type integer that specifies the time-out value, in seconds, to use for
+      server connection requests. If a connection request takes longer than this time-out value,
+      the request is canceled.
+      Applies to WinINET and WinHTTP and WinSock
+      Set to zero (0) to use the operating system default. }
+    property ConnectTimeout:Integer read fConnectTimeout write fConnectTimeout default 0;
+
+    { A value of type integer that specifies the time-out value, in seconds, to use for sending
+      requests. If sending a request takes longer than this time-out value, the send is canceled.
+      Applies to WinINET and WinHTTP and WinSock
+      Set to zero (0) to use the operating system default. }
+    property SendTimeout:Integer read fSendTimeout write fSendTimeout default 0;
+
+    { A value of type integer that specifies the time-out value, in seconds, to receive a
+      response to a request. If a response takes longer than this time-out value, 
+      the request is canceled.
+      Applies to WinINET and WinHTTP and WinSock
+      Set to zero (0) to use the operating system default. }
+    property ReceiveTimeout:Integer read fReceiveTimeout write fReceiveTimeout default 0;
+
+    { A value of type integer that specifies the time-out value, in seconds, to wait to receive
+      all response headers to a request. If a response takes longer than this time-out value,
+      the request is canceled.
+      Applies to WinHTTP
+      Set to zero (0) to use the operating system default. }
+    property ResponseTimeout:Integer read fResponseTimeout write fResponseTimeout default 0;
+
+2) CryptObject property added to all HTTP/S connection components, which can be used to access the 
+   encryption object associated to the physical connection through the "CryptPlugin" component.
+
+3) New Script Plugin for StreamSec Tools 2.1 included, now with improved performance and access to a
+   number of encryption parameters through the new CryptObject property on HTTP/S connection components
+   (cast the CryptObject property to TRtcSSecConnCryptObject and check "rtcSSecPlugin.pas" unit for details).
+
+---------------------------------------------------------
+* RTC SDK 3.30
+---------------------------------------------------------
+
+1) License updated to Free BSD (least restrictive license available).
+
+---------------------------------------------------------
+* RTC SDK 3.29
+---------------------------------------------------------
+
+1) Fixed an issue reported when using the WinHTTP API implementation with some Proxy servers.
+
+   It looks like some blocking API calls, even though they are declared as "blocking" require
+   that memory pointers passed to calls remain intact until a response is received. And this 
+   has required a minor change in the way data was being passed to some WinHTTP and WinInet calls.
+
+---------------------------------------------------------
+* RTC SDK 3.28
+---------------------------------------------------------
+
+1) Declared WINHTTP_RECV_TIMEOUT and WINHTTP_SEND_TIMEOUT as global variables 
+   in the "rtcWinHttpCliProv.pas" unit, with default value -1, meaning 
+   that NO changes should be made to standard Windows timeout values.
+
+2) Removed the new "DirectWrite" property on the TRtcHttpClient component (introduced in v 3.20)
+   because the underlying changes have been causing problems in the automatic reconnect feature
+   when using the WinInet or WinHTTP API (both working in blocking mode).
+
+3) DateTime2ISOStr and ISOStr2DateTime functions made public in the "rtcInfo.pas" unit.
+
+4) Fixed a bug in the Str2DateTime and ISOStr2DateTime which have been 
+   negating time values if there was no date specified in the string.
+
+---------------------------------------------------------
+* RTC SDK 3.27
+---------------------------------------------------------
+
+1) License Agreement updated.
+   For more information, please check the "license.txt" file.
+
+---------------------------------------------------------
+* RTC SDK 3.26
+---------------------------------------------------------
+
+1) Str2DateTime and ISOStr2DateTime functions fixed to also work for Time-only values (if no date was specified).
+
+2) New "Min PageViewes", "Max PageViews", "Min Time on Site" and "Max Time On Site" filters added 
+   to the Rtc WebServer Log Analyzer (under "Tools\WebServer_LogReader") and general "page" filtering improved.
+
+---------------------------------------------------------
+* RTC SDK 3.25
+---------------------------------------------------------
+
+1) Remote Function Wizard included in the package was missing the Template file, because "_clear.bat" was deleting it. 
+   The file is now there again and "_clear.bat" has been fixed to NOT delete "*.TXT" files anymore.   
+
+---------------------------------------------------------
+* RTC SDK 3.24
+---------------------------------------------------------
+
+1) Updated low-level WinHTTP API implementation of the TRtcHttpClient component to use 
+   a 30 minute timeout for sending and receiving data, so connections do not get dropped
+   if a Server takes longer time to respond. Timeout value can also be changed by using the 
+   new WINHTTP_RECV_TIMEOUT and WINHTTP_SEND_TIMEOUT variables in the "rtcWinHttpCliProv.pas" unit.
+
+---------------------------------------------------------
+* RTC SDK 3.23
+---------------------------------------------------------
+
+1) Fixed a bug in the URL_Encode function.
+
+2) Fixed warnings in Delphi 2009 and C++Builder 2009 caused by updates released in RTC SDK 3.21 and 3.22
+
+3) Added rtcSDK_C.bpk package for use with C++Builder 6 and up.
+
+---------------------------------------------------------
+* RTC SDK 3.22
+---------------------------------------------------------
+
+1) To keep the "Value" and "ItemValue" properties implementations as close to the original implementation as possible, 
+   while taking in account the new and extended implementation which also works with arrays, reading the "Value" or 
+   "Itemvalue" property will now return the last element from the array, while writing to the "Value" or "ItemValue" 
+   property changes the value of the last element in the array. Assigning an empty string to the "Value" or "ItemValue" 
+   property will remove the last element from the array (or clear the array if it had only 1 element).
+
+---------------------------------------------------------
+* RTC SDK 3.21
+---------------------------------------------------------
+
+1) Added "ElementCount" and "Element" properties to the "Params", "Query" and "Cookies" properties, which are
+   available on the "Request" and "Response" properties of the TRtcDataClient and TRtcDataServer components.
+
+   This makes it easy to send and receive arrays of elements (multiple elements with the same name)
+   when working with TRtcDataRequest and TRtcDataProvider components.
+
+---------------------------------------------------------
+* RTC SDK 3.20
+---------------------------------------------------------
+
+1) A better implementation of the new "DirectWrite" property.
+
+   Buffering will now only be enforced when Write or WriteHeader methods are being called from inside an event.
+   If buffering would always be used, the "Flush" method would have to be called after Write or WriteHeader 
+   methods used from outside events. Since it was not necessary in prior RTC SDK versions to use the "Flush" 
+   method when Write or WriteHeader were being used outside of events and the default setting fo DirectWrite 
+   is now FALSE, buffering outside of events could break some old RTC code. This update eliminates that problem.
+
+2) Fixed a possible issue with using the "Release" method from inside the TRtcHttpClient component.
+
+3) Fixed the method used to determine if the current code is being executed from inside an event.
+
+---------------------------------------------------------
+* RTC SDK 3.19
+---------------------------------------------------------
+
+1) Added a new "DirectWrite" property to the "TRtcHttpClient" component with the default value = FALSE.
+
+   When DirectWrite = FALSE, all calls to Write and WriteHeader will be buffered to minimize the 
+   number of API calls and to use background threads for sending data when MultiThreaded=TRUE, even 
+   if the "Write" and "WriteHeader" methods were called from events synchronized with the Main Thread.
+
+   Anyone who wants to use the old implementation, which was sending data out immediately on the call 
+   to the Write method if WriteHeader was called before, can set the DirectWrite property to TRUE.
+
+2) "RTCHelp.CHM" Help file added to the package (inside the "Help" folder). 
+
+---------------------------------------------------------
+* RTC SDK 3.18
+---------------------------------------------------------
+
+1) There was a problem in the TRtcHttpClient component which would cause a stack overflow error when 
+   the client would try to send out a large amount of data (1 GB+) in a single request with "useSSL", 
+   "useProxy" or "useWinHTTP" properties set to TRUE. This has now been fixed, so the TRtcHttpClient 
+   component can be safely used for sending out large files or data streams of any size.
+
+---------------------------------------------------------
+* RTC SDK 3.17
+---------------------------------------------------------
+
+1) Fixed a minor bug in XML-RPC code which was left over while porting RTC SDK to D2009.
+
+2) Added a work-around for XML-RPC servers and clients which require all string values to be enclosed 
+   in "<value><string> </string></value>" even though the XML-RPC format allows "<value> </value>" 
+   to be used when sending string data. This change applies to the following RTC types:
+     - rtc_Variable
+     - rtc_String
+     - rtc_Text
+     - rtc_WideString
+
+   Because this work-around will generate a bit more traffic than using the original code, in case 
+   the servers and clients you are communicating with do not have this requirement and you need to keep 
+   your traffic as low as possible, you can disable this work-around by defining the RTC_XMLRPC_VALUESTRING
+   compiler directive in your Project(s). But if you are not bothered with a bit more traffic and want 
+   your RTC Clients/Servers to be compatible with as many XML-RPC clients and servers as possible, then 
+   there is nothing special you need to do (simply do NOT define the above compiler directive).
+
+---------------------------------------------------------
+* RTC SDK 3.16
+---------------------------------------------------------
+
+1) Fixed a bug which made it impossible to work with content lengths above 2 GB, 
+   because of which RTC Servers compiled with one of the RTC SDK 3.x versions were 
+   unable to serve files larger than 2 GB. This update also fixes some problems 
+   with the RTC Portal VCL, since the RTC Portal VCL is based on the RTC SDK.
+
+---------------------------------------------------------
+* RTC SDK 3.15
+---------------------------------------------------------
+
+1) If more than one Cookie is received from a WebServer in a single response, all cookies 
+   will now be stored in the "Response.Cookies" property and not only the last cookie found 
+   in the HTTP header (which was the case with prior RTC SDK versions). This update is required
+   if you need to use the RTC SDK to emulate the behavior of a user working with a Browser to 
+   run through websites which are sending multiple cookies in a single response 
+   (when there can be more than one "SET-COOKIE" header in the response).
+
+---------------------------------------------------------
+* RTC SDK 3.14
+---------------------------------------------------------
+
+1) Added new functions for generating MD5 Hash values to the "rtcMD5.pas" unit.
+
+   Now, you can get a hash from any string, formatted in 5 different ways,
+   so you can choose the format which best suits your purpose.
+
+   function MD5Str - returns a standard hash string
+     * Example: '<$hash!>'
+
+   function MD5asGUID - returns a hash formatted as a GUID
+     * Example: '<$guid!>'
+
+   function MD5Code - returns a hash formatted using special RTC 32bit encoding 
+     * Example: '<$code!>'
+
+   function MD5Code6bit - returns a hash formated using special RTC 64bit encoding
+     * Example: '<$code6!>'
+   
+   function MD5Code8bit - returns a hash in plain binary format 
+     * No encoding, raw data as 16 characters/bytes
+
+---------------------------------------------------------
+* RTC SDK 3.13
+---------------------------------------------------------
+
+1) Fixed a bug in new MD5 functions ("rtcMD5.pas" unit) because of which automated 
+   caching did not work in the last few versions of the RTC WAF Server and Player.
+
+   Now, RTC WAF Player will correctly be caching content like Forms and images locally,  so it does 
+   not have to be reloaded from the Server every time, as long as it remains unchanged on the Server.
+
+2) "Font.Size" and "Font.Height" properties will now always be sent as "Font.Size" instead of "Font.Height"
+   to compensate for differences in screen resolution and "PixelsPerInch" settings between clients.
+
+---------------------------------------------------------
+* RTC SDK 3.12
+---------------------------------------------------------
+
+1) New "FixupRequest" property for all TRtcDataServer components (TRtcHttpServer, TRtcISAPIServer and TRtcMessageServer).
+   FixupRequest property has several sub-properties which can be enabled to automate request processing.
+
+   Here is the list of new properties and their explanation:
+
+   * property RemovePrefix:boolean;
+   -  You can set this property to TRUE to allow the component to automatically remove
+      the "http://domain.com:port/" and "https://domain.com:port/" part from Request.FileName,
+      so that your Web Server can also work with HTTP Proxy Servers who do not properly
+      process the URI before forwarding the request. The only reason why should should NOT set
+      this property to TRUE is if you do not want your Server to work with badly implemented
+      Proxy Servers or if you are using the component to implement a HTTP Proxy server and
+      need the URL Prefix (http://...) to determine the destination of each request. }
+
+   * property DecodeFileName:boolean;
+   -  To have the HttpServer component decode the FileName part of the Request automatically,
+      so you do not have to use URLDecode on "Request.FileName", set this to TRUE.
+      Note that if you do this, you have to avoid using URLDecode on Request.FileName anywhere
+      in your code, because doing URLDecode twice on the same string could give you wrong results. }
+
+   * property DecodeQuery:boolean read FDecodeQuery write FDecodeQuery default False;
+   -  To have the HttpServer component decode the Query part of the Request automatically,
+      so you do not have to use URLDecode on "Request.Query" elements, set this to TRUE.
+      Note that if you do this, you have to avoid using URLDecode on Request.Query anywhere
+      in your code, because doing URLDecode twice on the same string could give you wrong results. }
+
+   * property UpperCaseFileName:boolean read FUpperCaseFileName write FUpperCaseFileName default False;
+   -  If you want to process all your requests by allowing the user to use mixed casing
+      while you only check for the uppercase version of the string in Request.FileName,
+      set this to TRUE and Request.FileName will always be converted to UpperCase.
+      Note that doing this would also make any code which checks for lowercase versions
+      of strings in Request.FileName non-functional, because all lowercase letters will
+      be converted to uppercase before anything can access the Request.FileName property. }
+
+
+2) New "FixupRequest" property for all TRtcDataClient components (TRtcHttpClient and TRtcMessageClient).
+   FixupRequest property has a few sub-properties which can be enabled to automate request preparation.
+
+   * property EncodeFileName:boolean read FEncodeFileName write FEncodeFileName default False;
+   -  To have the Client component encode the FileName part of the Request automatically,
+      so you do not have to use URL_Encode on "Request.FileName", set this to TRUE.
+      Note that if you do this, you have to avoid using URL_Encode on Request.FileName anywhere
+      in your code, because doing URL_Encode twice on the same string could give you wrong results. }
+
+   * property EncodeQuery:boolean read FEncodeQuery write FEncodeQuery default False;
+   -  To have the Client component encode the Query part of the Request automatically,
+      so you do not have to use URL_Encode on "Request.Query" elements, set this to TRUE.
+      Note that if you do this, you have to avoid using URL_Encode on Request.Query anywhere
+      in your code, because doing URL_Encode twice on the same string could give you wrong results. }
+
+
+3) New "FilePath" property in the TRtcRequest class, making read and write access 
+   to separate elements of the "Request.FileName" property easy and fully automated.
+   The new "Request.FilePath" property is directly linked to the existing "Request.FileName" 
+   property, so that you can use both properties in any combination you want.
+
+   The new FilePath property can be used to check how many elements the File Path has,
+   to read and write each element separately and to set the FilePath to any length (crop).
+   This makes the new FilePath property ideal for use in writing "REST" Clients and Servers.
+
+4) FixupRequest.RemovePrefix property set to TRUE in all RTC Server and ISAPI Demos.
+
+5) Fixed a bug in the Server-side code responsible for parsing MULTIPART FORM DATA from a Browser.
+
+6) Made a few changes in the RTC Web App Framework to improve handling of Fonts in the IDE.
+   In particular, now changes in parent controls Font will correctly be reflected in child 
+   controls which have their "ParentFont" property set to TRUE.
+
+7) Added "IDE_Link" property to TRtcForm, which makes the use of the undocked Form designer,
+   which is the default designer in Delphi 6 and Delphi 7 (can also be enabled in Delphi 2005 and up).
+   Default value for "IDE_Link" will be TRUE in Delphi 6, 7 but FALSE in later Delphi versions,
+   since the forms designer there is tucked on to a parent form. You can change the IDE_Link
+   property at design-time in any IDE, but the value will NOT be stored to avoid problems when
+   moving your forms between IDEs.
+
+8) Set "Arial" as the default Font on all RTC WAF and WAC components, because the "MS Sans Serif" 
+   font is not available on non-MS platforms (Linux and MacOSX) and Forms designed with "MS" fonts 
+   would look differently when there is no "MS" font available on the Client/Player OS.
+
+9) Corrected "IDE_2005up" and "IDE_2006up" defines in the "rtcDefs.inc" file.
+
+10) Updated the URL_Decode function from the "rtcInfo.pas" unit with a new "Strict:boolean" 
+    parmeter (defaults to FALSE) which will ignore any errors in URL encoding and give you
+    the best possible result without raising an exception. When String is TRUE, the function
+    will behave as it did before, raising an exception if there are any inconsistencies in the string.
+
+11) Updated the URL_Encode function with a new parameter "Safe:boolean" (false by default), 
+    which now makes it possible to URL_Encode the whole Query.Text without messing up special
+    characters like ";",  "?", "&" and "=". The number of characters which will NOT be encoded
+    has also been increased, adding a few more special characters to the "non-encode" list.
+
+---------------------------------------------------------
+* RTC SDK 3.11
+---------------------------------------------------------
+
+1) RTC Web Application Framework now also for Lazarus
+
+   RTC SDK can now be used for writing client-side RTC WAF components which can 
+   be compiled into native RTC WAF Players for different platforms, so that your 
+   RTC Web Applications (written in Delphi for Windows) can be accessed by users
+   running Windows, Linux and MacOSX. How much of the functionality from your
+   Windows application each Player will be capable of displaying will only 
+   depend on the implementation of client-side components for RTC WAF and Lazarus.
+
+2) TRtcWafClientModule now also for Lazarus (cross-platform)
+
+   TRtcWafClientModule is a generic RTC Web Applications Player component
+   which allows you to compile your own Client for running RTC Web Applications
+   powered by the RTC SDK and its new TRtcWafServerModule.
+
+3) New "RTC WAF Player" Sample project for Lazarus (cross-platform)
+
+   The same way you can use the RTC WAF Player sample project for Delphi to compile a
+   native RTC WAF Player for Windows, you can use the Lazarus RTC WAF Player project
+   to compile a native RTC WAF Player for Linux and MacOSX. To add more functionality 
+   to your cross-platform web application player, you will only need to include units 
+   implementing client-side RTC Web Applciation Components for Lazarus.
+
+---------------------------------------------------------
+* RTC SDK 3.10
+---------------------------------------------------------
+
+1) New component: TRtcWafServerModule  ("RTC Server" tab)
+
+   TRtcWafServerModule component is a generig RTC WAF Server implementation
+   with everything a RTC Web Application Server needs besides a RTC Server 
+   connection component. It can be linked directly to a TRtcHttpServer, 
+   TRtcMessageServer or TRtcISAPIServer component, providing all the 
+   functionality needed to compile your forms and data modules into a 
+   RTC Web Application Server, so that your forms, datamodules and code
+   can be remotely used from a RTC WAF Player.
+
+2) New component: TRtcWafClientModule ("RTC Client" tab)
+
+   TRtcWafClientModule is a generic RTC Web Applications Player component
+   which allows you to compile your own Client for running RTC Web Applications
+   powered by the RTC SDK and its new TRtcWafServerModule.
+
+3) New "RTC WAF Server" and "RTC WAF Player" Sample projects included
+
+   You can now find a Sample Shell of a RTC WAF Server and Player under Demos/RTC_WAFSample.
+
+   Both projects compile and run by using only the RTC SDK and are perfect shell projects for writing
+   RTC Web Application Servers and Players. But, since the RTC SDK only includes the TRtcForm as a 
+   visual component, that is the only component you will be able to use in your RTC Web Applications
+   unless you use RTC WAC (Web Application Components), write your own proxy classes or components for
+   the RTC W/A Framework or get components for the RTC W/A Framework from a third-party component vendor.
+
+   These sample projects are empty shells which are best used as a starting point for new applications.
+   If you have access to RTC WAC and are looking for an example which uses more components, please
+   check the projects under "Demos/ClientServer" from the RTC WAC package.
+
+---------------------------------------------------------
+* RTC SDK 3.09
+---------------------------------------------------------
+
+1) Fixed a bug in the GetServerVariable function used by the RTC WebServer when hosting ISAPI extensions.
+
+---------------------------------------------------------
+* RTC SDK 3.08
+---------------------------------------------------------
+
+1) Icons for RTC SDK components are now also available for the Lazarus IDE (not only Delphi).
+   
+   This means that you won't have to guess what components there are in the Lazarus component 
+   palette when using the RTC SDK with Lazarus, since each component now has the apropriate image.
+
+2) Added "cthreads" unit to the uses clause in the Lazarus_Server example in the QuickStart folder.
+
+---------------------------------------------------------
+* RTC SDK 3.07
+---------------------------------------------------------
+
+1) Minor Unicode support update for D2009.
+
+---------------------------------------------------------
+* RTC SDK 3.06
+---------------------------------------------------------
+
+1) Fixed the QuickStart/Lazarus_Server example for Linux and MacOSX (set "MultiThreaded" property to TRUE).
+
+2) Updated the README file with pointers to instructions for installing RTC SDK in Lazarus/FPC for Windows, Linux and MacOSX
+
+
+** MOTE IMPORTANT NOTES about RTC SDK 3.06 for Lazarus/FPC **
+
+1) Linux and MacOSX support in the RTC SDK 3.06 is only in the first BETA. Applications compiled with RTC SDK 3.06 for Linux and MacOSX should NOT be used in a productive environment. Only applications compiled for Windows (using Delphi or Lazarus/FPC) can be used in a productive environment.
+
+2) Support for writing ISAPI extensions is NOT available for Lazarus/FPC, so you will have to continue using Delphi if you need to be able to deploy your Server code as ISAPI extensions (which, btw, work only on Windows). 
+
+3) Automatic compression for RTC remote functions is NOT available under Lazarus/FPC. This also means that you should not use automatic compression with RTC remote functions in your Delphi applications if they need to communicate with your applications compiled with Lazarus/FPC.
+
+4) Web Applications Framework (part of the RTC SDK for Delphi) is not available under Lazarus/FPC. This is because the Framework is currently based on VCL for Delphi.
+
+5) Third-party plugins for SSL support (StreamSec Tools and SecureBlackBox from Eldos) are only available for Delphi. The same goes for third-party transport plugins (like the NexusDB transport plugin).
+
+6) If you should decide to move your RTC Applications to Lazarus/FPC, you should start with Lazarus/FPC for Windows, because the RTC SDK 3.05 compiled with Lazarus/FPC for Windows is generally using the same code-base as the RTC SDK compiled under Delphi. This will provide you with comparable stability and functionality under Lazarus/FPC as you are already used to with Delphi for Windows, while allowing you to compile your applications with Lazarus/FPC for Linux and MacOSX to test how they behave on non-Windows platforms.
+
+
+** HOW TO INSTALL LAZARUS 0.9.26 AND RTC SDK 3.06 IN UBUNTU? **
+
+If you are also using uBuntu (or some other Debian Linux version), do NOT use "their" Lazarus package and do NOT enable installation of community-supported (universe) packages, or you might end up installing files from Lazarus 0.94 and FPC 2.2.0 instead of what you have downloaded. 
+
+The packages I've used with ubuntu are "fpc-2.2.2-3-debs.tgz" and "lazarus-0.9.26-0-debs.tgz", both available in the "Lazarus Linux i386 DEB" group on SourceForge:
+http://sourceforge.net/projects/lazarus
+
+FPC and Lazarus installation will take a while because you will need to unpack all files into a local folder and install package files one-by-one in a specific order. If you try to install a package which requires some other package, ubuntu package manager will warn you about a missing dependency, so you will know which package to install before you can install the one you have just opened. After completing the FPC installation, before you can install the Lazarus IDE package, after all the other packages have been installed which you have downloaded, Lazarus IDE package will moan about a missing dependency starting with "libc". To install that package, you have to open up "Synaptic Package Manager" which you can find under "System / Administration" on the uBuntu menu. Simply search for the missing package (by name - as asked for by the Lazarus IDE package) and install it, then close the Package Manager and open the Lazarus IDE package. You should then be able to complete the Lazarus installation on ubuntu Linux.
+
+Once finished with the last Lazarus package, you will see a new "Lazarus" entry in the ubuntu menu under "Applications / Programming". This is how you will be able to start Lazarus *after* you have installed the RTC SDK package (or any other third-party packages you might need), but in order to install the RTC SDK package, you will have to start Lazarus as a superuser "root". To do this, open up a Terminal window and use the "su" commant to enter superuser mode, move to the Lazarus folder (it should be located at "usr/lib/lazarus" and execute "lazarus-ide". If you see Lazarus 0.9.6 popup and Lazarus opens, you can download the RTC SDK 3.05 package, unpack it somewhere in your "home" folder, open up the "rtcsdk_fpc" package in Lazarus, compile and install it. After Lazarus recompiles and starts up again, check if you see "RTC Server" and "RTC Client" tabs in the Lazarus components palette. They should now be there. After the RTC SDK installed, close Lazarus and the Terminal window and start it up as a normal user by using the "Lazarus" link under "Applications / Programming" in the ubuntu menu. 
+
+Once Lazarus starts up, you should be able to use the RTC SDK components.
+
+** HOW TO INSTALL LAZARUS 0.9.26 AND RTC SDK 3.06 ON MACOSX? **
+
+On MacOSX, the installation is a lot easier because there are installation files for PowerPC and Intel-based Macs. Just remember to install FPC before installing Lazarus, or you will have to manually edit FPC folder locations on your first Lazarus start. If you are the Admin on MacOSX, you will not need to use a Terminal window to compile RTC SDK and have Lazarus built. Simply start up Lazarus (using the "Start Lazarus" icon) and you can open up, compile and install the RTC SDK package. Lazarus will restart and you will see the "RTC Client" and "RTC Server" tabs in Lazarus components palette.
+
+** HOW TO INSTALL LAZARUS 0.9.26 AND RTC SDK 3.06 ON WINDOWS? **
+
+On Windows, the installation is very easy. Just download the file "lazarus-0.9.26-fpc-2.2.2-win32.exe" from SourceForge (Windows packages) and go throught the installation process. After installation finishes, you should be able to start up Lazarus, then open, compile and install the RTC SDK package. Lazarus will restart and you will see the "RTC Client" and "RTC Server" tabs in Lazarus components palette.
+
+I haven't tested the RTC SDK on other Linux distributions, but once you manage to install FPC and Lazarus and have write access rights in the folder where Lazarus is installed, you should be able to install the RTC SDK.
+
+
+---------------------------------------------------------
+* RTC SDK 3.05
+---------------------------------------------------------
+
+Fixed a minor issue with the FPC 2.2.0 compiler.
+
+---------------------------------------------------------
+* RTC SDK 3.04 - First BETA for Linux and MacOSX
+---------------------------------------------------------
+
+1) This is the first RTC SDK edition (BETA) which can be used with Lazarus
+   for writing native Windows, Linux and MacOSX Clients and Servers.
+
+   When RTC SDK is compiled for Windows (either with Delphi or Lazarus),
+   Windows API is being used directly, so there are no changes to existing
+   Windows Applications using the RTC SDK (highest stability and performance).
+
+   On the other hand, When the RTC SDK is compiled for Linux or MacOSX, 
+   proxy functions and classes which emulate Async WinSock operations will be used.
+
+   Implementation of these "ASync WinSock emulation" classes works in a small
+   test environment with a few connections, but does not (yet) work under heavy
+   load, so please do NOT start dreaming about all your Servers running under
+   Linux or MacOSX - yet. We are working on finding a solution which would 
+   work better under heavy load, but the current version is only to be seen 
+   as our first working BETA, which will first need to undergo a lot of
+   bug-fixing and optimization.
+
+   There are also no icons for components under Lazarus yet, 
+   so that all components will look the same.
+
+   And ... in order for your applications to work on Linux or MacOSX,
+   you will have to set the MultiThreaded property of RTC Client and Server
+   components to true and handle synchronization with the main thread where
+   necessary. Since the application will be multithreaded and Lazarus/FPC have
+   a requirement that the "cthreads" unit is the first one in the USES list of
+   any project using threads, you will need to make sure that the "cthreads" 
+   units is the first unit in your project files USES clause.
+
+   WARNING: When installing RTC SDK in Lazarus on Linux or MacOSX, use the
+   "rtcsdk_fpc.lpk" package file and make sure that "-dUseCThreads" is defined
+   under Package Optins for that package before you Install it, or you could
+   end up with an IDE which does not load because "cthreads" unit is not the
+   first one it Lazarus project USES clause.
+
+2) "Lazarus_AppClient" and "Lazarus_AppServer" Projects added in Demos.
+
+   These are basically the same projects as "App_Client" and "App_Server",
+   but created for Lazarus, so they can be compiled for Windows,  Linux and MacOSX.
+
+---------------------------------------------------------
+* RTC SDK 3.03
+---------------------------------------------------------
+
+1) Fixed compatibility with Delphi 6.
+
+   RTC SDK is now compatible with Delphi 6, 7, 2005, 2006, 2007 and 2009.
+
+   Delphi 4 and 5 are no longer supported.
+
+---------------------------------------------------------
+* RTC SDK 3.02 - first version including the Web Applications Framework
+---------------------------------------------------------
+
+1) Minor D2009-related performance optimizations and bug fixes.
+
+2) "Tools" folder added to the package, which now includes:
+   
+  * RTC Remote Functions Wizard
+    - can be used for generating client-side units with classes 
+      for easy access to remote functions written on the Server.
+
+  * Web Server Log Reader
+    - can be used for analyzing content of LOG files 
+      generated by the RTC WebServer.
+
+  * WebStress_Client/RTCWebSetressTool.dpr
+    - Web Server Stress Tool can be used to stress-test any Web Server by opening 
+      hundreds of connections from each client and flooding the Server/ISAPI 
+      with HTTP GET requests. This project was previously in the "Demos" folder.
+
+3) Web Applications Development Framework is now part of the RealThinClient SDK.
+  
+
+---------------------------------------------------------
+* RTC SDK 3.01
+---------------------------------------------------------
+
+1) RTC SDK can now also be used with Lazarus for Windows.
+
+
+---------------------------------------------------------
+* RTC SDK 3.0 Beta - RC2
+---------------------------------------------------------
+
+1) RTC SCripting Engine is now working with Unicode strings when used with D2009.
+
+   You can now have Unicode Text, Variables and Function names inside 
+   your Scripts, and the result will also be a Unicode string.
+
+2) RTC Remote Functions are now fully Unicode enabled when used with D2009.
+
+   This means that you can now use Unicode for everything related to RTC Remote Functions,
+   including but not limited to unicode strings through the asText and asWideString properties,
+   Remote Function Names, remote function parameter names, Exception strings through the asException 
+   property, variable names through the asVariable property, Dataset field names, Record Field names, etc.
+
+   The "asString" property (rtc_String type) is still working with AnsiString (not Unicode) to keep 
+   the components backwards compatible with prior RTC SDK versions.
+   When you need to work with Unicode strings,  use the "asText" property (as before).
+
+NOTE: RTC Parser is NOT working with Unicode, because files and HTML text are stored as Ansi.
+
+
+---------------------------------------------------------
+* RTC SDK 3.0 Beta - RC1
+---------------------------------------------------------
+
+1) RealThinClient SDK has been made compatible with D2009. 
+   Some classes have been modified to make use of the new Unicode support in D2009, 
+   but most of the code is working with AnsiString for backwards compatibility.
+
+   NOTE: The RTC SDK has been fully ported to D2009, but DEMOS which are using low-level
+   Windows API (like the RTC Messenger Client for its Chat window) will NOT work correctly.
+   If you are using some third-party components which are NOT ready for D2009, you will
+   need to update them too, and make necessary modifications in the code to make them work.

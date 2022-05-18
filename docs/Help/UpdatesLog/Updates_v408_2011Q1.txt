@@ -1,0 +1,66 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+**********************************************************
+*                                                        *
+* RealThinClient SDK v4.08 (2011.Q1) March 30th 2011.    *
+*                                                        *
+**********************************************************
+
+---------------------------------------------------------
+* Changes since v4.05 (2010.Q4)
+---------------------------------------------------------
+
+1) "rtcSDK_Raw.dpk" package was added ("Lib" folder). This new package can be used
+   to register "TRtcTCPClient", "TRtcTCPServer", "TRtcUDPClient" and "TRtcUDPServer"
+   components to the Delphi component palette ("RTC Raw" tab).
+
+   Using raw TCP or UDP components from the RTC SDK requires A LOT MORE coding
+   and careful design. With raw TCP and UDP components, data is sent and received
+   without any kind of pre-formatting (what you see is what you get), so you
+   can't combine them with other RTC SDK components to simplify data processing.
+   
+   As with other RTC SDK components, you also have to ensure that access to all
+   component methods (Read/Write) is ONLY done from within the thread responsible
+   for each component. For example, if your Client or Server are Multi-Threaded,
+   you need to use the PostJob method to post a job to the thread responsible for
+   working with that connection component (you can't send data from anywhere).
+
+   * IMPORTANT NOTE *
+   The main reason for these components to exist in the RTC SDK is to allow you to
+   use the RTC SDK for communicating with third-party Clients and Servers which do
+   NOT have support for HTTP/S, but instead use their custom TCP or UDP protocols.
+
+   By using these raw communication components, you acknowledge that we can NOT
+   provide you with support for implementing your or any other 3rd-party protocol,
+   nor can we assist you in debugging if there should be problems in communication.
+
+2) "Raw_TCP" and "Raw_UDP" example projects added to the "Demos" folder.
+
+   "Raw_TCP" is a very simple project, showing basic usage of the "TRtcTCPClient"
+   and "TRtcTCPServer" components to send and receiving raw data over TCP/IP.
+   
+   "Raw_UDP" is a very simple project, showing basic usage of the "TRtcUDPClient"
+   and "TRtcUDPServer" components to send, broadcast and receiving UDP packets.
+
+3) "rtcPHP.pas", "rtcPHPProvider.pas" and "rtcPHPTypes.pas" units
+   in "Demos/DataProviders" updated for use with newer PHP versions.
+
+   Depending on the PHP version you want to use,
+   you need to declare the correct compiler directive:
+
+   {$DEFINE PHP5} // declare for PHP 5.0 - tested with PHP 5.0.3
+   {$DEFINE PHP520} // declare for PHP 5.2 - tested with PHP 5.2.17
+
+   * IMPORTANT NOTE *
+   PHP units included in the RTC SDK are purely experimental.
+   If you use these units to host PHP sites from a RTC Server,
+   you acknowledge that we can NOT provide you with support,
+   since these units heavily rely on 3rd-party code.
+
+4) All "HTTP_" variable names sent to PHP script will now be converted to
+   upper-case, so that checking $_SERVER[''HTTP_USER_AGENT'] in PHP script
+   will now return the correct value of the 'User-Agent' HTTP Header.
+   
+5) "rtcZLib.pas" unit extended with the option for using the "ZLib.pas" unit
+   from Delphi (2009+) internally, instead of a RTC-specific implementation
+   which requires external OBJ files compiled for each platform (zlib folder).

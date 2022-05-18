@@ -1,0 +1,180 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+****************************************************************
+*                                                              *
+* RealThinClient SDK v6.56 (2015.Q2), released June 30th 2015. *
+*                                                              *
+****************************************************************
+
+---------------------------------------------------------
+* Changes in v6.56 (2015.Q2)
+---------------------------------------------------------
+
+1. User Group Status management methods, which were previously accessible directly from the 
+   TRtcHttpGateClient and TRtcGateClientLink components, have been moved to the "Groups" property.
+
+   * Old way to access the methods:
+
+      SetUserGroupStatus(UserID,GroupID,Status:TGateUID);
+      ClearUserGroupStatus(UserID,GroupID:TGateUID);
+      ClearAllUserGroupStates;
+      GetUserGroupStatus(UserID,GroupID:TGateUID):TGateUID;
+      GetMinUserGroupStatus(UserID:TGateUID):TGateUID;
+      GetMaxUserGroupStatus(UserID:TGateUID):TGateUID;
+      GetMinUserGroupID(UserID:TGateUID):TGateUID;
+      GetNextUserGroupStatus(var UserID,GroupID:TGateUID):TGateUID;
+
+  * New way to access the methods:
+
+      Groups.SetStatus(UserID,GroupID,Status:TGateUID);
+      Groups.ClearStatus(UserID,GroupID:TGateUID);
+      Groups.ClearAllStates;
+      Groups.GetStatus(UserID,GroupID:TGateUID):TGateUID;
+      Groups.GetMinStatus(UserID:TGateUID):TGateUID;
+      Groups.GetMaxStatus(UserID:TGateUID):TGateUID;
+      Groups.GetMinID(UserID:TGateUID):TGateUID;
+      Groups.GetNextStatus(var UserID,GroupID:TGateUID):TGateUID;
+
+2. User Group ID management methods, which were previously accessible directly from the
+   TRtcHttpGateClient component, have been moved to the "Groups" property.
+
+  * Old way to access the methods:
+
+      AllocNextFreeGroupID:TGateUID;
+      AllocPrevFreeGroupID:TGateUID;
+      AllocGroupID(GroupID:TGateUID);
+      ReleaseGroupID(GroupID:TGateUID);
+      ReleaseAllGroupIDs;     
+
+  * New way to access the methods:
+
+      Groups.AllocNextID:TGateUID;
+      Groups.AllocPrevID:TGateUID;
+      Groups.AllocID(GroupID:TGateUID);
+      Groups.ReleaseID(GroupID:TGateUID);
+      Gropps.ReleaseAllIDs;     
+
+
+3. The following properties with detailed HTTP Gate Client connection status information, 
+   which have previously been accessible directly from the TRtcHttpGateClient component, 
+   have been moved to the "State" property of the component (property names unchanged):
+
+    property InputState:TRtcGateClientInState read FInputState;
+    property OutputState:TRtcGateClientOutState read FOutputState;
+
+    property LoggedIn:boolean read FLoggedIn;
+    property OutputReady:boolean read FOutputReady;
+    property InputReady:boolean read FInputReady;
+
+    property LastContact:cardinal read FLastContact;
+    property LastInput:cardinal read FLastInput;
+    property LastOutput:cardinal read FLastOutput;
+
+    property LastDataIn:cardinal read FLastDataIn;
+    property LastDataOut:cardinal read FLastDataOut;
+
+    property PingInCnt:integer read FPingInCnt;
+    property PingOutCnt:integer read FPingOutCnt;
+
+    property LeftToSend:longword read FLeftToSend;
+
+    property TotalSent:int64 read FTotalSent;
+    property TotalReceived:int64 read FTotalReceived;
+
+    property LastError:String read FLastError;
+
+    property OutputResetAt:Cardinal read FOutputResetAt;
+    property InputResetAt:Cardinal read FInputResetAt;
+    property OutputResetTime:Cardinal read FOutputResetTime;
+    property InputResetTime:Cardinal read FInputResetTime;
+
+  To access any of the properties listed above, add "State." in front of the property name.
+
+4. "RemoveUserFromChannel" method on the TRtcGateway component extended with 2 additional parameters:
+   RemoveAsHost and RemoveAsListener (optional). This way, users can also be removed from one side of 
+   the Channel, if they were previously added as Listener and as Host to the same Channel.
+
+5. TRtcGateway component extended with a new subscription-based Online/Offline notification model for Users
+   in the same "Channel", similar to the "Channels" which are accessible from the TRtcGateway component,
+   but without the implications of "User Groups" (which are used for streaming). Channel subscriptions are 
+   controlled by each Client remotely, using the new "Subscribe" and "UnSubscribe" methods (TRtcHttpGateClient).
+
+   There are two types of "Channels": 
+
+   A) Public channels, where the "Channel" parameter is calculated
+      from a freely chosen text using the "rtcMakePublicKey" function (rtcKeyHash unit).
+
+      In Public channels, there is no difference between Hosts and Listeners/Controls. All Users are Equal.
+      For a user to join a PUBLIC channel, the "Channel" parameter is calculated using the "rtcMakePublicKey"
+      function, where the name of the Public channel (like "Lobby") is used as the "Prefix" parameter. 
+
+      In Public channels, all Users get notified when any other User joins or leaves the channel (gc_UserReady/gc_UserNotReady).
+
+      .... and then, there are ... 
+
+   B) Private channels, where the "Channel" parameter (the "Key") for Listeners/Controls is calculated
+      using the "rtcGenerateKey" function (rtcKeyHash unit), while the "Channel" parameter for Hosts (the "Lock")
+      is calculated with the "rtcCalculateLock" function from the Listener/Controls "Channel" (the "Key"). 
+
+      For a User to join a private channel as Listener/Control, a "Key" generated with the
+      "rtcGenerateKey" function (rtcKeyHash unit) has to be used as the "Channel" parameter. 
+
+      For a User to join a private channel as a Host, a "Lock" calculated with the "rtcCalculateLock" function
+      from the "Key" (used by Listeners/Controls) has to be used as the "Channel" parameter. 
+
+      Listeners/Controls get notified when a Host joins or leaves their channel (gc_UserReady/gc_UserNotReady). 
+
+      Hosts get notified when a Listener/Control joins or leaves their channel (gc_UserWaiting/gc_UserNotWaiting).  
+
+   NOTE1: If the same User subscribes to multiple channels, a sepatate notification will be sent for each Channel. 
+
+   NOTE2: GroupID used for a Subcription does NOT automatically occupy a GroupID used for other communications.
+          A subscription GroupID is just a way to allow you to separate notifications from different channels,
+          but please note that a GroupID used for a subscription is also limited to a 8-bit number (0-255).
+
+
+---------------------------------------------------------
+* Changes in v6.55
+---------------------------------------------------------
+
+1. Improved multipart boundary extraction for receiving "Form Post" data from web browsers.
+
+2. Added "rtcKeyHash" unit with MD5 and Key/Lock generation and testing routines.
+
+3. Added "memItemList" unit with fast search and compare class for custom indexed items.
+
+4. Added "TRtcISAAC" class (rtcRSA unit), implementing the ISAAC random numbers generator.
+
+---------------------------------------------------------
+* Changes in v6.54
+---------------------------------------------------------
+
+1. [ComponentPlatformsAttribute] updated for iOS64.
+
+---------------------------------------------------------
+* Changes in v6.53
+---------------------------------------------------------
+
+1. "ERtcExecuteError" class extended with the "ErrorCode" property, which is now populated in the "Execute" method
+   ("TRtcClientModule" component) to contain the Error Code (Result) from the "WaitForCompletion" method. 
+   Possible ErrorCode values are:
+    wait_OK = wait over, everything OK.
+    wait_Timeout = wait timed out, but we are not finished yet.
+    wait_Quit = application Terminating, but we are not finished yet.
+    wait_Msg = loop terminated because of a user message which could not be processed.
+    wait_Error = connection error. 
+
+---------------------------------------------------------
+* Changes in v6.52
+---------------------------------------------------------
+
+1. Fixed a "LongInt" <> "Integer" type difference problem with the iOS64 compiler.
+
+2. Fixed a problem in the "rtcSDK" package file, because of which Delphi XE8 was automtically
+   removing the "rtcRSA.pas" unit from the "containing units" list and then reporting an
+   "implicit import" warning for the same file during package compilation or installation.
+
+3. "SDKDemos_FMX3" Project Group added with 3 Projects (File_Client, AppClient & AppServer)
+   ready to be compiled with Delphi XE8 for all supported platforms.
+
+* This is the official RTC SDK release with full Delphi XE8 support.

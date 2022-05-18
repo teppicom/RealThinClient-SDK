@@ -1,0 +1,11 @@
+um die proxy-einstellungen (internet-explorer einstellungen) zu lesen:
+
+HKEYCurrentUser / Software/Microsoft/Windows/CurrentVersion/InternetSettings
+
+ProxyServer (string) mit folgenden möglichen Eintragungen:
+
+ftp=ftp_proxy_address:83;gopher=gopher_proxy_address:81;http=http_proxy_address:81;https=https_proxy_address:82;socks=socks_proxy_address:8000
+
+normalerweise steht nur ein string dort, der gilt für alle:     proxy_address:81
+
+ProxyEnable = 1 oder 0

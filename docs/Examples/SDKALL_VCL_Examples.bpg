@@ -1,0 +1,194 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = RTConWebServer.exe FileISAPI.dll MSG_ISAPI.dll AppISAPI.dll \
+  WebForum_ISAPI.dll AppClient.exe AppServer.exe File_Client.exe FileServer.exe \
+  MSG_Client.exe MSG_Server.exe RTCWebServer.exe RTCWebForum.exe \
+  RTCWebServer2.exe RTCWebPackManager.exe RTCRouter.exe RTCRouter2.exe \
+  RTCLoadBalancer.exe RTCLoadBalancer2.exe RTCLoadBalancer3.exe BrowserUpload.exe \
+  RTCDualServer.exe rtcUploadClient.exe rtcUploadServer.exe CliProject1.exe \
+  SrvProject1.exe rtcParseTest.exe template.exe templateForm.exe \
+  RTCScriptTester.exe rtcServer1.exe rtcServer2.exe rtcServer2b.exe \
+  rtcServer3.exe rtcServer4.exe RTC_XMLRPCTest.exe LinksLocal.exe LinksClient.exe \
+  LinksServer.exe MyHttpServer.exe MyHttpServer2.exe WSockServTest.exe \
+  WSockCliTest.exe RtcFunctionsWizard.exe RTCRouterCheck.exe ConsolAppCli.exe \
+  MaxMem.exe MaxStrRefs.exe MemTest.exe StrTest.exe RtcWebLogReader.exe \
+  RTCWebStressTool.exe WinHttpServer.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+RTConWebServer.exe: RTC_WebServer\RTConWebServer.dpr
+  $(DCC)
+
+FileISAPI.dll: File_Server\FileISAPI.dpr
+  $(DCC)
+
+MSG_ISAPI.dll: RTC_Messenger\MSG_ISAPI.dpr
+  $(DCC)
+
+AppISAPI.dll: App_Server\AppISAPI.dpr
+  $(DCC)
+
+WebForum_ISAPI.dll: RTC_WebForum\deploy\WebForum_ISAPI.dpr
+  $(DCC)
+
+AppClient.exe: App_Client\AppClient.dpr
+  $(DCC)
+
+AppServer.exe: App_Server\AppServer.dpr
+  $(DCC)
+
+File_Client.exe: File_Client\File_Client.dpr
+  $(DCC)
+
+FileServer.exe: File_Server\FileServer.dpr
+  $(DCC)
+
+MSG_Client.exe: RTC_Messenger\MSG_Client.dpr
+  $(DCC)
+
+MSG_Server.exe: RTC_Messenger\MSG_Server.dpr
+  $(DCC)
+
+RTCWebServer.exe: RTC_WebServer\RTCWebServer.dpr
+  $(DCC)
+
+RTCWebForum.exe: RTC_WebForum\deploy\RTCWebForum.dpr
+  $(DCC)
+
+RTCWebServer2.exe: RTC_WebForum\deploy\RTCWebServer2.dpr
+  $(DCC)
+
+RTCWebPackManager.exe: RTC_WebPackageManager\deploy\RTCWebPackManager.dpr
+  $(DCC)
+
+RTCRouter.exe: Router\RTCRouter.dpr
+  $(DCC)
+
+RTCRouter2.exe: Router\RTCRouter2.dpr
+  $(DCC)
+
+RTCLoadBalancer.exe: LoadBalancer\RTCLoadBalancer.dpr
+  $(DCC)
+
+RTCLoadBalancer2.exe: LoadBalancer\RTCLoadBalancer2.dpr
+  $(DCC)
+
+RTCLoadBalancer3.exe: LoadBalancer\RTCLoadBalancer3.dpr
+  $(DCC)
+
+BrowserUpload.exe: BrowserUpload\BrowserUpload.dpr
+  $(DCC)
+
+RTCDualServer.exe: DualServer\RTCDualServer.dpr
+  $(DCC)
+
+rtcUploadClient.exe: ClientUpload\rtcUploadClient.dpr
+  $(DCC)
+
+rtcUploadServer.exe: ClientUpload\rtcUploadServer.dpr
+  $(DCC)
+
+CliProject1.exe: RemoteFunctions\CliProject1.dpr
+  $(DCC)
+
+SrvProject1.exe: RemoteFunctions\SrvProject1.dpr
+  $(DCC)
+
+rtcParseTest.exe: rtcParse1\rtcParseTest.dpr
+  $(DCC)
+
+template.exe: rtcParse2\template.dpr
+  $(DCC)
+
+templateForm.exe: rtcParse3\templateForm.dpr
+  $(DCC)
+
+RTCScriptTester.exe: rtcScript\RTCScriptTester.dpr
+  $(DCC)
+
+rtcServer1.exe: ServerLesson1\rtcServer1.dpr
+  $(DCC)
+
+rtcServer2.exe: ServerLesson2\rtcServer2.dpr
+  $(DCC)
+
+rtcServer2b.exe: ServerLesson2b\rtcServer2b.dpr
+  $(DCC)
+
+rtcServer3.exe: ServerLesson3\rtcServer3.dpr
+  $(DCC)
+
+rtcServer4.exe: ServerLesson4\rtcServer4.dpr
+  $(DCC)
+
+RTC_XMLRPCTest.exe: XMLRPCTest\RTC_XMLRPCTest.dpr
+  $(DCC)
+
+LinksLocal.exe: LinkedObjects\LinksLocal.dpr
+  $(DCC)
+
+LinksClient.exe: LinkedObjects\LinksClient.dpr
+  $(DCC)
+
+LinksServer.exe: LinkedObjects\LinksServer.dpr
+  $(DCC)
+
+MyHttpServer.exe: ConsoleServer\MyHttpServer.dpr
+  $(DCC)
+
+MyHttpServer2.exe: ConsoleServer\MyHttpServer2.dpr
+  $(DCC)
+
+WSockServTest.exe: WebSockServer\WSockServTest.dpr
+  $(DCC)
+
+WSockCliTest.exe: WebSockClient\WSockCliTest.dpr
+  $(DCC)
+
+RtcFunctionsWizard.exe: RemoteFn_Wizard\RtcFunctionsWizard.dpr
+  $(DCC)
+
+RTCRouterCheck.exe: RouterCheck\RTCRouterCheck.dpr
+  $(DCC)
+
+ConsolAppCli.exe: UnitTesting\ConsolAppCli.dpr
+  $(DCC)
+
+MaxMem.exe: UnitTesting\MaxMem.dpr
+  $(DCC)
+
+MaxStrRefs.exe: UnitTesting\MaxStrRefs.dpr
+  $(DCC)
+
+MemTest.exe: UnitTesting\MemTest.dpr
+  $(DCC)
+
+StrTest.exe: UnitTesting\StrTest.dpr
+  $(DCC)
+
+RtcWebLogReader.exe: WebServer_LogReader\RtcWebLogReader.dpr
+  $(DCC)
+
+RTCWebStressTool.exe: WebStress_Client\RTCWebStressTool.dpr
+  $(DCC)
+
+TcpMessages.exe: Raw_TCP\TcpMessages.dpr
+  $(DCC)
+
+UdpMessages.exe: Raw_UDP\UdpMessages.dpr
+  $(DCC)
+
+WinHttpServer.exe: Raw_HttpServer\WinHttpServer.dpr
+  $(DCC)
+
+

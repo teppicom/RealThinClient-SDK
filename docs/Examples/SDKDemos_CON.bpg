@@ -1,0 +1,33 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = RTConWebServer.exe FileISAPI.dll MSG_ISAPI.dll AppISAPI.dll \
+  WebForum_ISAPI.dll
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+RTConWebServer.exe: RTC_WebServer\RTConWebServer.dpr
+  $(DCC)
+
+FileISAPI.dll: File_Server\FileISAPI.dpr
+  $(DCC)
+
+MSG_ISAPI.dll: RTC_Messenger\MSG_ISAPI.dpr
+  $(DCC)
+
+AppISAPI.dll: App_Server\AppISAPI.dpr
+  $(DCC)
+
+WebForum_ISAPI.dll: RTC_WebForum\deploy\WebForum_ISAPI.dpr
+  $(DCC)
+
+

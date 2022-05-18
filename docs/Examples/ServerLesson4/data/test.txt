@@ -1,0 +1,5 @@
+This is a test file used by the RTC SDK Server lesson 3, which shows you 
+how to implement events for a DataProvider to server small files from a server.
+
+Best Regards,
+Danijel Tkalcec

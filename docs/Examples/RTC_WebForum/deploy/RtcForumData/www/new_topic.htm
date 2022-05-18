@@ -1,0 +1,17 @@
+<%include:forum_top.htm%>
+
+<div id=section_header><img src="linktree_side.gif" width="13" height="13" border="0"/><img src="folder_open.gif" width="16" height="13" border="0"/>&nbsp;<a class="section_header" href="?cmd=viewsection&section_id=<%section_id%>&sid=<%sid%>"><%section_name%></a></div>
+<div id=topic_header><img src="linktree_main.gif" width="13" height="13" border="0"/><img src="linktree_side.gif" width="13" height="13" border="0"/><img src="folder_open.gif" width="16" height="13" border="0"/>&nbsp;Create new topic</div>
+<br>
+
+<%if:preview%>
+  <%include:replies_inner.htm%>
+<%endif:preview%>
+	
+<%include:reply_form.htm%>
+
+<script language="JavaScript" type="text/JavaScript">
+  xfindObj('user_name').focus();
+</script>
+
+<%include:forum_bottom.htm%>

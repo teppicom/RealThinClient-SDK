@@ -1,0 +1,33 @@
+<%include:forum_top.htm%>
+<div id=section_header><img src="linktree_side.gif" width="13" height="13" border="0"/><img src="folder_open.gif" width="16" height="13" border="0"/>&nbsp;<%section_name%></div>
+<div id=forumarea>
+
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr>
+    <%if:write_access%><td width="86"><a href="?cmd=newtopic&section_id=<%section_id%>&sid=<%sid%>"><img src="new_topic.gif" alt="New topic" width="86" height="18" border="0" title="New topic"/></a><br>
+      &nbsp;</td>
+    <%endif:write_access%>
+		<td>
+		  <table cellspacing=0 cellpadding=0 width="100%" border=0>
+			  <tr><td align="right" valign="top"><a href="#bottom">Bottom</a></td></tr>
+				<tr><td>&nbsp;</td></tr>
+			  <tr><td align="right" valign="bottom">Topics: <b><%topics_count%></b> | Posts: <b><%posts_count%></b></td></tr>
+			</table>	
+		</td>
+  </tr>
+</table>
+
+<table cellspacing=1 cellpadding=4 width="100%" border=0>
+  <tr class="list_head">
+    <td width="20" height="25"><img src="1x1px.gif" width="21" height="20" border="0"/></td>
+    <td width="50%">Subject</td>
+    <td width="20%" align="center">Started by</td>
+    <td width="40" align="center">Posts</td>
+    <td width="20%">Last post</td>
+    <%if:moderator_access%><td width="55" align="center">Moderate</td>
+    <%endif:moderator_access%>
+  </tr>
+	<!-- topics_row.htm -->
+	<%table_row%>
+</table>
+<%include:forum_bottom.htm%>

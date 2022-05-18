@@ -1,0 +1,34 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+****************************************************************
+*                                                              *
+* RealThinClient SDK v5.17 (2012.Q2), released July 14th 2012. *
+*                                                              *
+****************************************************************
+
+---------------------------------------------------------
+* Changes in v5.17
+---------------------------------------------------------
+
+1) Maintenance release (minor internal changes).
+
+---------------------------------------------------------
+* Changes in v5.16
+---------------------------------------------------------
+
+1) Added overflow control for the internal "LenToSend" and "DataOut" values.
+
+   To monitor if there is a problem with the "LenToSend" counter, 
+   or with the "DataOut" values received from the underlying socket API, 
+   declare the "RTC_DEBUG" compiler directive. This will write LOG entries
+   in case a DataOut value should ever be greater than the LenToSend counter.
+
+   Such conditions are NOT normal and are a clear indicator that something is wrong,
+   either with the way the components are being used, or with the sockets API.
+
+---------------------------------------------------------
+* Changes in v5.15
+---------------------------------------------------------
+
+1) NexusDB plugins updated to work with later NexusDB versions.
+

@@ -1,0 +1,50 @@
+<%include:forum_top.htm%>
+<div id=section_header><img src="linktree_side.gif" width="13" height="13" border="0"/><img src="folder_open.gif" width="16" height="13" border="0"/>&nbsp;<a class="section_header" href="?cmd=viewsection&section_id=<%section_id%>&sid=<%sid%>"><%section_name%></a></div>
+<div id=topic_header><img src="linktree_main.gif" width="13" height="13" border="0"/><img src="linktree_side.gif" width="13" height="13" border="0"/><img src="folder_open.gif" width="16" height="13" border="0"/>&nbsp;<%topic_subject%></div>
+
+<%if:write_access%>
+<script language="JavaScript" type="text/javascript"><!--
+  function toggleForm(){
+		if (xfindObj('replyform').style.display == 'none') {
+  		show_hide_obj('replyform');
+		}	
+		if (!(xfindObj('replyform').style.display == 'none')) {
+      xfindObj('submitbutton').focus();
+			obj = xfindObj('user_name');
+			if (!obj) {
+			  obj = xfindObj('reply_text');
+			}
+			obj.focus();
+		}
+	}
+//-->
+</script>
+<%endif:write_access%>
+
+<div id=forumarea>
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr>
+    <%if:write_access%><td width="86" class="tab_button"><a href="javascript:void(0)" onClick="toggleForm();"><img src="reply.gif" alt="New topic" width="86" height="18" border="0" title="New topic"/></a><br>
+      &nbsp;</td><%endif:write_access%>
+		<td>
+		  <table cellspacing=0 cellpadding=0 width="100%" border=0>
+			  <tr><td align="right" valign="top"><a href="#bottom">Bottom</a></td></tr>
+				<tr><td>&nbsp;</td></tr>
+			  <tr><td align="right" valign="bottom">Total posts: <b><%replies_count%></b></td></tr>
+			</table>	
+		</td>
+  </tr>
+</table>
+
+<%include:replies_inner.htm%>
+
+<%if:write_access%>
+<div id=replyarea>
+  <br>
+  <a name="areplyform"/>
+  <div class="reply_btn"><a href="javascript:void(0)" onClick="toggleForm();"><img src="reply.gif" alt="New topic" width="86" height="18" border="0" title="New topic"/></a></div>
+  <%include:reply_form.htm%>
+	<a name="areplyformend" id=areplyformend/>
+</div>
+<%endif:write_access%>
+<%include:forum_bottom.htm%>

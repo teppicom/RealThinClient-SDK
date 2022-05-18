@@ -1,0 +1,192 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{EC834A45-3315-465B-894D-C23D9F4B5944}</ProjectGuid>
+			<MainSource>rtcSDK.dpk</MainSource>
+			<Config Condition="'$(Config)'==''">デバッグ</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.0</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='リリース' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='デバッグ' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DesignOnlyPackage>true</DesignOnlyPackage>
+			<GenPackage>true</GenPackage>
+			<DCC_DependencyCheckOutputName>C:\Users\Public\Documents\RAD Studio\7.0\Bpl\rtcSDK.bpl</DCC_DependencyCheckOutputName>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_Description>RealThinClient SDK v6.04 (2012.Q3)</DCC_Description>
+			<DCC_S>false</DCC_S>
+			<DCC_OutputNeverBuildDcps>true</DCC_OutputNeverBuildDcps>
+			<GenDll>true</GenDll>
+			<DCC_N>false</DCC_N>
+			<DCC_E>false</DCC_E>
+			<DCC_F>false</DCC_F>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="rtcSDK.dpk">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="rtcConn.dcr"/>
+			<DCCReference Include="rtcHttpSrv.dcr"/>
+			<DCCReference Include="rtcDataSrv.dcr"/>
+			<DCCReference Include="rtcHttpCli.dcr"/>
+			<DCCReference Include="rtcDataCli.dcr"/>
+			<DCCReference Include="rtcSrvModule.dcr"/>
+			<DCCReference Include="rtcCliModule.dcr"/>
+			<DCCReference Include="rtcFunction.dcr"/>
+			<DCCReference Include="rtcISAPISrv.dcr"/>
+			<DCCReference Include="rtcPlugins.dcr"/>
+			<DCCReference Include="rtcScript.dcr"/>
+			<DCCReference Include="rtcDataRoute.dcr"/>
+			<DCCReference Include="rtcLoadBalance.dcr"/>
+			<DCCReference Include="rtcLink.dcr"/>
+			<DCCReference Include="rtcThrPool.dcr"/>
+			<DCCReference Include="rtl.dcp"/>
+			<DCCReference Include="designide.dcp"/>
+			<DCCReference Include="rtcRegister.pas"/>
+			<DCCReference Include="rtcConn.pas"/>
+			<DCCReference Include="rtcHttpSrv.pas"/>
+			<DCCReference Include="rtcTimer.pas"/>
+			<DCCReference Include="rtcInfo.pas"/>
+			<DCCReference Include="rtcThrPool.pas"/>
+			<DCCReference Include="rtcLog.pas"/>
+			<DCCReference Include="rtcDataSrv.pas"/>
+			<DCCReference Include="rtcHttpCli.pas"/>
+			<DCCReference Include="rtcDataCli.pas"/>
+			<DCCReference Include="rtcSrvModule.pas"/>
+			<DCCReference Include="rtcCliModule.pas"/>
+			<DCCReference Include="rtcFunction.pas"/>
+			<DCCReference Include="rtcISAPISrv.pas"/>
+			<DCCReference Include="rtcParse.pas"/>
+			<DCCReference Include="rtcISAPIApp.pas"/>
+			<DCCReference Include="rtcSocketCliProv.pas"/>
+			<DCCReference Include="rtcSocketSrvProv.pas"/>
+			<DCCReference Include="rtcZLib.pas"/>
+			<DCCReference Include="rtcWinSocket.pas"/>
+			<DCCReference Include="rtcCrypt.pas"/>
+			<DCCReference Include="rtcISAPISrvProv.pas"/>
+			<DCCReference Include="rtcHWndPool.pas"/>
+			<DCCReference Include="rtcSocketPool.pas"/>
+			<DCCReference Include="rtcThrConnProv.pas"/>
+			<DCCReference Include="memBinTree.pas"/>
+			<DCCReference Include="memObjList.pas"/>
+			<DCCReference Include="rtcConnProv.pas"/>
+			<DCCReference Include="rtcSyncObjs.pas"/>
+			<DCCReference Include="memBinList.pas"/>
+			<DCCReference Include="memPtrPool.pas"/>
+			<DCCReference Include="memStringObjList.pas"/>
+			<DCCReference Include="memXList.pas"/>
+			<DCCReference Include="rtcPlugins.pas"/>
+			<DCCReference Include="rtcTransports.pas"/>
+			<DCCReference Include="rtcMsgCli.pas"/>
+			<DCCReference Include="rtcMsgCliProv.pas"/>
+			<DCCReference Include="rtcMsgSrv.pas"/>
+			<DCCReference Include="rtcMsgSrvProv.pas"/>
+			<DCCReference Include="memStringIntList.pas"/>
+			<DCCReference Include="rtcWInetHttpCliProv.pas"/>
+			<DCCReference Include="rtcFastStrings.pas"/>
+			<DCCReference Include="rtcScriptCompile.pas"/>
+			<DCCReference Include="rtcScript.pas"/>
+			<DCCReference Include="rtcWinHttpCliProv.pas"/>
+			<DCCReference Include="memStrIntList.pas"/>
+			<DCCReference Include="memStrObjList.pas"/>
+			<DCCReference Include="rtcSocketHttpCliProv.pas"/>
+			<DCCReference Include="rtcSocketHttpSrvProv.pas"/>
+			<DCCReference Include="rtcSockBaseCliProv.pas"/>
+			<DCCReference Include="rtcSockBaseSrvProv.pas"/>
+			<DCCReference Include="rtcSockBase.pas"/>
+			<DCCReference Include="rtcSockets.pas"/>
+			<DCCReference Include="memXObjList.pas"/>
+			<DCCReference Include="rtcSockBaseSyn.pas"/>
+			<DCCReference Include="rtcSynSocket.pas"/>
+			<DCCReference Include="rtcSynAPI.pas"/>
+			<DCCReference Include="rtcWinSock.pas"/>
+			<DCCReference Include="memStrList.pas"/>
+			<DCCReference Include="memXSList.pas"/>
+			<DCCReference Include="rtcCliPool.pas"/>
+			<DCCReference Include="rtcDataRoute.pas"/>
+			<DCCReference Include="rtcLoadBalance.pas"/>
+			<DCCReference Include="rtcTypes.pas"/>
+			<DCCReference Include="memStringPtrList.pas"/>
+			<DCCReference Include="rtcEditors.pas"/>
+			<DCCReference Include="rtcLink.pas"/>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="デバッグ">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="リリース">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>Package</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">rtcSDK.dpk</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1041</VersionInfo>
+						<VersionInfo Name="CodePage">932</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+				</Delphi.Personality>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

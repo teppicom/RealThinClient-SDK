@@ -1,0 +1,27 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = rtcSDK_SSec.bpl rtcSDK_STMT.bpl NexusDB_RTC.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+
+rtcSDK_SSec.bpl: LibPlugins\rtcSDK_SSec.dpk
+  $(DCC)
+
+rtcSDK_STMT.bpl: LibPlugins\rtcSDK_STMT.dpk
+  $(DCC)
+
+NexusDB_RTC.bpl: LibPlugins\NexusDB_RTC.dpk
+  $(DCC)
+
+

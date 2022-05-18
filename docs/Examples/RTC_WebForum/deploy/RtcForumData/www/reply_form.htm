@@ -1,0 +1,63 @@
+<script language="JavaScript" type="text/javascript">
+	function validateReplyForm(){
+		xvalidateForm(<%if:guest_access%>'user_name','','R',<%endif:guest_access%><%if:new_topic%>'topic_subject','','R',<%endif:new_topic%>'reply_text','','R');
+		return document.MM_returnValue;
+	}
+
+	function preview_topic(){
+		frm_obj = xfindObj('frm');
+		cmd_obj = frm_obj.cmd;
+		if (cmd_obj){
+			cmd_obj.value = <%if:alone%>'newtopic'<%elseif:alone%>'viewtopic'<%endif:alone%>;
+			frm_obj.action = '#preview';
+			if (validateReplyForm()) {
+				xfindObj('frm').submit();
+			}
+		}
+	}
+</script>
+<div id="replyform" style="width: 100%; <%if:formvisible%><%elseif:formvisible%>display: none<%endif:formvisible%>">
+	<form method="post" enctype="multipart/form-data" name="frm" id="frm" onSubmit="return validateReplyForm();">
+		<table border="0" width="100%">
+		  <%if:guest_access%>
+			  <tr>
+				<th width="85">Your Name</td>
+				<td><input name="user_name" id="user_name" type="text" value="<%user_name%>" style="width: 100%" title="Your Name">
+				</td>
+			  </tr>
+		  <%endif:guest_access%>
+		  <tr>
+			<th width="85">Topic Title</td>
+			<td>
+			  <%if:new_topic%>
+				<input name="topic_subject" id="topic_subject" type="text" value="<%topic_subject%>" style="width: 100%" title="Topic Title">
+			  <%elseif:new_topic%>
+				<%topic_subject%>
+			  <%endif:new_topic%>
+			</td>
+		  </tr>
+		  <tr>
+			<th width="85">Topic Text</td>
+			<td><textarea name="reply_text" id="reply_text" style="width: 95%" rows="20" title="Message"><%reply_text%></textarea></td>
+		  </tr>
+		  <tr>
+			<td width="85">&nbsp;</td>
+			<td width="585">&nbsp;</td>
+		  </tr>
+		  <tr>
+			<td width="85">&nbsp;</td>
+			<td width="585" align="center">
+			    <input type="button" value="Preview" class="button" onclick="preview_topic()"/>	
+					&nbsp;
+			  <input type="submit" class="button" value="Submit" id="submitbutton"/>
+			  &nbsp;
+			  <input type="button" value="Cancel" class="button" onclick="document.location='?cmd=<%if:alone%>viewsection&section_id=<%section_id%><%elseif:alone%>viewtopic&section_id=<%section_id%>&topic_id=<%topic_id%><%endif:alone%>&sid=<%sid%>'"/>
+		    </td>
+		  </tr>
+		</table>
+	  <input name="cmd" type="hidden" value="savetopic"/>
+	  <input name="section_id" type="hidden" value="<%section_id%>"/>
+	  <input name="topic_id" type="hidden" value="<%topic_id%>"/>
+	  <input name="sid" type="hidden" value="<%sid%>"/>
+	</form>
+</div>

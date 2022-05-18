@@ -1,0 +1,281 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'RTC App Server (FMX version)'
+  ClientHeight = 402
+  ClientWidth = 284
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  OnCreate = FormCreate
+  OnCloseQuery = FormCloseQuery
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object Label1: TLabel
+    AutoSize = True
+    StyledSettings = [Family, FontColor]
+    Position.X = 9.000000000000000000
+    Position.Y = 250.000000000000000000
+    Size.Width = 90.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.Font.Style = [fsBold]
+    TextSettings.WordWrap = False
+    Text = 'Not listening'
+  end
+  object Label2: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 100.000000000000000000
+    Position.Y = 202.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Server Port'
+  end
+  object Label3: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 323.000000000000000000
+    Size.Width = 49.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Clients:'
+  end
+  object lblCliCnt: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 87.000000000000000000
+    Position.Y = 323.000000000000000000
+    Size.Width = 12.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = '0'
+  end
+  object Label5: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 9.000000000000000000
+    Position.Y = 202.000000000000000000
+    Size.Width = 83.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Max Threads'
+  end
+  object Label7: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 373.000000000000000000
+    Size.Width = 52.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'In+Out:'
+  end
+  object lblDataInOut: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 67.000000000000000000
+    Position.Y = 373.000000000000000000
+    Size.Width = 23.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = '???'
+  end
+  object lblPluginState: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 175.000000000000000000
+    Size.Width = 116.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'CryptPlugin state?'
+  end
+  object Label4: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 348.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Responses:'
+  end
+  object lblResult: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 87.000000000000000000
+    Position.Y = 348.000000000000000000
+    Size.Width = 12.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.WordWrap = False
+    Text = '0'
+  end
+  object btnListen: TButton
+    Default = True
+    Position.X = 184.000000000000000000
+    Position.Y = 200.000000000000000000
+    Size.Width = 92.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    Text = 'Listen'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = btnListenClick
+  end
+  object ePort: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 11
+    Text = '8080'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.Font.Style = [fsBold]
+    Position.X = 100.000000000000000000
+    Position.Y = 221.000000000000000000
+    Size.Width = 65.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object xEncrypt: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 95.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 12
+    Text = 'Encryption'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xEncryptClick
+  end
+  object xMultiThreaded: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 93.000000000000000000
+    Size.Width = 272.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 13
+    Text = 'Multi-Threaded mode (set before "Listen")'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xMultiThreadedClick
+  end
+  object xCompress: TCheckBox
+    Position.X = 125.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 108.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 14
+    Text = 'Compression'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xCompressClick
+  end
+  object eThreads: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 15
+    Text = '64'
+    TextSettings.Font.Size = 14.000000000000000000
+    Position.X = 9.000000000000000000
+    Position.Y = 221.000000000000000000
+    Size.Width = 60.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object xMonitorDataInOut: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 121.000000000000000000
+    Size.Width = 287.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 16
+    Text = 'Count Bytes In + Out (a lot slower)'
+    TextSettings.Font.Size = 14.000000000000000000
+  end
+  object xBlocking: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 262.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 17
+    Text = 'Use Blocking API (set before "Listen")'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xBlockingClick
+  end
+  object xCryptPlugin: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 149.000000000000000000
+    Size.Width = 247.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 18
+    Text = 'Use CryptPlugin (no SSL)'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xCryptPluginClick
+  end
+  object xRTCTimeouts: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 37.000000000000000000
+    Size.Width = 116.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 19
+    Text = 'RTC Timeouts'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xRTCTimeoutsClick
+  end
+  object xAPITimeouts: TCheckBox
+    Position.X = 131.000000000000000000
+    Position.Y = 37.000000000000000000
+    Size.Width = 150.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 20
+    Text = 'Socket API Timeouts'
+    TextSettings.Font.Size = 14.000000000000000000
+    OnClick = xAPITimeoutsClick
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = Timer1Timer
+    Left = 192
+    Top = 312
+  end
+  object RtcDataServer1: TRtcHttpServer
+    ServerPort = '8080'
+    RestartOn.ListenLost = True
+    OnClientConnect = RtcDataServer1ClientConnect
+    OnClientDisconnect = RtcDataServer1ClientDisconnect
+    OnListenStart = RtcDataServer1ListenStart
+    OnListenStop = RtcDataServer1ListenStop
+    OnListenError = RtcDataServer1ListenError
+    FixupRequest.RemovePrefix = True
+    OnResponseDone = RtcDataServer1ResponseDone
+    OnDataOut = RtcDataServer1DataOut
+    OnDataIn = RtcDataServer1DataIn
+    MaxHeaderSize = 16000
+    Left = 192
+    Top = 264
+  end
+end

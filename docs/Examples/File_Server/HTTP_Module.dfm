@@ -1,0 +1,51 @@
+object HTTP_Server: THTTP_Server
+  OldCreateOrder = False
+  Left = 211
+  Top = 132
+  Height = 173
+  Width = 196
+  object ServerHTTP: TRtcHttpServer
+    MultiThreaded = True
+    Timeout.AfterConnecting = 300
+    ServerPort = '80'
+    OnConnecting = ServerHTTPConnecting
+    OnDisconnecting = ServerHTTPDisconnecting
+    OnDisconnect = ServerHTTPDisconnect
+    RestartOn.ListenLost = True
+    OnListenStart = ServerHTTPListenStart
+    OnListenStop = ServerHTTPListenStop
+    OnListenError = ServerHTTPListenError
+    FixupRequest.RemovePrefix = True
+    OnRequestNotAccepted = ServerHTTPRequestNotAccepted
+    MaxRequestSize = 128000
+    MaxHeaderSize = 16000
+    OnInvalidRequest = ServerHTTPInvalidRequest
+    Left = 28
+    Top = 20
+  end
+  object ServerHTTPS: TRtcHttpServer
+    MultiThreaded = True
+    Timeout.AfterConnecting = 300
+    ServerPort = '443'
+    OnConnecting = ServerHTTPConnecting
+    OnDisconnecting = ServerHTTPDisconnecting
+    OnDisconnect = ServerHTTPDisconnect
+    RestartOn.ListenLost = True
+    OnListenStart = ServerHTTPListenStart
+    OnListenStop = ServerHTTPListenStop
+    OnListenError = ServerHTTPListenError
+    FixupRequest.RemovePrefix = True
+    OnRequestNotAccepted = ServerHTTPRequestNotAccepted
+    MaxRequestSize = 128000
+    MaxHeaderSize = 16000
+    OnInvalidRequest = ServerHTTPInvalidRequest
+    Left = 104
+    Top = 20
+  end
+  object ServerLink: TRtcDualDataServerLink
+    Server = ServerHTTP
+    Server2 = ServerHTTPS
+    Left = 60
+    Top = 76
+  end
+end

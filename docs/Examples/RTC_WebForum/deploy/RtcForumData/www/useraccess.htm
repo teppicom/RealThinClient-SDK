@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpl_usraccess.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Access settings</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+
+<!-- InstanceParam name="sections_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tabsel" -->
+
+<!-- InstanceParam name="usr_sections_tab_class" type="text" value="tab2sel" -->
+<!-- InstanceParam name="usr_packages_tab_class" type="text" value="tab2" -->
+
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both">
+<div id=adminarea>
+<p class="page_header">Administration Panel</p>
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsections&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tabsel"  onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" --><strong>User: <%user%>. Access settings for Sections</strong><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody">
+            
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab2sel" onMouseOver="this.bgColor='#F0F0F0';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsectionsaccess&user=<%user_login_enc%>&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab2" onMouseOver="this.bgColor='#F0F0F0';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacksaccess&user=<%user_login_enc%>&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table>  
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+			  <tr><!-- InstanceBeginEditable name="AccessRegion" -->              
+                <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr class="editpack">
+                      <td>Section name</td>
+                      <td width="60"><div align="center">Section Visible</div></td>
+                      <td width="60"><div align="center">Section Access</div></td>
+                      <td width="100"><div align="center">Access Rights</div></td>
+                      <td width="50"><div align="center">Action</div></td>
+                    </tr>
+					<!-- access_table_row.htm -->  
+                    <%table_rows%>
+					
+            </table></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><form name="filter" id="filter" class="editpack" style="padding: 5px">
+  Filter
+  <select name="menu_moderate" onchange="xJumpMenu('parent',this,0)">
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=0&sid=<%sid%>" <%none_selected%>>NONE rights</option>
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=1&sid=<%sid%>" <%read_selected%>>READ rights</option>
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=2&sid=<%sid%>" <%write_selected%>>WRITE rights</option>
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=3&sid=<%sid%>" <%moderate_selected%>>MODERATE rights</option>
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=4&sid=<%sid%>" <%power_selected%>>READ or WRITE or MODERATE rights</option>
+    <option value="?cmd=showsectionsaccess&user=<%user%>&filter=5&sid=<%sid%>" <%all_selected%>>All Sections</option>
+  </select>
+</form>
+</td>
+              <!-- InstanceEndEditable --></tr>
+ 			  <tr>
+ 			    <td>
+ 			      <form action="#" method="get">                       <div align="center">
+                          
+                      <input name="Back" type="button" class="button" id="Back" value="Back" onclick="document.location='?cmd=showusers&sid=<%sid%>'" />
+		                </div>
+			    </form></td></tr>
+            </table>
+            
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table></div>
+  </div>
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,1911 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*********************************************************
+*                                                       *
+* RealThinClient SDK v2.85 (2008.Q3), August 20th 2008. *
+*                                                       *
+*********************************************************
+
+This is the last RealThinClient SDK release compatible with Delphi 4 and 5.
+
+---------------------------------------------------------
+* RTC SDK 2.85
+---------------------------------------------------------
+
+1) Implemented a work-around for ISAPI extensions when using some older Apache versions, 
+   which are omitting a zero terminator in some HTTP variables but sending it in other HTTP variables.
+
+---------------------------------------------------------
+* RTC SDK 2.84
+---------------------------------------------------------
+
+1) Fixed a minor bug in the rtcLog unit (used in RTC SDK Demos for writing log files).
+
+---------------------------------------------------------
+* RTC SDK 2.83
+---------------------------------------------------------
+
+1) Fixed a bug in the WinHTTP connection provider which could have resulted in 
+   some HTTP headers from prior responses to be dragged along in every next response.
+   
+   [ Thanks to Kevin Lu for reporting this problem ]
+
+---------------------------------------------------------
+* RTC SDK 2.82
+---------------------------------------------------------
+
+1) The fix in the WinHTTP connection provider for the "manual proxy" issue was not correctly applied.
+   This has now been corrected.
+
+   [ Thanks to Michael Adam for reporting this problem ]
+
+---------------------------------------------------------
+* RTC SDK 2.81
+---------------------------------------------------------
+
+1) Fixed an issue with the new "manual Proxy" implementation in WinInet and WinHTTP connection providers
+   where wrong proxy settings could have resulted in an endless loop on the client by trying to re-post 
+   a request unlimited number of times.
+
+2) Updated WinInet and WinHTTP connection providers behavior to NOT automatically process redirect
+   requests from a webserver, but instead give you the option to decide what you want to do.
+
+3) Updated the WinSock Server connection component so that the CryptPlugin can be set or removed
+   before every call to the Listen method. In prior implementations, the CryptPlugin could only 
+   have been set (or left blank) once before the first call to "Listen".
+
+---------------------------------------------------------
+* RTC SDK 2.80
+---------------------------------------------------------
+
+1) Fixed an exploit bug in the RTC Forum Demo.
+
+---------------------------------------------------------
+* RTC SDK 2.79
+
+---------------------------------------------------------
+
+1) Fixed handling of responses without a content body (Status Code = 1xx, 204 or 304).
+
+   The problem was that a client would end up waiting for content body, even though a 
+   Status Codes was received which per definition does NOT have a content body (see above).
+   This fix will make sure that Status Codes without content body (1xx, 204 and 304) are 
+   handled correctly (the same way as a 'HEAD' request). For more information, see:
+   http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4
+
+
+---------------------------------------------------------
+* RTC SDK 2.78
+---------------------------------------------------------
+
+1) Removed "Forms" unit from the "rtcDataCli" unit. There are now no references to Controls or Forms units
+   in the RTC SDK anymore, making it possible to use Client- and Server-side RTC SDK components in applications
+   which may not use the Forms unit nor the Application object (like CONSOLE applications or Linux daemons).
+
+2a) Removed "Forms" unit from the uses clause in the "rtcISAPIProject.dpr" file (ISAPI template project).
+2b) Removed "Forms" unit from FileISAPI DLL demo, reducing DLL file size from 580 KB to 332 KB.
+2c) Removed "Forms" unit from MSG_ISAPI DLL demo, reducing DLL file size from 654 KB to 407 KB.
+2d) Removed "Forms" unit from AppISAPI DLL demo, reducing DLL file size from 631 KB to 384 KB.
+
+
+3) Changed Write_File and Delete_File procedures from the rtcInfo unit into functions (returning TRUE on success)
+
+
+---------------------------------------------------------
+* RTC SDK 2.77
+---------------------------------------------------------
+
+1) RtcHttpClient component extended with support for using a specific Proxy server. 
+   Using the new UserLogin.ProxyAddr and UserLogin.ProxyBypass properties of the RtcHttpClient
+   component, you can now set up your RTC Clients to work with a specific HTTP Proxy server,
+   without having to pre-configure WinHTTP or Internet Explorer.
+
+2) RtcHttpClient component extended with support for Proxy server authentication.
+   Using the new UserLogin.ProxyUsername and UserLogin.ProxyPassword properties of the RtcHttpClient
+   component, you can now set up authentication for Proxy servers which require authorization.
+
+3) Added support for Server authentication when working with WinHTTP (WinInet already had this). 
+
+4) File_Client demo extended to use the new ProxyAddr, ProxyUsername and ProxyPassword features.
+
+---------------------------------------------------------
+* RTC SDK 2.76
+---------------------------------------------------------
+
+1) Fixed a possible AV on thread termination caused by calling Free from within the thread object.
+   This fix introduces some changes in the way threads are marked for termination.
+   Now, a thread object should never use FREE to release itself from memory from its Work method, 
+   but instead only return TRUE to signal the worker thread that it wants to be released.
+
+2) Fixed a problem where the application would block for 10 seconds on close when the Main thread 
+   was required for closing background threads which are using Synchronize() in their destructor.
+
+---------------------------------------------------------
+* RTC SDK 2.75+
+---------------------------------------------------------
+
+1) Updated the CHM Help file, which is now the only Help file available in the package.
+
+2) Removed Delphi HLP, BDS 3, BDS 4 and BDS 5 Help files from the source code package
+   (they are now available as a separate download)
+
+3) Changed all "_clear.cmd" and "_pack.cmd" files in the Demos folder
+   to use a separate "Bin" folder, outside of the RTC SDK folder for storing EXE files.
+
+4) Updated the "Readme.txt" file to point to SourceForge for obtaining updates.
+   
+---------------------------------------------------------
+* RTC SDK 2.75
+---------------------------------------------------------
+
+1) Fixed a bug in the automatic Logon feature of the TRtcClientModule component when using the TRtcDualDataClientLink.
+
+2) Removed refferences to the WinSock_rtc unit from all Demos.
+
+3) Changed the "_clear.cmd" file from the "Lib" folder to NOT delete the ".obj" files, 
+   so it can be used by anyone to prepare the package for submission to SVN.
+
+4) Added a new "_pack.cmd" file to the root folder, which will call all "_clear" files 
+   from sub-folders to prepare the package for submission to SVN and use 7-zip (if installed)
+   to create a ZIP file which can be uploaded to SourceForge as the next official RTC SDK release.
+
+---------------------------------------------------------
+* RTC SDK 2.74+
+---------------------------------------------------------
+
+1) Now under a BSD style license.
+
+---------------------------------------------------------
+* RTC SDK 2.74
+---------------------------------------------------------
+
+1) Updated the WinSock API to explicitly set "send" and "receive" timeouts to prevent problems with 
+   reconfigured Windows installations where default timeout was set too short by some third-party application,
+   directly affecting the behavior of RTC Client and/or Server applications (clients loosing connections).
+
+2) Moved Socket Buffer class from a separate unit into WSocket_rtc unit and updated comments.
+
+3) Removed direct use of the "WSocket_rtc" unit from all RTC Demos, since it is a low-level 
+   API unit which should not directly be used by any RTC application.
+
+4) Updated all RTC SDK package files (Delphi and BCB)
+
+---------------------------------------------------------
+* RTC SDK 2.73
+---------------------------------------------------------
+
+1) Function "File_Age" in the rtcInfo unit is now changed to open a file (non-exclusive and read-only) and 
+   use the FileGetDate function to check file's date instead of using the FileAge function from Delphi, because the
+   FileAge function in Delphi 2007 was reported on CodeGear's QC as unsuitable for multithreaded apps (not thread-safe).
+
+2) Fixed a possible exception in RtcServerModule when using a Browser to access ServerModule's URL (ModuleFileName).
+
+3) Enabled the KEEP-ALIVE option for WinSock connections.
+
+4) Updated the WinHTTP connection provider to work with client-side SSL certificates and custom-made server-side SSL certificates.
+
+5) Added a "ResetLogin" method to the TRtcClientModule component, which will clear all client Session data and
+   allow you to reset the auto-login feature, making it easier to switch between users.
+
+---------------------------------------------------------
+* RTC SDK 2.72
+---------------------------------------------------------
+
+1) Added the "Extract" method to all complex TRtcValueObject types:
+   - TRtcValue.Extract;
+   - TRtcRecord.Extract(index:string);
+   - TRtcArray.Extract(index:integer);
+   - TRtcDataSet.Extract(index:string);
+   - TRtcFunctionInfo.Extract(index:string);
+
+   This method should be used instead of "asObject:=nil" whenever you have
+   extracted an object from the complex type by using typed "as..." properties 
+   (not "asObject") and want to make sure that unnecessary container objects will 
+   be freed, so you only need to handle the object/data received.
+
+   So ... now, when using asByteStream to extract the TStream and then using the Extract method 
+   to let the parent component know you want to keep the object (you want to destroy the TStream), 
+   
+he Extract method will free the TRtcByteStream object container and you will only need to 
+   release the TStream object (received from "asByteStream" property before calling Extract).
+
+   If you are using the Remote Functions Wizzard, update it to the latest version and 
+   have it regenerate all your units to use this new method instead of "asObject:=nil;"
+
+---------------------------------------------------------
+* RTC SDK 2.71
+---------------------------------------------------------
+
+1) New SSL Server certificate for the WebForumTLS and WebServerTLS demos have been created.
+   The problem was that all SSL/TLS Demos stopped working after the demo certificate has expired.
+   The new demo certificate should work for the next 10 years ;)
+
+2) Added a new TRtcUserDataEvent and the appropriate Sync method to the TRtcConnection class.
+   This event and the new Sync method are required by the new RTC Portal components.
+
+---------------------------------------------------------
+* RTC SDK 2.70
+---------------------------------------------------------
+
+1) TRtcHttpValues class extended with 2 new methods for accessing data from uploaded files:
+
+    function IsFile(const index:string):boolean;
+    - Return TRUE if a File was uploaded using <input type="file">. 
+      To retieve File content, use the GetFile method.
+
+    function GetFile(const index:string; stream:TStream):boolean; overload;
+    - Get file uploaded using <input type="file"> and store its content in a "Stream".
+      Return TRUE if successful, FALSE if file not found or variable name not recognized. 
+
+
+2) Fixed a problem using "REQUEST.QUERY" and "REQUEST.PARAMS" objects from within RTC Scripts.
+
+---------------------------------------------------------
+* RTC SDK 2.69
+---------------------------------------------------------
+
+1) "BeforeExecute", "AfterExecute" and "OnWrongCall" events added to the TRtcFunctionGroup component.
+
+   BeforeExecute event will be executed every time before a function assigned directly to the 
+   FunctionGroup is executed. It will NOT be executed for functions assigned to the Helper Group 
+   nor for unknown functions. You can use this event to add control code to a group of functions,
+   for example check if the user calling the function is already logged in and raise an exception if not.
+
+   AfterExecute event will be executed after a call to a function directly assigned to this 
+   FunctionGroup was successful (no exceptions raised).
+
+   OnWrongCall event will be executed in case a function is called which does not exist in
+   this FunctionGroup. This event is only for loggin purpuses. Any changes to Function 
+   Parameters or the Result object inside the event will have no effect to the actual result.
+
+---------------------------------------------------------
+* RTC SDK 2.68
+---------------------------------------------------------
+
+1) Removed some critical section entry/leave points from the WinSock Http Client and Server 
+   connection providers, which might result in some minor performance improvement when using 
+   the RTC SDK with the WinSock API (default settings when useProxy=False and useSSL=False)
+
+2) Added support for using the WinHTTP API with the RtcHttpClient component.
+   Now, RTC Clients can choose between the WinSock, WinInet and WinHTTP API.
+
+   To use the WinHTTP API, set useWinHTTP=True for the RtcHttpClient component.
+
+   When useWinHTTP=FALSE, but useProxy or useSSL are TRUE, the WinINET API will be used.
+   When useWinHTTP, useProxy and useSSL are FALSE, the WinSock API will be used.
+
+   To configure a HTTP Proxy for use with the WinHTTP API,
+   you need to run the "proxycfg.exe" utility from Microsoft.
+
+   The WinHTTP API is best suited for PCs where the use of Internet Explorer is not wanted,
+   or where you want your application to run as a Windows Service 
+   without access to user-specific Internet Explore settings.
+
+   On the other hand, the WinInet API always uses the same settings as Internet Explorer,
+   which makes it better suitable for Client-side applications with zero configuration.
+
+---------------------------------------------------------
+* RTC SDK 2.67
+---------------------------------------------------------
+
+1) Updaded RtcDatasetToDelphi and DelphiDatasetToRtc functions to ignore fields
+   which are not part of the "physical" dataset (fields which can not be set).
+
+2) Exposed the LOG folder through the RTC_LOG_FOLDER variable ("rtcLogs.pas" unit).
+
+3) Added "ScriptOpen" and "ScriptClose" properties to the RTC ScriptingEngine,
+   allowing you to choose a different set of characters for
+   script closing and opening. Default characters are <? and ?>
+
+---------------------------------------------------------
+* RTC SDK 2.66
+---------------------------------------------------------
+
+1) Fixed a bug which could cause a Server to lock up when using Delayed Calls.
+
+---------------------------------------------------------
+* RTC SDK 2.65
+---------------------------------------------------------
+
+1) WinSock HTTP Client update
+
+   There was a problem receiving a response when the HTTP Header was missing the Status Text
+   and the "useProxy" property was set to FALSE. This problem has now been fixed.
+
+---------------------------------------------------------
+* RTC SDK 2.64
+---------------------------------------------------------
+
+1) Added the AutoLogin property with OnLogin, OnLoginResult and OnLoginAborted events for the 
+   RtcClientModule component. Using the new property and events, you can implement automatic
+   user login functionality to make sure the user authentication information will be sent to
+   the Server with every connection used, and re-sent in case a session on the Server should expire.
+
+   When AutoLogin property is set to TRUE, you should implement the OnLogin event to prepare a remote 
+   function (just prepare, not make the Call), which will be sent to the Server to authenticate the user 
+   and initialize user's session data. On the server side, you simply need to have the login function
+   implemented, the same way you would implement any other remote function for your rtcServerModule.
+
+   When using AutoLogin, prepare all the data required for the login call BEFORE you make any other calls.
+   You should not explicitly make the "log in" call. Your OnLogin event will be used to prepare the call
+   which will be automatically sent as the first call after the connection was established. 
+
+   Once user authentication was successful, the user will remain "logged in" and there will be no further 
+   (automatic) "log in" calls, as long as the Session used to "log in" the user stays alive. 
+   If a session expires, or you use a different connection, a new "log in" call will automatically be made,
+   to prepare the new session.
+
+2) Added a new component: TRtcDualDataClientLink
+
+  You can use one or more TRtcDualDataClientLink components to create a small pool of client connections,
+  allowing the Link component to decide which connection component to use when posting a request, 
+  depending on the number of currently pending requests on each connection. A new request will 
+  be posted through the connection with the lowest number of pending/active requests, unless 
+  a specific connection object was explicitly specified when making the post/call.
+
+  WARNING: Since Sessions are always linked to physical connections, when using the 
+           DualDataClientLink, your code has to be prepared to work with multiple sessions.
+
+           If you are using remote functions and there is some login information which you 
+           need/want to send before the user can start working with the Server (identify the user), 
+           I would recommend using the new "TRtcClientModule.AutoLogin" functionality for user login.
+
+3) Extended the TRtcClientModule.Call, TRtcClientModule.Post, TRtcDataRequest.Post and TRtcDataRequest.Insert 
+   methods to accept the "Sender:TRtcConnection" as a parameter additionally to "FromInsideEvent:boolean" when 
+   you are making a call from inside an event triggered by a connection component. This was necessary with the 
+   introduction of TRtcDualDataClientLink component, to allow you to pass the next call through the same physical
+   connection you have just received a result from (for example, when you are implementing request loops).
+
+4) Added "DelphiDS.Active:=True" to the RtcDataSetToDelphi function in the rtcDBTypes unit.
+
+---------------------------------------------------------
+* RTC SDK 2.63
+---------------------------------------------------------
+
+1) Fixed a problem with possible Memory Leaks when compiling Scripts which contain Errors.
+
+2) To avoid problems with unterminated short strings, syntax checking is now more strict,
+   disallowing short strings ("" and '') to spread across multiple lines inside the script.
+   IOW, the use of " and ' is only allowed for strings which will be terminated before 
+   the end of line. For multi-line strings, always use Long HTML strings: ?> <?
+
+3) Fixed the row and column position counter in the Script Compiler when using Single-line comments (//)
+
+---------------------------------------------------------
+* RTC SDK 2.62
+---------------------------------------------------------
+
+1) Fixed a memory leak in the Scripting Engine.
+
+2) Added more ignore flags for the "certAny" option when using rtcHttpClient
+   to communicate with a HTTPS Server which is using an invalid SSL certificate.
+
+---------------------------------------------------------
+* RTC SDK 2.61
+---------------------------------------------------------
+
+1) BCB (Borland C++) Package files updated.
+
+---------------------------------------------------------
+* RTC SDK 2.60b - Scripting Engine Fixes
+---------------------------------------------------------
+
+1) RTC Scripting engine: Fixed a problem with empty while loops.
+
+2) RTC Scripting engine: Fixed the AND function.
+
+---------------------------------------------------------
+* RTC SDK 2.60 - RTC Scripting Engine added
+---------------------------------------------------------
+
+1) RTC Scripting Engine added to the RealThinClient SDK.
+
+   RTC Scripting Engine makes it possible to use a Pascal-like scripting 
+   language to execute Delphi functions from within HTML and/or XML files.
+
+   When using the RTC Scripting Engine, you can decide for yourself how 
+   much of your application logic you want to have inside your compiled 
+   Server or ISAPI (using RTC remote functions) and how much you want to 
+   have in form of scripts inside your HTML/XML files.
+
+   If you are already using the RTC SDK and have a collection of remote 
+   functions written, you can make these functions accessible from script 
+   files by connecting the FunctionGroup (where your remote functions are 
+   connected) to a TRtcScriptEngine component, making all the functions
+   avilable from scripts executed using that TRtcScriptEngine component.
+   The same functions can still be available from RTC Clients.
+
+   For a complete Script Language syntax, see the "Script_Syntax.txt" file.
+
+2) Added a Script Engine Test application, with a sample script.
+
+   This Script Test application is meant for learning and experimenting with 
+   RTC Scripting Engine capabilities. You can enter your Script in the
+   left memo, click "Execute" and see the result in the right memo.
+
+---------------------------------------------------------
+* RTC SDK 2.52
+---------------------------------------------------------
+
+1) Updated Encryption plugin for StreamSec Tools.
+
+   [ Thanks to Henrick Hellström ]
+
+2) Added an option to the "rtcLog.pas" unit for automatic deletion of old log files.
+
+   The new option is disabled by default. To enable it, set the RTC_LOGS_LIVE_DAYS variable to the 
+   number of days you want the logs to be kept. Every time a new log file is created, the logging 
+   functions will delete all files in the LOG folder which are older than "RTC_LOGS_LIVE_DAYS" days.
+
+   [ Thanks to Gerhard Knapp ]
+
+3) Fixed the missing CRLF in the "Log" function and optimized the functions a bit.
+
+   [ Thanks to Alex Pranke ]
+
+---------------------------------------------------------
+* RTC SDK 2.51
+---------------------------------------------------------
+
+1) Changed Append/Rewrite/Writeln to OpenFile/CreateFile/WriteFile for writing log files ("rtcLogs.pas" unit).
+
+   The old implementation could cause the log file to be re-created (emptied) if there was a problem opening 
+   it (for example, if it was locked by another application). The new implementation will never overwrite 
+   existing file, while also being capable of writing to the log file while it is open by another application.
+   Only if some other application requests exclusive access to "our" log file, log writing will be disabled 
+   until the file was released again.
+
+---------------------------------------------------------
+* RTC SDK 2.50
+---------------------------------------------------------
+
+1) Added an additional "assertion" check to the TRtcRecord and TRtcDataSet classes.
+
+   An exception will now be raised if you try to make an assignment to a TRtcRecord/TRtcDataSet 
+   field by using an integer index before the field was not created using a field name.
+   Trying to assign data to fields without a field name will raise the same exeption.
+
+2) Added Low-level components to the "RTC LowLevel" palette:
+   - UDP Client
+   - UDP Server
+   - TCP Client 
+   - TCP Server 
+
+   Low-level TCP/IP and UDP components can be used for raw communication monitoring (for example, 
+   debugging) and for adding new protocols (like SMTP, POP, NTTP, etc) based on TCP/IP or UDP.
+
+3) Added Low-level TCP/IP Client/Server and UDP Client/Server demos.
+
+---------------------------------------------------------
+* RTC SDK 2.49
+---------------------------------------------------------
+
+1) Delphi 4, 5 and 6 compatibility update.
+
+   In RTC SDK 2.48 (WaitForCompletion update), I've used a new WM_INPUT constant, which 
+   was introduced in Delphi 7. I've now replaced this with (WM_KEYFIRST-1), which is 
+   known in all Delphi versions, but returns the same value. This fixes the compile
+   error you would get with Delphi 6 and older when trying to compile RTC SDK 2.48.
+
+---------------------------------------------------------
+* RTC SDK 2.48
+---------------------------------------------------------
+
+1) WaitForCompletion with UserInteraction=False was processing too many messages, which has caused problems 
+   using ThinDAC in blocking mode. Now, WaitForCompletion with UserInteraction=False will only process low 
+   system messages (up to WM_INPUT) and USER messages, which will avoid triggering scroll and other messages.
+
+---------------------------------------------------------
+* RTC SDK 2.47
+---------------------------------------------------------
+
+1) Fixed a Memory and a *Thread* leak. 
+
+   This "memory+thread" leak will only happen in a Multi-Threaded Server where 
+   the listener is often being started and stopped (which is never the case) or 
+   in a client working with a single connection in Multi-Threaded mode and that 
+   connection is often being opened and closed.
+
+---------------------------------------------------------
+* RTC SDK 2.46
+---------------------------------------------------------
+
+1) Update from version 2.44 and fixed in 2.45 worked for most cases, but not for all.
+   Instead of tying to identify where the call came from, I have now added a parameter 
+   for calling remote functions from within other remote functions OnResult events.
+
+   This update makes it possible to call remote functions from within a Result received from 
+   another remote function call, even if your application is working in single threaded mode.
+
+2) Modified AppClient demo to use this new feature, so the multi-connection flood test can now
+   run in single-threaded and in multi-threaded mode (the "MultiThreaded" Checkbox is now used).
+
+---------------------------------------------------------
+* RTC SDK 2.45
+---------------------------------------------------------
+
+1) Critical fix for version 2.43 (memory consumption problem).
+
+   RTC Messenger Client in Version 2.43 and 2.44 stopped working.
+   This is now fixed in version 2.45
+
+---------------------------------------------------------
+* RTC SDK 2.44
+---------------------------------------------------------
+
+1) Fixed a conflict with connection Timeouts in a Multi-Treaded Server.
+
+   The problem was that one background thread would trigger a Timeout event for a connection
+   while another background thread was in the process of destroying the same connection object.
+
+   To avoid this possible conflict, Timeout events are being prepared as jobs, then posted to 
+   the thread responsible for handling the connection object. In other words, if a Timeout should 
+   be triggered, a "Disconnect job" will be posted to the connection object's thread, so the 
+   "timeout thread" doesn't access the connection object directly. This way, the actual disconnect 
+   will be handled by the same thread which is handling all other things related to this connection.
+
+---------------------------------------------------------
+* RTC SDK 2.43
+---------------------------------------------------------
+
+1) Fixed a memory consumption problem when using WinInet to recursively send requests.
+
+   This is usually never the case in applications controlled by humans, but if you need 
+   to implement an endless request loop and want to base each next request on the data you
+   have received from the last response, and you have to use WinInet (useProxy or useSSL),
+   using recursive calls would be the easiest way to implement it, which is also how the
+   endless loop in the AppClient demo was implemented. So, this fix will keep your memory 
+   requirements on a constant level, even when implementing endless loops using recursive calls.
+
+---------------------------------------------------------
+* RTC SDK 2.42
+---------------------------------------------------------
+
+1) Fixed a bug introduced in SDK 2.41, where the main thread window handle used for 
+   processing all RTC messages in the main thread could have been created from a background thread, 
+   which has resulted in Timer/Reconnect/PostInteractive messages not being fired.
+   NOTE: This bug was introduced with my "handle tweaking" in version 2.41
+
+2) Fixed a problem closing the background message handler thread, which was also 
+   causing 3 small memory leaks and a 10-second pause before application shutdown.
+   NOTE: This bug was introduced in version 2.31 (moving background thread to a separate unit)
+
+---------------------------------------------------------
+* RTC SDK 2.41
+---------------------------------------------------------
+
+1) Minor "Windows handle" tweaking
+
+2) Added support for BDS 2006 to rtcDBTypes unit
+
+---------------------------------------------------------
+* RTC SDK 2.40
+---------------------------------------------------------
+
+1) Work-around for a bug in Flash 8 upload rountines, 
+   which are sending invalid FORM POST data
+
+2) Support for working with HTTPS (SSL) Servers using non-standard and/or invalid SSL vcertificates.
+
+   Default setting for "rtcHttpClient.UserLogin.CertType" is now "certAny", 
+   which will ignore all Server-side certificate errors and accept the response.
+
+   If you do NOT want your RTC Client to work with servers using "wrong" certificates, 
+   you need to set the "rtcHttpClient.UserLogin.CertType" to "certNone".
+
+---------------------------------------------------------
+* RTC SDK 2.38
+---------------------------------------------------------
+
+1) Added compiler directives with are required for compiling the RTC SDK to "rtcDefs.inc", 
+   making it possible to use the RTC SDK in projects which require different compiler settings.
+
+2) Included Demos and QuickStart folders, which were missing since RTC SDK 2.35 Beta
+
+---------------------------------------------------------
+* RTC SDK 2.37
+---------------------------------------------------------
+
+1) Fixed a bug which would cause an endless request loop from the client when
+   client wants to enforce encryption, but the Server doesn't support encryption.
+
+---------------------------------------------------------
+* RTC SDK 2.36
+---------------------------------------------------------
+
+1) A few bug fixes and more changes for the new RTC Scripting Engine.
+
+---------------------------------------------------------
+* RTC SDK 2.35 Beta
+---------------------------------------------------------
+
+1) Changes required for the new RTC Scripting Engine.
+
+   Please note that this is a BETA version!
+
+---------------------------------------------------------
+* RTC SDK 2.34
+---------------------------------------------------------
+
+1) BCB6 compatibility update
+
+---------------------------------------------------------
+* RTC SDK 2.33
+---------------------------------------------------------
+
+1) Added "FieldByName" function to TRtcDataSet class.
+   This function was added only to make field access similar to TDataSet.FieldByName() possible.
+
+   FieldByName will always return a TRtcValue object (never NIL), which you can use to read data
+   inside this specific field in this specific row. If nothing was assigned to that row and field,
+   a new NULL value will automatically be created and assigned on first access.
+
+   When using FieldByName, a container object will be created for each field and row,
+   which takes more memory and makes field access slower. Unless you absolutely
+   NEED to use FieldByName to access field data, it would be much better to use
+   asString[], asInteger[], asDateTime[] and other "as..." properties, which work
+   faster and require less memory, since the TRtcValue container is not needed.
+
+
+---------------------------------------------------------
+* RTC SDK 2.32
+---------------------------------------------------------
+
+1) rtcHttpServer can now process requests received with chunked transfer encoding.
+
+   Except for the missing "Request.ContentLength" value, your implementation should work the same 
+   whether the data was received using the standard streaming method, or by using chunked transfers.
+
+2) rtcHttpClient can now safely be used to send large files out by writing them out in smaller blocks 
+   from the OnDataSent events. Because of the new WinInet implementation, content body doesn't have 
+   to be buffered to memory before we start sending it to the Server. 
+
+   The old implementation with "useProxy=True" has been using a buffer to place the whole content in 
+   memory before it could be sent out. New implementation is using the "InternetWriteFile" procedure 
+   to send the content body out as you write it, the same way it works with the WinSock API 
+   (when "useProxy=False"), which eliminates the need to place the whole content in memory before sending.
+
+3) Fixed a problem in rtcHttpClient's "WriteHeader" and "Write" methods which made it impossible to 
+   start sending out a large request/response by using only WriteHeader or an empty Write in the OnBeginRequest
+   event (you had to start sending the file content from the OnBeginRequest event).
+
+   Now you can set up your request headers in the OnBeginRequest event and send out only the HTTP headers
+   by using the WriteHeader method (or a simple "Write" without parameters), then send the content body
+   by implementing the OnDataSent event to send the data out in chunks/blocks.
+
+4) QuickStart/Delphi_ClientUpload example was updated to take advantage of (2) and (3), showing you how
+   to send out large files, without flooding your memory with the whole file content.
+
+
+---------------------------------------------------------
+* RTC SDK 2.31
+---------------------------------------------------------
+
+1) Added "AccessMode" parameter to Read_File, Write_File and Scan_File functions, so
+   you can now choose the mode in which the file should be opened for reading/writing/scanning.
+
+2) Setting asByteStream position to the beginning (Position=0) when receiving streams with remote functions.
+   In prior versions, "asByteStream.Position" was at the end of the stream (the stream was just written),
+   so you had to set the position to zero by using "asByteStream.Position:=0" before you could read from it.
+
+3) Fixed the rtcFileProvider Demo (used by the RTC WebServer) to work correctly with relative paths.
+   From here on, the current EXE folder will be used as a starting folder for all relative paths.
+
+4) Moved the background Thread for Multithreaded Message Handling to the "rtcHWndPool" unit.
+
+5) Using background thread to process Timeout and Reconnect messages for connections in MultiThreaded mode.
+   Older implementations were using the Main Thread, so timeouts and reconnects did not work when the Main Thread was busy.
+
+6) Fixed the rtcHttpClient.WriteHeader(Header_Text:string) method for "useProxy=True".
+
+7) Resetting "Response.StatusCode" and "Response.StatusText" with every new request. 
+   With older implementations, StatusCode or StatusText could have kept values from the last 
+   response if a malformed HTTP response (without a StatusCode and Text) would be received.
+
+8) Included SBB_FileClient, SBB_FileServer and SBB_WebForum Demos with SSL encryption using SecureBlackBox from Eldos.
+
+---------------------------------------------------------
+* RTC SDK 2.30
+---------------------------------------------------------
+
+1) RTC WebServer 2 TLS Demo extended to work over HTTP and HTTPS by connecting all 
+   components to a HTTP and a HTTPS Server components using a TRtcDualDataServerLink.
+
+   This Demo shows you how to create a single Server executable which will serve
+   your applicationa and any files using more than one port and protocol.
+
+2) All Help files have been updated.
+
+---------------------------------------------------------
+* RTC SDK 2.29 - Fixing SSL support using Third-party components
+---------------------------------------------------------
+
+1) Fixed a problem which caused exceptions when using Third-Party Encryption components (SSL).
+
+   The problem with SSL was that the reported "Response.DataOut" on the Server-side, as well
+   as the "Request.DataOut" property on the Client-side would not be correct when using the
+   new WinSock implementation which was triggering the "DataSent" event before the data was
+   really sent out. Now (same as in older RTC SDK versions), the "DataSent" event will only be
+   triggered once the data was *really* sent out (or at written to the WinSock buffer).
+
+2) Added a read-only property "Version_SDK" to TRtcConnection components, which 
+   will show the current RTC SDK version (now 2.29) in the Delphi IDE.
+
+3) RTC WebServer 2 Demo is now also available in the TLS version (SSL using StreamSec Tools 2).
+
+---------------------------------------------------------
+* RTC SDK 2.28 - important fix
+---------------------------------------------------------
+
+1) Added one auto-incrementing number to all sent requests when using encryption,
+   so that skipped or aborted requests can not "go by unnoticed" on the Server.
+
+   If Client and Server counters should get "out of sync" while using encryption
+   (which will happen if connections get dropped while sending or receiving data)
+   the Server will reject the "out of sync" request and notify the client by sending 
+   him the "Encryption Key Wrong" response, after which the client will re-initialize 
+   the encryption handshake (request a new encryption key).
+
+   Because of the additions required in the encryption control mechanism, 
+   this version is NOT compatible with RTC SDK 2.27 or older, 
+   unless the "compatibility mode" is enabled.
+
+---------------------------------------------------------
+* RTC SDK 2.27 - Major update !!! Read before using !!!
+---------------------------------------------------------
+
+1) If you need all your new clients and servers to stay compatible with 
+   all older RTC clients and servers, even if this means disabling some 
+   new features from the latest RTC SDK, you simply need to declare:
+
+   {$DEFINE OldRtcCompatibilityMode}
+
+   By default, this directive is NOT declared and all new features are used.
+
+   If you still have some older clients or servers, please read the 
+   description of "compatibility-breaking" features (below) *before* 
+   deploying a new RTC Client or RTC Server to an existing network.
+
+
+2) RTC SDK versions up to 2.04 are expecting all Field names received with
+   remote function calls to be in UpperCase. This is not the case with newer
+   RTC SDK versions, which allow working with field names using mixed case,
+   without internaly converting all field names to uppercase.
+
+   If you are still using Clients or Servers compiled with older RTC SDK
+   versions, you have to define a compiler directive ...
+
+   {$DEFINE RtcUpperCaseFieldNames}
+
+   ... for your project, or to make it default for all projects, 
+   do it in the "rtcDefs.inc" file sinde RTC SDK's "Lib" folder.
+
+   This will make sure all Field Names will be converted to UpperCase 
+   when sent out, so that older clients and servers won't have problems 
+   with the client/server compiled with *this* RTC SDK version.
+
+   This directive is NOT enabled by default.
+
+
+3) RTC Clients compiled with RTC SDK versions *before* 2.27 do NOT send a
+   control sum when using RTC functions with encryption, which makes it
+   hard for the Server to check if the control key received from the client
+   is a valid control key. Starting with RTC SDK 2.27, RTC Clients will be
+   sending a control sum value along with each control key, which RTC Servers
+   can use to check if the control key is valid and make sure at least the
+   end of the request data was decrypted properly.
+
+   But, since this control sum value is not being sent by RTC Clients compiled
+   with RTC SDK versions older than 2.27, those clients would NOT work with
+   a RTC Server compiled with the latest RTC SDK version expecting this.
+
+   If you have RTC Clients compiled with RTC SDK 2.26 or older and can not 
+   port all of them before replacing the Server, you will need to declare 
+   a compiler directive ...
+
+   {$DEFINE RtcDoNotCheckCryptControlSums}
+
+   ... for your project, or to make it default for all projects, 
+   do it in the "rtcDefs.inc" file in the RTC SDK's "Lib" folder.
+
+   This will disable this new check on the RTC Server (compiled with the laterst 
+   RTC SDK version), so that your RTC Server can continue working with older clients, 
+   even when compiled with the latest RTC SDK version. 
+
+
+---------------------------------------------------------
+* RTC SDK 2.26
+---------------------------------------------------------
+
+1) More optimizations for working with large data structures and/or 
+   sending large requests and/or responses using the Write() method.
+   - improved class: TRtcHugeString
+   - improved class: TRtcFastStrObjList
+
+2) From this version on, TRtcHugeString class is used for all internal buffers (no more "TStringList")
+
+3) Moved TRtcHugeString class to a new "rtcFastStrings.pas" unit
+
+---------------------------------------------------------
+* RTC SDK 2.25
+---------------------------------------------------------
+
+1) Fixed a bug which causes an Access Violation when using TRtcClientModule.Call(NIL) 
+   and the Request was Aborted. The problem was that the ResultAborted event was called 
+   on the "assigned" TRtcResult object (parameter to "Call"), while the TRtcResult object was NIL.
+
+---------------------------------------------------------
+* RTC SDK 2.24
+---------------------------------------------------------
+
+1) Minor fixes and code readability improvements to the new RTC Value objects implementation.
+
+The first implementation used a TStringList and a search tree to store functions, records, datasets and
+http header information. This implementation uses a new class, which encapsulates the functionality of 
+a TStringList and a search tree, which reduces the probability of getting the 2 lists "out of sync".
+
+---------------------------------------------------------
+* RTC SDK 2.23
+---------------------------------------------------------
+
+1) Removed Low-level TCP/IP and UDP components from the components palette.
+
+2) Removed Low-Level TCP/IP and UDP Demos from the "Demos" folder.
+
+This is to avoid new RTC SDK users from stumbling across the low-level components and trying 
+to use them for writing RTC applications, which is NOT what RTC SDK was designed for. 
+The low-level components are still there in the Lib folder, they are just not installed 
+on the components palette. Only the higher-level components are now on the components
+palette and only higher-level Demos are in the Demos folder.
+
+If you need to implement your own protocol on top of the TCP/IP protocol,
+please contact us directly by E-Mail: http://www.realthinclient.com/contact.htm
+
+---------------------------------------------------------
+* RTC SDK 2.22
+---------------------------------------------------------
+
+1) Fixed a bug with Cookie expiration time in the RTC WebForum Demo, because of which "Logout" didn't always work.
+
+---------------------------------------------------------
+* RTC SDK 2.21
+---------------------------------------------------------
+
+1) Added the new unit "memStrIntList" to all RTC SDK packages.
+
+2) Fixed a bug in the new HTTP Header handling (introduced with RTC SDK 2.20)
+
+3) Fixed a bug in the rtcISAPIServer when sending files split in chunks (introduced in RTC SDK 2.0 RC 1).
+
+   The problem was that the OnDataSent event wasn't being triggered after data was forwarded to 
+   the WebServer, so only the first block was sent out. After that, an exception was raised in the ISAPI,
+   since more data was expected to be sent out. This bug was only related to ISAPI extensions which
+   would be sending data out in chunks, like the RTC Forum (sending large files from the download area).
+
+   This bug did not affect working with Remote functions or other implementations where the complete response 
+   was sent from the "OnDataReceived" event, while OnDataSent event was left unused. Since in 99,9% of all
+   ISAPI extension implementations the complete response is being sent directly from the OnDataReceived event,
+   it is very likely that nobody would even notice this bug. I've also found it only by chance, while 
+   testig the RTC Forum ISAPI (trying out all the features - including file download).
+
+4) ISAPI connection object will now be released from the pool in case of an exception.
+   This is necessary to avoid more problems resulting from that same exception, 
+   since the connection could be in a "limb" state after the exception was raised.
+
+5) Help files have been regenerated to reflect the changes in the library.
+
+*** !! NOTE !!! ***
+
+If you are still using RTC SDK 1.9 or older, 
+read the warning for RTC SDK 2.20 (below) before upgrading.
+
+*******************
+
+---------------------------------------------------------
+* RTC SDK 2.20 - beta
+---------------------------------------------------------
+
+**** ! WARNING ! ****
+
+Are you still using RTC Clients or Servers compiled with RTC SDK 1.9 (or older)?
+
+Then do NOT upgrade your Server to RTC SDK 2.20 before your clients have been recompiled 
+with RTC SDK 2.04 or newer, otherwise your clients will stop working propperly.
+
+Also, do not upgrade your Clients to RTC SDK 2.20 before your Server has been recompiled
+with RTC SDK 2.04 or newer, otherwise your Server will stop working propperly.
+
+*********************
+
+All data will (from this version on) be sent using mixed case field names, preserving the original 
+"casing" when sending records/functions/datasets. This is especially useful for Field Names in datasets,
+but could also be useful when sending any other data. Because of this change in behavior, RTC Servers 
+and RTC Clients compiled using RTC SDK versions prior to 2.04 (2.0 RC 4) will NOT be able to work 
+with RTC Clients and Servers built using this latest RTC SDK release, because the old 
+implementation for remote functions is expecting all field names to come in uppercase and 
+this will no longer be true with this latest RTC SDK release.
+
+The new RTC SDK can handle new and old clients/servers without any problems and there are now changes 
+required in your code, all the functionality remains the same (you can still use different case names),
+but the old RTC SDK will not be able to handle remote function calls if they come with mixed-case field names.
+
+In other words, if you are still using clients compiled with RTC SDK 1.9 or older, if you can not
+upgrade all your clients and the Server "at once", I would suggest that you start by upgrading the 
+Server to the RTC SDK 2.19 (or any other version after 2.04) which is still available for download, 
+then you can upgrade all the clients to RTC SDK 2.20 (or the current latest release). Only after all 
+your clients have been upgdraded to the RTC SDK 2.20 (or later), you can also upgrade the Server 
+to the latest RTC SDK release (currently 2.20).
+
+Here is what has changed (in more detail) ...
+
+1) Performance dupdate for working with RTC objects using field names:
+
+   In prior versions, all field names were stored in a TStringList which had to be scanned
+   from top to bottom for each field access (using field name), because I wanted to preserve 
+   the original field order (fields were sent in the same order they were created).
+
+   For the case-insensitive "indexing" to work, all field names had to be converted to UpperCase,
+   or a Case-Insensitiv option had to be enabled for the internal TStringList (making the search slower).
+
+   Now, mixed case names are preserved (stored in the TStringList in their original order) and a 
+   separate binary search tree is used to store uppercase versions of all field names (with their indexes), 
+   which is then used for fast searching (the more fields, the higher performance improvement).
+
+   Case-insensitive search now works without losing the original mixed case format and all searching 
+   is done using a binary search tree, which is extremely fast, especially when compared to the 
+   sequential scan method used in the prior version.
+
+2) HTTP headers and Remote function parameters will now be sent using the same mixed case which
+   was used to prepare them. In other words, you will now get the exact Field Names on "the other side",
+   which you used to store the data in records, function parameters, datasets and HTTP headers.
+   There will be no more automatic capitalization done. All to uppercase? No, thanks! :)
+
+
+---------------------------------------------------------
+* RTC SDK 2.19
+---------------------------------------------------------
+
+1) Updated the WebPackageManager, WebForum and WebServer2 Demos to compile with Delphi 4, 5 and 6.
+
+2) Moved WebPackageManager, WebForum, WebForum_ISAPI, WebServer2 and WebServer_TLS projects to
+   the "deploy" folder, to make it possible to debug the projects in Delphi 4. There is a bug in 
+   Delphi 4 which makes it impossible to debug applications compiled to a location different from
+   the default exe location (Delphi can not find the EXE after compilation).
+
+3) Added rtcSDK_C4.bpk package for installing the RTC SDK in BCB 4.
+
+---------------------------------------------------------
+* RTC SDK 2.18
+---------------------------------------------------------
+
+1) Updated the License Agreement to correct contradicting wording which could lead to 
+   a misconception that deployment of ISAPI extensions (Dynamic Link Libraries) was 
+   prohibited under the commercial license agreement, which would be nonsense, 
+   since the RealThinClient SDK is also designed for writing ISAPI extensions.
+
+   Please see the "License.txt" file for the updated License Agreement.
+
+2) Corrected a few QuickStart examples. 
+   Now all QuickStart examples compile with Delphi 4 and above.
+
+---------------------------------------------------------
+* RTC SDK 2.17
+---------------------------------------------------------
+
+1) Added TRtcDualDataServerLink component: 
+
+This component can be used to link the same Data Provider components to multiple Server 
+connection components (for example, HTTP Server, HTTPS server, NexusDB transport, direct link, etc).
+This is useful if you want to serve your content over multiple transports, without having to compile 
+the code into a separate exe, so that session information is accessible over multiple servers.
+
+2) Moved units "rtcPHP", "rtcPHPTypes" and "rtcISAPI" from the "Lib" folder to "Demos/DataProvider".
+   This is to reflect the fact that those are only examples for running PHP scripts and executing
+   ISAPI extensions from a RTC WebServer, but are not part of the RTC SDK library as such. 
+   So, those units are still there, just not in the "Lib" folder anymore.
+
+3) Removed the "rtcISAPI" and "rtcPHP" units from all RTC SDK packages,
+   since there are no components in these files and the files are not 
+   required to compile the RealThinClient SDK components. 
+
+---------------------------------------------------------
+* RTC SDK 2.16
+---------------------------------------------------------
+
+Components have been stress-tested and new Help files were generated.
+
+---------------------------------------------------------
+* RTC SDK 2.0 - RC 16 (stable)
+---------------------------------------------------------
+
+***Fix***
+
+1) Changed the "IRTCThreadCallback" interface to a "TRtcThreadCallback" class.
+
+2) Changed implementation in "rtcActiveX" to extend the "TRtcThreadCallback" class instead of extending TComponent and implementing the IRTCThreadCallback interface.
+
+---------------------------------------------------------
+* RTC SDK 2.0 - RC 15
+---------------------------------------------------------
+
+***Update***
+
+1) Added "IRTCThreadCallback" interface, which can be used to add special 
+   thread initialization and uninitialization code for the stand-alone RTC Server.
+
+2) Added "rtcActiveX" unit, which you can include ("uses") in your project if 
+   you are using ADO components in a multithreaded client/server and need each 
+   thread to call CoInitialize on thread start and CoUninitialize before thread "stop".
+
+3) Added "rtcDBTypes" unit, which includes arrays for converting RTC Field Types to 
+   standard Delphi Field Types (TDataSet), as well as a simple impementation of functions
+   for copying data from a RTC DataSet to a TDataSet and vice versa.
+
+4) A new QuickStart example for using the RTC Parser (rtcParse3.dpr)
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 14
+---------------------------------------------------------
+
+***Update***
+
+1) Constructors with Values as parameters for all TRtcSimpleValueObject classes (TRtcInveterValue, TRtcStringValue, TRtcBooleanValue, etc). Those new constructors will be useful if you need to convert data stored in some other containers (for example, COM data types) into RTC objects.
+
+2) Added method TRtcDataSet.SetField(FldName:string; FldType:TRtcFieldTypes; FldSize:integer=0; FldRequired:boolean=False); - Now you can define fields in a RTC DataSet using a single method call. This call is equivalend to assigning the values to FieldType, FieldSize and FieldRequired properties.
+
+3) Mime_Encode and Mime_Decode functions (for base64 string encoding and decoding) are now available for public use (unit "rtcInfo"). Those functions are not required for things related to the RTC SDK, but since we now have XML-RPC support and some clients or servers could be sending you Mime Encoded data where data should be sent in plain strings, you now have functions to encode and decode the data if necessary.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 13
+---------------------------------------------------------
+
+***Update***
+
+1) Added support for different Session locking options:
+  - sesIPLock (this was the only option until now)
+  - sesFwdLock (this is the new default)
+  - sesIPFwdLock
+  - sesNoLock 
+
+1a) sesNoLock: Allow access to anyone. No client data will be used for identifying clients, which means that any client knowing which Session IDs are open, will have access to those sessions, regardless of its IP address or other header values. This setting is not recommended for Servers available on the Internet.
+
+1b) sesIPLock: Allow access to an opened Session only to Clients coming from the same IP as the client which has created the session. This setting is not recommended for Web Applications which need to be accessible by anyone, since people behind proxy servers with changing IP addresses will not be able to "stay logged in" (when their IP changes, they will lose access to their Session).
+
+1c) sesFwdLock: This is the default Session Lock setting, which should work for all clients. It will provide maximum security for clients which are NOT behind a proxy server, while still allowing access to clients behind proxy servers with changing IP addresses (the "X-FORWARDED-FOR" header has to be set by the proxy forwarding client requests). 
+
+If the client opening the Session had the "X-FORWARDED-FOR" header set, any client with the same "X-FORWARDED-FOR" header will be allowed access to his Session (it just has to use the same Session ID as the client which has opened/created the session). If "X-FORWARDER-FOR" header was not set by the client creating the session, Peer IP address will be used for client identification.
+
+1d) sesIPFwdLock: Session will always be locked to the Peer IP address, *plus* to the "X-FORWARDED-FOR" request header, if it was set for the client which has opened the session. This setting is not recommended for Web Applications which need to be accessible to a wide public audience, since people behind proxy servers with changing IP addresses will NOT be able to "stay logged in". When their IP address changes, they will lose access to their Session data and need to log in again.
+
+2) Added new property "AutoSessionsLock" to the TRtcServerModule component, which you can use to define which Session Locking mode you want to use for Sessions created automaticaly by this rtcServerModule component for use with remote functions. Unless you have some special requirements (more or less session security), you should leave the settings at default (sesFwdLock).
+
+3) The "OpenSession" method in the TRtcDataServer component (available to all descendant components like TRtcHttpServer and TRtcISAPIServer) now has an *optional* parameter "LockType", which defaults to "sesFwdLock". Unless you need to use a different session locking mechanism (with more or less security for the clients), you should continue using the OpenSession method without parameters.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 12
+---------------------------------------------------------
+
+***Update***
+
+1) Added RTC SDK 2.0 Help files for BDS 2006 (BDS 4.0)
+
+2) Added support for sending files using a "FileStream" implementation (TRtcFileStream),
+   which keeps the file open until it was sent out or client disconnects, slightly 
+   increasing performance when sending large files.
+  * disabled by default
+
+3) Added a new variable to allow forcing the OnDataSent event to be triggered even when 
+   WinSock buffers are full, to prepare new data and have something to send out once 
+   buffers are empty. This can increase performance when sending large files out.
+  * disabled by default
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 11
+---------------------------------------------------------
+
+***Update***
+
+1) Additional handling of non-standard XML-RPC strings:
+  - removing all <!---->, <!...> and <?...?> from XML-RPC (unwanted comments)
+  - removing whitespace inside <methodname> </methodname>
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 10
+---------------------------------------------------------
+
+***Fix***
+
+1) XML-RPC will now allow empty records using <struct></struct>
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 9
+---------------------------------------------------------
+
+***Fix***
+
+1) XML-RPC will now correctly handle Tags with inserted space between / and tag name, like < / double>
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 8
+---------------------------------------------------------
+
+***Update***
+
+1) I went through a few hundred "XML-RPC" related websites yesterday, testing how the XML-RPC
+   parser (which is now part of the RTC SDK) will handle the data received from various implementations
+   calling themselves "XML-RPC". I can't believe how much freedom some people allow themselves when
+   it comes to "stretching" a standard to their likings. Since I want RTC SDK to be capable of handling
+   even things which are only remotely similar to XML-RPC, I've done a number of additions to the parser
+   to make it more tolerant to 3rd-party creativity. 
+
+Here are a few things which RTC SDK will now be able to handle (correctly parse), none of 
+which are part of the XML-RPC standard, but simply alternatives invented by "creative minds":
+
+- Date/Time format "yyyy-mm-ddThh:mm.ss+timezone" ( standard is only "yyyymmddThh:mm.ss" )
+- Escape characters &gt; &quot; &apos; &nbsp; &#xx; ( standard is only &lt; &amp; ),
+  The use of plain "&" (should always be &apos; - which is required by the standard)
+  Any other unsupported escape characters will be left unhandled (not raise an exception)
+- Allowing comments in format "<!-- .... -->" (will be skipped as this is not part of the XML-RPC standard)
+- Tags with inserted spaces like <double >, </ double>, < / double > (XML-RPC standard is strict and doesn't allow that)
+- Inserted space in non-string value fields, like <i4> 12 </i4> (inserting whitespace inside a value is acrually not allowed in XML-RPC standard)
+- Multiple values inside <methodresponse>, even without <params> and <param> (will be stored as an array, if more values are sent)
+- Using the <fault> tag to enclose FaultCode and FaultString (should be in <struct>)
+- Using the <methodfault> tag instead of <methodresponse> to enclode fault data
+- Sending records using <member></member> without a <struct> parent
+- Sending named record fields using <name></name><value></value> lists without <struct><member> parents
+- accepting function calls using <call> instead of <methodcall>
+- accepting Date/Time values Using <datetime> or <timestamp> instead of <datetime.iso8601>
+- accepting Binary Streams using <base64binary> or <binary> instead of <base64>
+- accepting NIL values using <string/>, <double/> or any other type name (this is different from sending an empty or default value using <string></string> or <double></double>, since data type will be rtc_Null)
+- accepting valued enlosed in multiple <value>...</value> and/or <data>..</data> tags (why someone does this, is beyond my understanding)
+- accepting F, N, FALSE and NO als alternative values for a boolean "False" (should be '0')
+- allowing <params/> in <methodcall> when there are no parameters (should be <params></params>)
+- allowing parameters in <methodcall> to be sent without enclosing them inside <params> and/or <param>
+- Allowing arrays to be sent without enclosing them inside <data> (<array><data><value> is defined by the XML-RPC standatd)
+- allowing arrays and records to be sent using the <params> tag instead of <array> or <struct>
+
+In other words, RTC SDK will now be able to parse the wildest XML-RPC variations, like ...
+
+<call><methodname>hola</methodname>
+  <name>test</name>
+    <params><i4>12</i4><string></string><double>1.4</double></params>
+  <name>hola2</name>
+    <double>1.3</double>
+</call>
+
+... which should actually look like this (below) if it was real XML-RPC ...
+
+<?xml version="1.0"?>
+<methodCall><methodName>hola</methodName><params>
+<param><value><struct>
+<member><name>TEST</name><value><array><data>
+<value><i4>12</i4></value>
+<value></value>
+<value><double>1.4</double></value>
+</data></array></value></member>
+<member><name>HOLA2</name><value><double>1.3</double></value></member>
+</struct></value></param>
+</params></methodCall>
+
+As long as it looks like XML-RPC, it should be OK. Naturaly, RTC will not "swallow" errors in XML. 
+If there is a grave error in the string (like missing closing tag, misplaced tag or invalid tag), 
+there will be an exception raised. If it's on the Server-side trying to prepare a remote function call,
+client will receive the excepion with the appropriate error message.
+
+PS. XML-RPC data generated by the RTC SDK will always be 100% XML-RPC compliant, 
+    strictly following the XML-RPC standard definitions, so you don't have to worry about
+    other implementations won't be able to decipher the data you send out using a 
+    RTC Client or Server (as long as they are capable of parsing XML-RPC).
+
+***New***
+
+1) "Delphi_XMLRPCTest" project in "QuickStart"
+   You can use this to test how RTC will be parsing XML-RPC data.
+   Simply enter some XML-RPC string and click on the button to have RTC parse the data
+   and generate a new XML-RPC and RTC string with the same content.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 7
+---------------------------------------------------------
+
+***Fix***
+
+1) Fixed a Security Exploit in the rtcFileProvider implementation, which 
+   could have been used to download files outside of the Web folder.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 6
+---------------------------------------------------------
+
+***Opera work-around***
+
+1) Opera Browser has a bug which causes endless waiting times when it receives 
+   a response with content-length 0. To avoid this problem with the Opera browser,
+   I've modified the rtcFileProvider to return a short error message as content body,
+   to avoid Opera from waiting indefinitely for something it won't ever receive.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 5
+---------------------------------------------------------
+
+***Update***
+
+1) All appearances of ...
+       try x:=IntToStr(s); except x:=0; end; 
+   changed to ...
+       x:=IntToStrDef(s,0);
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta - RC 4
+---------------------------------------------------------
+
+***New stuff***
+
+1) Activated XML-RPC support for the RTC Messenger Server
+
+2) Added "useProxy" and "use XML-RPC" options to the RTC Messenger Client 
+   and tested all combinations with the new RTC Messenger Server - it works!
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta, RC 3
+---------------------------------------------------------
+
+***Fixes***
+
+1) RTC SDK compiled in Delphi 4 and 5 will now auto-convert field names to UpperCase, even if received in mixed case,
+   so that new Clients and Servers compiled with Delphi 4/5 will work with clients and Servers writen with Delphi 6 and later, 
+   even if those Clients and Servers are using mixed-case field names.
+
+2) For compatibility reasons with older RTC Clients and Servers, which might not be converting all Field names to uppercase 
+   if received in mixed-case, default option is now to use the same automatic uppercase conversion with RTC SDK 2.0 as in older 
+   RTC SDK versions. To use mixed-case field names, define the "RtcMixedCase" compiler directive in the "rtcDefs.inc" file.
+
+   This compiler directive will be required if you should need to communicate with external providers using XML-RPC which use
+   case-sensitive field names in their XML-RPC calls, so you will need to send field names in a specific up/low-case format.
+
+   In my opinion, XML-RPC implementations should be case-insensitive, but ... you never know what you could bump into.
+   Since it is nothing specificaly defined whether field names are to be treated case-sensitive in XML-RPC, some XML-RPC
+   implementations might not be "as cautious" as RTC SDK and require you to send data using specific mixed-case strings.
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta, RC 2
+---------------------------------------------------------
+
+***Fixes***
+
+1) RTC SDK 2.0 now compiles under Delphi 4 and 5, also.
+
+   "TStringList.CaseSensitive" property was added in Delphi 6, so Delphi 4 and 5 weren't able to compile the new changes for supporting case-sensitive field names in RTC structures.
+   This update will not use the old implementation (converting all field names to uppercase) when compiled with Delphi 4 or 5, 
+   while the same code compiled with Delphi 6 and up will use the new CaseSensitive property to allow sending parameters using mixed case (not only uppercase).
+
+
+---------------------------------------------------------
+* RTC SDK 2.0 beta, RC 1
+---------------------------------------------------------
+
+***New stuff***
+
+1) rtcFileProvider now supports resuming downloads by implementing the "Range" HTTP header
+
+2) rtcISAPIServer has a new property "ForceSingleThread", which can be used to force all calls to your code to be single-threaded (requests will be processed one-after-another)
+
+3) RTC remote functions now support a new format: XML-RPC, which you can use to write remote functions with RTC and make then accessible to external providers, and/or call remote functions provided to you by external providers.
+
+4) Added a new demo called "WebStress_Client", which you can use to stress-test any Web Server.
+
+***Fixes***
+
+1) File upload and download now works correctly with ISAPI extensions under MS IIS
+
+2) "varOleStr" will now correctly be mapped to "WideString" when using the "Value" property to assign Variant values to RTC objects
+
+3) Min Thread Pool size changed from 20 to 3, so your apps will close faster when run under Delphi.
+
+4) Fixed a client-side issue handling the "100 Continue" response from a Server (when useProxy=False).
+
+5) Parameter names in TRtcFunctionInfo, TRtcRecord and TRtcDataSet are no longer automaticaly stored as uppercase, to allow creating case-sensitive XML-RPC requests. "Searching" the values is still case-insensitive, so your existing code should remain compatible.
+
+6) All Help files have been updated to the latest source code version
+
+---------------------------------------------------------
+* RTC SDK 1.9 l
+---------------------------------------------------------
+
+This is a WinSock performance update, which applies to Stand-alone RTC Servers and stand-alone RTC Clients with UseProxy=False. There are 3 major internal changes:
+
+1) Using larger internal sending buffers to reduce the number of WinSock API calls
+
+2) Allowing up to 20 internal loops when buffers are ready to accept new data directly after the WinSock API call (instead of posting a message). This reduces the time-delay between packages being sent
+
+3) Packing HTTP headers into a buffer when we are expecting more content to be sent in the request/response instead of directly sending the headers out. This results in the headers being sent out with the first content body package, using a single WinSock API call, reducing the number of WinSock API calls and the number of TCP/IP packages sent for smaller requests/responses. 
+
+For example, it will now only require 1 TCP/IP package to be sent for requests with less than 1460 bytes of data. Before this update, there were always at least 2 TCP/IP packages sent for requests and responses with content body (1 for the headers and 1 for content body).
+
+All applications which start sending content body from the OnDataReceived event will work as usual and all following events will be triggered as expected.
+
+But, in case you had only used WriteHeader from the OnDataReceived event and waited for the OnDataSent event to trigger so you can start sending content body, you should change that implementation to start sending content body from the onDataReceived event. This applies only if there is content body to be sent. When sending a request or a response without content body, there are no changes in behavior.
+
+---------------------------------------------------------
+* RTC SDK 1.9k - beta3
+---------------------------------------------------------
+
+There shouldn't be any problems using this new RTC SDK version, but I've decided to make this update as a separate download with a "beta" sufix because I am going on a vacation tomorrow and won't be back for 3 weeks. I think it would be fatal if we only had one version and it was "untested" (has some major changes which could affect some applications behavior).
+
+I made a number of tests with this new update and it looks as though all the "old" functionality is still working like it did before, but I still can't guarantee that some of the changes won't "break" some existing applications, because some of the components behavior will change when of a communication problem with the Server "happens".
+
+Here is what has changes in this update:
+
+1) I've made some modifications to assure that, in case there were errors while sending requests to the server (while calling remote functions or requesting/sending files), the "OnResponseAborted" event on TRtcHttpClient and TRtcClientModule components will get triggered for each request generated by you and ... "ResultAborted" event on TRtcREsult will be triggered for each remote call (using the "Call" method). 
+
+In other words, you can now safely use the ResultAborted event on your TRtcResult components to react to situations when a specific remote function call wasn't executed on the Server and/or you didn't receive a valid response, in which case the OnResult event won't be fired for this call.
+
+There will be exactly one call to the OnResult event for each call that "goes through" or one call to "ResultAborted" for each call that "doesn't go through". By setting a reasonable value for TRtcClientModule's the AutoRepost property (not more than 2) and not using the "SkipRequests" method to clear the request buffer, you can rest assured that each one of your Call's will either fire the OnResult or the ResultAborted event on the TRtcResult component.
+
+2) "CancelRequests" method was added for TRtcDataClient and TRtcClientModule components, which will automaticaly be called by the connection component if a request "didn't go through" and wasn't planned for re-posted (none of the OnResponseAborted events called "Request.Repost"). If more than one request was in the request queue at that point, OnResponseAborted and ResultAborted events will be triggered for each of them before the request queue is cleared.
+
+The behavior of the "SkipRequests" method didn't change, to keep the new components backwards-compatible with code used in "old" clients, where all requests were usually skipped from the first OnResponseAborted event. This means that you can continue using the old approach to clean-up the request queue by callind SkipRequests, which will avoid calling OnResponseAborted events for pending requests which will be cleared from the queue. But, if you use SkipRequests, you have to know that OnResponseAborted and ResultAborted events won't be fired for requests which weren't sent out yet.
+
+3) When using the WinSock API (useProxy=False, non-blocking mode), "RequestAborted" events will be fired the same way they are being fired when the WinInet API is in use, which means that using a different setting for UseProxy property shouldn't make a notable difference in application behavior from this version on. 
+
+Since WinSock works differently than WinInet, to achieve the appearance of similar behavior, OnRequestAborted events will now be fired if a connection couldn't be established (OnConnectFail and OnConnectError), which actually happens before we even tried to send the request. In other words, a failed connect attempt will now be counted as a failed request attempt, which is identical to the behavior implemented using the WinInet (UseProxy=True, blocking mode).
+
+4) Since requests will now have to be reposted when connection attempts fail or if there was an error connecting (for example, DNS couldn't be resolved), a new event "OnRepostCheck" is now added, which will be fired after the OnConnectLost, OnConnectFail and OnConnectError events, so you can check the request which is about to be posted and call "Request.Repost" to repost the request, or use the AutoRepost property and let the component handle reposting automaticaly. This new "OnRepostCheck" event will always be fired before the "OnResponseAbort" event, if there was a request waiting to be sent to the Server, but wasn't reposted automaticaly by the component (see AutoRepost property).
+
+With all the changes in this update, you can set your connection component's "ReconnectOn" properties (ConnectLost, connectFail, ConnectError) to TRUE, define a value for your rtcClientModule/rtcDataRequest's AutoRepost property, set up events to be fired if a request was successful (as usual) and use "OnRepostCheck", "OnResponseAbort" or "ResultAborted" events (either one will do) to react on problems in communication.
+
+---------------------------------------------------------
+* NexusDB transport plugins for the RTC SDK
+---------------------------------------------------------
+
+Plug-ins for using the NexusDB components as a transport is 
+now included in the RTC SDK package ("LibPlugins" folder).
+
+You will need NexusDB components to compile the plug-ins.
+
+Check your NexusDB package for a more recent version of the plug-in,
+or contact NexusDB support if you are missing the RTC plug-in.
+
+--------------------------------------------------------
+* Support for Message-based Third-party transports
+---------------------------------------------------------
+
+NEW: TRtcMessageClient and TRtcMessageServer components
+
+You can use third-party Message-Based transports like NexusDB to tunnel all RTC communication, 
+which makes it easy to integrate a RTC Server as a plug-in for a NexusDB Server and use 
+RTC Client components to access the RTC Server through NexusDB connections.
+
+By using the new message-based communication components, you can also directly link RTC Client 
+and RTC Server components in one application, without the use of any other transport (like TCP/IP).
+
+---------------------------------------------------------
+* ISAPI optimization
+---------------------------------------------------------
+
+rtcISAPIServer component is now using a Connection components pool, so that connection 
+components don't have to be created and destroyed for each request being processed.
+
+All components are released from the pool when ISAPI extension is unloaded.
+
+---------------------------------------------------------
+* Some bugs have been found and fixes
+---------------------------------------------------------
+
+1) Fixed a bug where RTC Client using remote functions, set up to use encryption, 
+wouldn't be able to communicate with a RTC Server if AutoSessions was FALSE, 
+because the client had expected the Server to return a Session ID, 
+even if Server didn't want to suppot encryption or use Sessions.
+This has now been fixed on the client-side by setting an internal "flag" if 
+Server didn't return a Session ID and encryption wasn't required (ForceEncryption=False).
+
+2) There was a bug in the new 3rd-party encryption plugin for clients, 
+which has prevented data initial handshake from being sent/received. 
+This has now been fixed.
+
+---------------------------------------------------------
+* StreamSec Tools SSL plug-ins for the RTC SDK
+---------------------------------------------------------
+
+Plug-in for SSL encryption using StreamSec Tools 2.x 
+is now included in the RTC SDK package ("LibPlugins" folder).
+
+You will need StreamSec Tools to compile the plug-ins.
+Please contact "StreamSec" if you need a more recent version of the plug-in.
+
+---------------------------------------------------------
+* EOF/BOF fix for C++ Builder
+---------------------------------------------------------
+
+Renamed EOF and BOF methods in the rtcInfo unit, 
+to avoid an error message in creating a .hpp file for C++ Builder.
+
+---------------------------------------------------------
+* SSL support using Third-party components
+---------------------------------------------------------
+
+RealThinClient SDK 1.9 introduces plug-ins for encryption/decryption and 
+comes with a ready-to-use plug-in for StreamSec Tools 2.1 SSL support 
+(Client and Server). This means that, in case you have StreamSec Tools 2.1 
+and the RealThinClient SDK, you can use the new server plug-in to build 
+stand-alone HTTPS (SSL) Servers. Naturaly, you could also use the base plug-in 
+class (it's a simple class with only a handfull of methods) to implement your 
+own plug-ins for encryption/decryption using any other 3rd-party components/tools.
+
+To "convert" your standard RTC HTTP server into a Secure RTC HTTPS Server, 
+you just need to put one or two StreamSec components on your DataModule and 
+link them to your rtcHttpServer component through the (new) "CryptPlugin" property.
+
+An example for building a HTTPS Server (or converting an existing HTTP Server 
+into a HTTPS Server) is available in the Demos/RTCWebForum folder and ... 
+a precompiled Forum Server (exe), using the HTTPS protocol and running on port 443, 
+is available from the "Licensed Users :: Download Area" - simply unpack the files and run the exe.
+
+---------------------------------------------------------
+* RTC Web Forum Demo added
+---------------------------------------------------------
+
+New, relatively complex Demo was added to the RTC SDK: RTC Web Forum.
+
+RTC Forum is avilable as a separate project (RTC_WebForum), and it is compiled 
+into the RTC WebServer Demo, to demonstrate the abbility to compile several 
+complete RTC projects into a single stand-alone server executable.
+
+RTC Web Forum was built from ground up in less than 8 weeks.
+This includes 2 weeks for completing the Web Package Manager Demo, 
+which is included in the forum as a "virtual" Forum Section.
+
+---------------------------------------------------------
+* RTC Web Package Manager Demo added
+---------------------------------------------------------
+
+Added a new Demo to the RTC SDK (Web Package Manager).
+
+RTC Web Package Manager is an example Web Application, where users can log in 
+and download the latest content to which they have been granted access for.
+
+Visual design was done using templates (HTML files with place-holders),
+so it can be modified without changing application code. 
+
+All planning, coding and design was done in only 2 weeks, by a single Delphi 
+developer who had NO prior knowledge of RealThinclient SDK components.
+
+Main requirement for this project was to use only RTC SDK components and things 
+that come preinstalled with Delphi. NO other third-party components were used.
+
+---------------------------------------------------------
+* RTC Quick-Start Server Lessons added
+---------------------------------------------------------
+
+Quick-Start Server Lessons: 1, 2, 2b, 3 and 4 
+were added to the QuickStart folder, ready-to-run.
+
+---------------------------------------------------------
+* RTC WebServer Update
+---------------------------------------------------------
+
+1) Reorganized the RTC WebServer in Pages
+2) Added File Extension to Content-Type mappings
+
+Now you can define what the WebServer will send to clients in 
+the "Content-Type" header when downloading files, which will avoid 
+IE displaying any "unknown" content as "HTML".
+
+---------------------------------------------------------
+* RTC SDK 1.8p
+---------------------------------------------------------
+
+New functions added to the TRtcDataServer class 
+(rtcHttpServer and rtcISAPIServer components), which can be used 
+to check the total number of currently open sessions in the Server:
+- TotalSessionsCount
+- TotalSessionsLockedCount
+- TotalSessionsUnLockedCount
+
+---------------------------------------------------------
+* RTC SDK 1.8o
+---------------------------------------------------------
+
+> rtcParse update by Cord Schneider
+"This update fixes a minor bug where the last character of the Source is not returned 
+by the Output() function. This bug is only noticable when the Source is set directly 
+and not via the LoadFromFile() function."
+
+- Cord Schneider
+
+---------------------------------------------------------
+* RTC SDK 1.8n
+---------------------------------------------------------
+
+> rtcParse update by Cord Schneider
+"This update includes a new property, Silent, which will prevent TRtcParse 
+from raising an exception when the user attempts to set the value of a token 
+that is not present in the template.
+
+This property is particularly useful for templates that may have optional tokens 
+and avoids the need to test for the presence of each token before setting its value. 
+
+For example:
+
+...
+  parse.Silent := True;
+  parse.Value['title'] := 'A Simple Parser';
+  parse.Value['color'] := '#FFFFFF';
+  parse.Value['bgcolor'] := '#000000';
+  parse.Value['page'] := 'rtcParse';
+  parse.Value['does_not_exist'] := 'This token does not exist';
+  parse.Value['copyright'] := '(C) Copyright 2005'; ... "
+
+- Cord Schneider
+
+---------------------------------------------------------
+* RTC SDK 1.8m
+---------------------------------------------------------
+
+> New event: OnDataIn
+Added "OnDataIn" event, which will be triggered from the lowest level (same as OnDataOut)
+to enable monitoring of bytes received through a connection (raw data).
+
+> OnDataIn & OnDataOut events
+Published OnDataIn and OnDataOut events for rtcHttpServer, rtcISAPIServer and rtcHttpClient 
+components to enable monitoring of bytes passed through the connection.
+
+OnDataIn and OnDataOut events will be triggered for the connection component, even after they
+have been mapped to data processing components like DataProvider, ServerModule, ClientModule.
+
+Those events should ONLY be used for monitoring!
+Do not use any Read/Write operations from OnDataIn or OnDataOut events!
+
+---------------------------------------------------------
+* RTC SDK 1.8l
+---------------------------------------------------------
+
+> rtcParser update by Cord Schneider
+"I've made a non-critical modification to rtcParse.pas to provide better 
+exception handling and also to fix a rare case where Read_File() would 
+not correctly free a file handle if an error occurred while seeking to a new location.
+
+Changes include:
+
+  * added ERtcParse exception class so that users can more easily
+    trap TRtcParse-related exceptions
+
+  * added better exception handling in Read_File()
+
+  * Read_File() would not free the file handle if an error occurred
+    when seeking to a new location in the file being read
+
+I also noticed a curious thing: the template directory in QuickStart\Delphi_rtcParse2 
+should be templates ... somewhere along the line, the 's' got dropped off and the 
+demo won't run out-of-the-box."
+
+- Cord Schneider
+
+---------------------------------------------------------
+* RTC SDK 1.8k
+---------------------------------------------------------
+
+> Garbage collection for the design-time package
+Included garbage collection in the RTC SDK design-time package.
+This should avoid getting Windows Errors when Delphi closes.
+
+> RTC Messenger Client Demo update
+Added "SkipRequests" calls to the Logout function,
+to avoid getting into the infinite loop with requests being 
+reposted over-and-over-again when Server is not available.
+
+---------------------------------------------------------
+* RTC SDK 1.8j
+---------------------------------------------------------
+
+> Added {$WARN UNSAFE_CODE/TYPE/CAST OFF} directives
+To avoid getting warnings about "unsafe" code when creating new
+projects in Delphi 7 and later when using the RTC SDK, 
+warnings about "UNSAFE" code are now being deactivated for all RTC SDK 
+units by using compiler directives in the "rtcDefs.inc" file.
+
+> Added {$WARN SYMBOL_PLAFORM/DEPRECATED OFF} directives
+To avoid getting warnings about platform-dependent and "deprecated" code 
+when creating new projects in Delphi 6 and later using the RTC SDK,
+warnings about "platform dependent" and "deprecated" code deactivated
+by using compiled directives in the "rtcDefs.inc" file.
+
+> Added all units to package files list
+To avoid getting warnings about implicit unit import when compiling
+the RTC SDK package, all units used in the RTC SDK package are now
+defined in the Package file's "Contains" list.
+
+---------------------------------------------------------
+* RTC SDK 1.8i
+---------------------------------------------------------
+
+> Disconnect/Connect with AutoConenct from inside Event bugfix
+Fixed a bug with AutoConnect when Disconnect was called from inside an Event in MultiThreaded mode,
+which resulted in connection not being re-established, even when requests were waiting to be sent.
+
+---------------------------------------------------------
+* RTC SDK 1.8h
+---------------------------------------------------------
+
+> WinSock and WinInet Garbage collection
+In older versions, WinSock and WinInet were unloaded from th finalization section
+of the unit where they were loaded. From this version, WinSock and WinInet are added
+to garbage collection and will be unloaded after all other units have completed execution.
+This should enable closing all connections before shutdown, but also generate 
+Access Violations on shutdown, if components were destroyed before threads closed.
+
+---------------------------------------------------------
+* RTC SDK 1.8g
+---------------------------------------------------------
+
+> Disconnect event Bugfix
+When Disconnect was called on the Server to close a client connection, 
+events were not being triggered to notify about a connection being closed.
+This has now been fixed.
+
+---------------------------------------------------------
+* RTC SDK 1.8f
+---------------------------------------------------------
+
+> HugeStrings Critical update
+Fixed a bug in the new optimized code for working with Huge Strings.
+
+---------------------------------------------------------
+* RTC SDK 1.8e
+---------------------------------------------------------
+
+> Session management optimization
+Replacing one FormatDateTime function call in Session management routines with an optimized version of 
+the same thing, has resulted in 50% performance boost in executing remote functions using automatic sessions.
+
+> Garbage collection
+Added intelligent garbage collection for application/service/ISAPI shutdown, which avoids getting Access violations 
+in multithreaded clients and servers, while still releasing all resources before application  shutdown.
+Now you can use FastMM to check your application for memory leaks on shutdown.
+
+---------------------------------------------------------
+* RTC SDK 1.8d
+---------------------------------------------------------
+
+> Automatic compression and decompression added
+Automatic compression and decompression for remote functions is again part of the RTC SDK.
+I have found the cause for my problems and it was a pure hardware-related issue.
+
+> HyperThreading option for rtcClientModule
+Now one rtcClientModule can be used from multiple threads at the same time to call remote functions,
+which makes it suitable for use from Servers which have to communicate with other Servers from client connections.
+To activate this option, you need to set the "HyperThreading" property to TRUE.
+Then, "Data" and "Request" properties, as well as "Call", "StartRequest" and "Post" methods will internaly use a 
+separate data storage for each thread, which makes the use of this component from multiple threads completely transparent.
+
+> HyperThreading option for rtcDataRequest
+Now one rtcDataRequest can be used from multiple threads at the same time to process requests,
+which makes it suitable for use from Servers which have to communicate with other Servers from client connections.
+To activate this option, you need to set the "HyperThreading" property to TRUE.
+Then, the "Request" property and "Post" method will internaly use a separate data storage for each thread, 
+which makes the use of this component from multiple threads completely transparent.
+
+---------------------------------------------------------
+* RTC SDK 1.8c
+---------------------------------------------------------
+
+> AnsiUpperCase replaced with UpperCase
+If you are using non-standard characters for remote function parameters, 
+you need to declare the "AnsiUpperCase" compiler directive to continue using AnsiUpperCase.
+But, since AnsiUpperCase is a lot slower than UpperCase, you should avoid using international
+characters for variable names in remote functions. This is also important if you want to
+keep your code compatible between different OS versions.
+
+> Optimization after Profiling
+Some internal string-handling routines have been optimized for better performance.
+
+---------------------------------------------------------
+* RTC SDK 1.8b
+---------------------------------------------------------
+
+> New Help file for Delphi/BCB (beta)
+Thanks to Pete Fraser, the author of GenHelp, who has decided to make GenHelp capable of
+importing comments from PasDoc formatted source code, I am now able to generate Help Files
+which can be integrated into Delphi and BCB IDE, so you can use F1 directly from Delphi/BCB
+to get help on all RTC SDK components. Help is also available in CHM and HTML format.
+
+First beta release of a Help file (HLP and CNT) which can be installed into Delphi and BCB are
+now available from the Help folder. You can go to "Help / Customize ..." in Delphi/BCB and add
+the files to all 4 tabs (use CNT for 1st and 4th tab, HLP for 2nd and 3rd), then save the Help 
+Project to add the files to your IDE.
+
+If you want to use GenHelp to generate Help files for your projects, please go to:
+http://www.frasersoft.net/genhelp/
+
+> TRtcParser update
+Cord Schneider has found and fixed a bug in the TRtcParser, because of which any text behind 
+the last TAG wasn't added to the output. The Output file should now be generated correctly.
+
+> Automatic compression/decompression removed!
+Automatic compression and decompression for remote functions removed from the RTC SDK, because zLib didn't pass all tests.
+Since it is more important for me to have a stable set of components than using this feature, I've decided to go without it.
+
+> GetHeapStatus
+Memory check before accepting a new client connection is activated again, 
+to avoid endangering the Server in case many memory-consuming clients try to connect.
+
+---------------------------------------------------------
+* RTC SDK 1.8
+---------------------------------------------------------
+
+> BCB 6 package (100% BCB compatibility)
+All RTC SDK components can now be compiled and installed under BCB 6
+
+> Lazarus package (100% Lazarus/FreePascal compatibility)
+All RTC SDK components can now be compiled and installed under Lazarus/FreePascal
+
+> BCB 6 Projects (RTC SDK Demos)
+All RTC SDK Demo can now be opened and compiled with BCB 6
+
+> BCB 6 - Delphi Forms editable
+Now, after installing the rtcSDK_C.bpk package under BCB 6, 
+you can work with Delphi and BCB Forms from C++ Builder.
+
+> Loading Windows API dynamically
+WinSock and WinInet units from Delphi or BCB are not needed anymore, 
+all Windows API DLL's are loaded dynamicaly before first use and unloaded on application exit.
+
+---------------------------------------------------------
+* RTC SDK 1.7g 
+---------------------------------------------------------
+
+> Secure connections using Client Certificates with rtcHTTPClient
+Now, additionaly to the useSSL property (for the HTTPS protocol), there is now a new property "UserLogin".
+- "UserLogin.Username" and "UserLogin.Password" can now be used to authenticate the user with a secure Server.
+- You can also use Client Certificates (installed under Internet Explorer) by setting the "UserLogin.CertStoreType" and "UserLogin.CertSubject" properties.
+
+---------------------------------------------------------
+* RTC SDK 1.7f 
+---------------------------------------------------------
+
+> GetHeapStatus
+Since the implementation of GeHeapStatus leaves a lot of open wishes regarding performance, in most cases it will only slow down execution, without doing anthing useful. That's why I've decided to eliminate the use of GetHeapStatus in the RTC SDK. 
+While this was the only function used from the rtcMemory unit (without declaring additional complier directives), I've also removed the "rtcMemory.pas" unit from the RTC SDK.
+
+> Compression/decompression update
+Added a global parameter "RTC_MIN_COMPRESS_SIZE" (defaults to 256) to define the minimum ammount of data that has to be present to use compression with a remote function request or response. 
+Since there's no gain in compressing small ammounts of data, while compression always uses up some CPU time, not compressing small requests and responses will reduce CPU usage, without lowering the transfer rate in case large chunks of data (like DataSets) have to be transferred over slow connections.
+You can still set "RTC_MIN_COMPRESS_SIZE" to 0 (zero) if you want your client and/or server to always use compression, regardless of uncompressed data size.
+
+---------------------------------------------------------
+* RTC SDK 1.7e 
+---------------------------------------------------------
+
+> Added automatic compression for remote functions
+rtcServerModule and rtcClientModule now have a property called "Compression", which you can use to activate automatic compression for sending data from client and/or server when using remote functions. Please check the description of rtcClientModule's and rtcServerModule's "Compression" property for more info.
+
+> rtcParse: contribution to RTC SDK by Cord Schneider
+Cord Schneider has written a simple parser which can be used to generate dynamic content using templates. Please check the "rtcParse" unit in documentation and "rtcParser" example in the QuickStart folder for more info.
+
+---------------------------------------------------------
+* RTC SDK 1.7d 
+---------------------------------------------------------
+
+> rtcServerModule bugfix
+There was a bug in the last RTC SDK update when using case-sensitive names for ModuleFileName. This has now been fixed.
+
+> QuickStart/RemoteFunctions
+A small example on writing and calling remote functions has been added to the QuickStart folder and to the QuickStart lessons on the Web.
+
+---------------------------------------------------------
+* RTC SDK 1.7c 
+---------------------------------------------------------
+
+> Work with files larger than 2GB
+All methods from the RTC SDK have now been updated to work with extremely large files (up to 4 Terabyte), 
+eliminating the old file size limit of 2GB. RTC Clients can download and RTC Servers can send extremely large files.
+
+---------------------------------------------------------
+* RTC SDK 1.7b
+---------------------------------------------------------
+
+> "useSSL" property for the HttpClient, enables client to work over HTTPS
+There is a new property for the rtcHttpClient, "useSSL". When this property is TRUE, a connection provider will be used which support SSL (HTTPS). You will also have to set the appropriate port when using HTTPS (443).
+Please note that RTC Server doesn't support SSL (HTTPS) when running as a stand-alone server, but it can support HTTPS when running under another Web Server wich supports SSL (HTTPS).
+
+> "AutoConnect" property for the HttpClient (TRtcDataClient descendant)
+Now you can use the new AutoConnect property, in combination with "ReconnectOn" and "Timeout" properties, to have the connection automaticaly opened when required and closed when not needed for some time.
+For more info, check the description of the AutoConnect property of TRtcDataClient. 
+AutoConnect won't close a connection, even if you change the server address or port, so ... 
+if you need to change those, call Disconnect to make sure your client will be opening a
+connection to the new address and port the next time you post a request.
+
+> File_Client and AppClient demos updated
+Now also demonstrating the use of new "useSSL" and "AutoConnect" properties.
+Check the File_Client and AppClient Demos to see what else has changed.
+
+> Server "Denial-Of-Service" vulnerability fix
+Problem description: I've managed to crash the RTC WebServer using AppClient with 300 conncetions sending requests which weren't supported by any component implemented. This has caused a lot of fast connects, non-accepted requests and abortive disconnects, comparable to a Denial-Of-Service attack. Because of an old bug in the Server-side WinSock connection provider, which caused access violations by trying to read "last piece of data" on a closed connection, server would crash after several hundred repetitive DOS attepmts.
+
+Problem solution: WinSock Server connection provider won't try to read from a closed connection anymore. 
+
+This problem was easy to reproduce: when you start the old RTC WebServer and use the AppClient's multiple connection flood test to "shoot at the Server", server would crash after a few minutes.
+Since I haven't been able to shoot the server down after the fix, using the AppClient Demo to "shoot at the RTC WebServer" for two hours, while server was still serving normal requests from other clients, 
+this problem should now be fixed (no unwanted side-effects).
+
+> ISAPI extensions over HTTPS/SSL
+This hasn't been tested yet, since I don't have a HTTPS server, but (in theory) RTC ISAPI extensions should now also be working when installed under a Web Server which supports SSL/HTTPS.
+
+---------------------------------------------------------
+* RTC SDK 1.6 -> 1.7
+---------------------------------------------------------
+
+> TRtcDataSet.copyOf bugfix
+Now you can use the TRtcDataSet.copyOf method to create a copy of the TRtcDataSet object (this didn't work before).
+
+> Use Request.Params to accept file uploads from Web Browsers
+Now you can use the Request.Params property to accept file uploads, not only simple form variables. Please check the QuickStart/Browser_Upload folder for more info.
+
+> ServerModule.ModuleFileName case-sensitive
+ModuleFileName is case sensitive and now you can use small case letters for your ServerModule's ModuleFileName property. Since you will need to use a case-sensitive address when using your code as ISAPI extension, it only made sense to declare the ServerModule's ModuleFileName as case-sensitive (not convert it to uppercase automaticaly).
+
+> WinSock connection provider tune-up
+1) Increased reading and sending buffers per connection (60 KB in / 60 KB out)
+2) Changed block size used for sending data to WinSock from 1 to 5 KB, to reduce CPU usage and speed-up data transfer.
+4) rtcFileProvider updated to read blocks slightly smaller than 60 KB (when sending large files out), looks like this gives better performance.
+
+> Added rtc_ByteStream with "asByteStream" and "newByteStream" methods for Remote Functions
+- Problem:
+Stream data had to be manualy converted to a string to be sent out.
+- Solution:
+Added rtc_ByteStream value data type, which can now be used to work with parameters as Stream data. Limited, since the whole stream has to be read before it can be transmitted, but still a Stream. 
+
+**** !WARNING! **** 
+"rtc_ByteStream" is a NEW DATA TYPE, which old Clients and old Servers can not handle! If data is being sent using this new data type to an old client, that client won't be able to decipher the response and will raise an Exception! If you want to start using asByteStream/newByteStream in your existing project, you should update all clients which would use remote functions that send/receive data using "asByteStream".
+*******************
+
+> Updated RTC WebServer and FileServer file streaming
+- Problem:
+Some applications don't like files being streamed out without HTTP header.
+- Solution:
+For file streaming, RTC WebServer and FileServer are now setting Conent-Type to 'application/octet-stream' and sending the corrent content length, instead of streaming the file out without a HTTP header.
+
+> Updated BackLog from 5 to 200
+- Problem:
+When a high number of connections is opened at once, most of them were rejected because there wasn't enough space in Windows BackLog buffers to hold them.
+- Solution:
+Increased BackLog buffer size from 5 to 200, so that 200 connections can be opened at once, without any of them getting rejected.
+
+> Disconnect/Connect and Disconnect/Release fix-up for the client
+It wasn't possible to use .Disconnect and immediately after this .Connect in a multi-threaded client, without getting yourself in big trouble. You still shouldn't do this, but if you find yourself tempted to do it, it should work correctly now. 
+
+WARNING!!! DO NOT CALL DISCONNECT ON FORM CLOSE! In multithreaded mode, when form is destroyed, connection is also automaticaly closed, so there is no need to call Disconnect when your application closes. If you should call Disconnect on application close, you could get a lot of exceptions, because Disconnect will be executed in the background. Since the main thread will destroy the connection object (and close the connection), you would produce access violations in object's destructor if you called Disconnect from FormClose or FormDestroy.
+
+> Listen and StopListen fix-up for the Server
+It wasn't possible to use ".StopListen" and immediately after that ".Listen" in a multi-threaded server, without getting in situations where "Listen" wouldn't work because "StopListen" didn't complete propperly. It is now more likely that "StopListen;Listen;" will work, but it is not adviseable to use this if it is not absolutely necessary to change the listening port.
+
+> Server can now listen only on one port
+In RTC Core 1.6 you were able to use several ports for listening (separated by a comma). Since this option wasn't used (probably made no sense), I changed this to a single port to reduce CPU usage (internal implementation used arrays of objects to deal with several open ports, this is not necessary anymore). 
+
+> Multiple calls to Connect or Disconnect
+Now it is allowed to call Connect, even if connection is already active or is currently opening. It is also allowed to call Disconnect on a closed connection. It is not recommended to do this, but at least it should work correctly now.
+
+> rtc_DataSet bugfix
+- Problem description:
+when rtcDataSet structures were used with FieldType[], FieldSize[] or FieldRequired[] properties to define the exact structure as in TDataSet components from Delphi, values for some fields didn't "arrive as expected" to the remote function, being left as "blank".
+- Problem solutuon:
+Problem was that the assignment of the first value has duplicated the field name to which it was assigned. When data arrived to the other side (from client to server or vice-versa) and was reconstructed there, any values assigned to duplicated field name were placed on the wrong index position, becoming "invisible". This bug has now been fixed.
+
+> WinSock WindowClassName update
+- Problem description:
+It wasn't possible to use ICS components and RTC components in one project, because both implementations used the same WindowsClassName for Window handles.
+- Problem solution:
+RTC implementation now uses a different WindowClassName for its handles. This way, ICS and RTC Core components can be used in the same project, making it possible to port existing ICS applications step-by-stap to RTC Core.
+
+> WaitForCompletion update
+WaitForCompletion didn't work if connection wasn't established yet (it returned FALSE). Now, you can call Connect, post a request and use waitforCompletion to block code execution until connection is established and all requests have been processed or abandoned. WaitForCompletion will return only after all posted requests have been processed/abandoned or specified wait time has elapsed.

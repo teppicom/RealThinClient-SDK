@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpl_base.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Untitled Document</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+  function submit_form()
+  {
+  xvalidateForm('old_pwd','','R','pwd','','R','pwd2','','R');
+  if ((document.MM_returnValue)&&(comparev('pwd', 'pwd2')))
+    return true
+  else
+    return false;
+  }
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both"><!-- InstanceBeginEditable name="Body Region" -->
+<div id=forumarea>
+<p class="page_header">Change User Password</p>
+<form method="get" enctype="multipart/form-data" name="chpwdform" id="chpwdform">
+	<table width="350" border="0" cellpadding="0" cellspacing="0" class="editpack">
+	  <tr>
+		<td width="150" height="30" valign="middle">Old Password</td>
+		<td valign="middle"><input title="Old password" name="old_pwd" type="password" id="old_pwd"></td>
+					  <script language="JavaScript" type="text/JavaScript">
+						  xfindObj('old_pwd').focus();
+						</script>
+	  </tr>
+	  <tr>
+		<td width="150" height="30" valign="middle">Password</td>
+		<td valign="middle"><input title="New password" name="pwd" type="password" id="pwd"></td>
+	  </tr>
+	  <tr>
+		<td height="30" valign="middle">Confirm password</td>
+		<td valign="middle"><input title="Confirm password" name="pwd2" type="password" id="pwd2"></td>
+	  </tr>
+	  <tr>
+		<td height="30" colspan="2" valign="middle"><div align="center">
+			<input name="Submit" type="button" class="button" id="Submit" value="Submit" onClick="if (submit_form()) {submit()};">
+			<input name="Cancel" type="button" class="button" id="Cancel" value="Cancel" onClick="history.back()">
+		  </div></td>
+	  </tr>
+	</table>
+  <input name="cmd" type="hidden" value="savepwd">
+  <input name="sid" type="hidden" value="<%sid%>">
+</form>
+</div>
+<!-- InstanceEndEditable --></div>
+</body>
+<!-- InstanceEnd --></html>

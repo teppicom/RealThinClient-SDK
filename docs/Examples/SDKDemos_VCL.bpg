@@ -1,0 +1,63 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = AppClient.exe AppServer.exe File_Client.exe FileServer.exe \
+  MSG_Client.exe MSG_Server.exe RTCWebServer.exe RTCWebForum.exe \
+  RTCWebServer2.exe RTCWebPackManager.exe RTCRouter.exe RTCRouter2.exe \
+  RTCLoadBalancer.exe RTCLoadBalancer2.exe RTCLoadBalancer3.exe  
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+AppClient.exe: App_Client\AppClient.dpr
+  $(DCC)
+
+AppServer.exe: App_Server\AppServer.dpr
+  $(DCC)
+
+File_Client.exe: File_Client\File_Client.dpr
+  $(DCC)
+
+FileServer.exe: File_Server\FileServer.dpr
+  $(DCC)
+
+MSG_Client.exe: RTC_Messenger\MSG_Client.dpr
+  $(DCC)
+
+MSG_Server.exe: RTC_Messenger\MSG_Server.dpr
+  $(DCC)
+
+RTCWebServer.exe: RTC_WebServer\RTCWebServer.dpr
+  $(DCC)
+
+RTCWebForum.exe: RTC_WebForum\deploy\RTCWebForum.dpr
+  $(DCC)
+
+RTCWebServer2.exe: RTC_WebForum\deploy\RTCWebServer2.dpr
+  $(DCC)
+
+RTCWebPackManager.exe: RTC_WebPackageManager\deploy\RTCWebPackManager.dpr
+  $(DCC)
+
+RTCRouter.exe: Router\RTCRouter.dpr
+  $(DCC)
+
+RTCRouter2.exe: Router\RTCRouter2.dpr
+  $(DCC)
+
+RTCLoadBalancer.exe: LoadBalancer\RTCLoadBalancer.dpr
+  $(DCC)
+
+RTCLoadBalancer2.exe: LoadBalancer\RTCLoadBalancer2.dpr
+  $(DCC)
+
+RTCLoadBalancer3.exe: LoadBalancer\RTCLoadBalancer3.dpr
+  $(DCC)

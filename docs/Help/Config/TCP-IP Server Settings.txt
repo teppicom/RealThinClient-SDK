@@ -1,0 +1,121 @@
+NumForwardPackets   Schlüssel: Tcpip\Parameters
+      Hinweis: In Windows 2000 und späteren Versionen
+      befindet sich dieser Wert unter dem folgenden Schlüssel:
+      Schlüssel: Tcpip\Parameters\Interfaces\<ID des Adapters>
+   Werttyp: REG_DWORD - Zahl
+   Gültige Werte: 1 - <angemessener Wert, kleiner als 0xFFFFFFFF>
+   Standardwert: 50
+   mein Vorschlag: 1.000
+
+Beschreibung: Dieser Parameter bestimmt die Anzahl der IP-Paketheader, die für 
+die Paketwarteschlange des Routers reserviert werden. Wenn alle Header verwendet werden, 
+beginnt der Router, Pakete zu verwerfen, die zufällig aus der Warteschlange ausgewählt werden. 
+Dieser Wert sollte mindestens so groß sein, wie der Wert für "ForwardBufferMemory", 
+geteilt durch die maximale IP-Datengröße der Netzwerke, die mit dem Router verbunden sind. 
+Der Wert sollte den Wert für "ForwardBufferMemory", geteilt durch 256, nicht übersteigen, 
+da für jedes Paket mindestens 256 Byte an Weiterleitungspufferspeicher verwendet werden. 
+Die optimale Anzahl für Weiterleitungspakete bei einer bestimmten Größe für 
+"ForwardBufferMemory" hängt von der Art der Übertragungen ab, die im Netzwerk erfolgen, 
+und liegt irgendwo zwischen diesen beiden Werten. Dieser Parameter wird nicht berücksichtigt, 
+und es werden keine Header reserviert, wenn der Router nicht aktiviert ist.
+
+--------------------
+
+ForwardBufferMemory   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Anzahl der Bytes
+   Gültige Werte: <Netzwerk-MTU> - <angemessener Wert, kleiner als 0xFFFFFFFF>
+   Standardwert: 74240 (ausreichend für fünfzig 1480 Byte umfassende Pakete,
+      gerundet auf ein Mehrfaches von 256)
+
+   mein Vorschlag: 1.480.192 (1.480 x 1.000 pakete)
+   
+
+Beschreibung: Dieser Parameter legt fest, wie viel Speicher IP reserviert, um Paketdaten in 
+der Routerpaketwarteschlange zu speichern. Wenn dieser Pufferspeicherplatz gefüllt ist, 
+beginnt der Router, Pakete zu verwerfen, die zufällig aus der Warteschlange ausgewählt werden. 
+Puffer für Daten in Paketarteschlangen umfassen 256 Byte, so dass der Wert dieses Parameters 
+ein Vielfaches von 256 sein sollte. Für größere Pakete werden mehrere Puffer miteinander verkettet. 
+Der IP-Header für ein Paket wird getrennt gespeichert. Dieser Parameter wird nicht berücksichtigt, 
+und es werden keine Puffer reserviert, wenn der IP-Router nicht aktiviert ist.
+
+-------------------
+
+TcpMaxConnectRetransmissions   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Zahl
+   Gültige Werte: 0 - 0xFFFFFFFF
+   Standardwert: 3
+   mein Vorschlag: 5
+
+Beschreibung: Dieser Parameter legt fest, wie oft TCP eine Verbindungsanforderung (SYN) erneut 
+übermittelt, bevor der Versuch abgebrochen wird. Der Timeoutwert für erneute Rückübermittlungen 
+wird mit jeder nachfolgenden Übermittlung im Rahmen eines bestimmten Verbindungsversuchs verdoppelt. 
+Der Anfangstimeoutwert beträgt drei Sekunden.
+
+---------------------
+
+TcpMaxDataRetransmissions   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Zahl
+   Gültige Werte: 0 - 0xFFFFFFFF
+   Standardwert: 5
+   mein Vorschlag: 15
+
+Beschreibung: Dieser Parameter steuert, wie oft TCP ein einzelnes Datensegment (kein Verbindungssegment) 
+erneut übermittelt, bevor die Verbindung unterbrochen wird. Der Timeoutwert für erneute Übermittlungen 
+wird mit jeder nachfolgenden Übermittlung im Rahmen einer Verbindung verdoppelt. Der Wert wird zurückgesetzt, 
+wenn das Senden von Antworten wieder aufgenommen wird. Der Basistimeoutwert wird dynamisch ermittelt, 
+indem die Zeit für Roundtrips über eine Verbindung gemessen wird.
+
+----------------------
+
+TcpTimedWaitDelay (neu in Windows NT, Version 3.51 SP5 und höher)   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Zeit in Sekunden
+   Gültige Werte: 30 - 300 (dezimal)
+   Standardwert: 0xF0 (240 dezimal)
+   mein Vorschlag: 30
+
+Beschreibung: Dieser Parameter legt fest, wie lange eine Verbindung im TIME_WAIT-Status verbleibt, 
+wenn die Verbindung geschlossen wurde. Während sich eine Verbindung im TIME_WAIT-Status befindet, 
+kann das Socketpaar nicht erneut verwendet werden. Dieser Status wird auch als "2MSL"-Status bezeichnet, 
+da der Wert laut RFC zweimal so hoch sein soll wie die maximale Segmentlebensdauer im Netzwerk. 
+Weitere Details finden Sie im RFC 793.
+
+------------------------
+
+TcpWindowSize   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Anzahl an Bytes
+   Gültige Werte: 0 - 0xFFFF
+   Standardwert: Der kleinere Wert von 0xFFFF
+   und (dem größeren Wert des Vierfachen der maximalen TCP-Datengröße im Netzwerk
+   oder 8192 aufgerundet auf ein gerades Vielfaches der TCP-Datengröße im Netzwerk.)
+   Der Standardwert ist 8760 für Ethernet.
+   mein Vorschlag: 32767
+
+Beschreibung: Dieser Parameter legt die maximale Größe des TCP-Empfangsfensters fest, das vom System 
+bereitgestellt wird. Das Empfangsfenster gibt die Anzahl der Bytes an, die ein Absender übermitteln kann, 
+ohne dass eine Bestätigung empfangen wird. Im Allgemeinen kann durch größere Empfangsfenster die Leistung 
+in Netzwerken mit hoher Verzögerung und hoher Bandbreite verbessert werden. Um ein Höchstmaß an Effizienz 
+zu erzielen, sollte das Empfangsfenster einem geraden Vielfachen der maximalen TCP-Segmentgröße 
+(Maximum Segment Size, MSS) entsprechen. 
+
+------------------------
+
+DefaultTTL   Schlüssel: Tcpip\Parameters
+   Werttyp: REG_DWORD - Anzahl der Sekunden/Abschnitte (Hops)
+   Gültige Werte: 1 - 255
+   Standardwert: 32 für Windows NT, Version 3.51
+   Standardwert: 128 für Windows NT, Version 4.0
+   mein Vorschlag: 255
+
+Beschreibung: Gibt den Standardwert für "Time To Live" (TTL) an, der im Header ausgehender IP-Pakete 
+festgelegt wird. Durch den TTL-Wert wird festgelegt, wie lange ein IP-Paket höchstens im Netzwerk verbleiben 
+kann, ohne sein Ziel zu erreichen. Dieser Wert legt genau genommen einen Grenzwert für die Anzahl der Router fest, 
+die ein IP-Paket passieren kann, bevor es verworfen wird.
+
+-------------------------
+
+BackLog     Schlüssel: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters
+
+"EnableDynamicBacklog"=dword:00000001
+"MinimumDynamicBacklog"=dword:00000020
+"MaximumDynamicBacklog"=dword:00001000
+"DynamicBacklogGrowthDelta"=dword:00000010

@@ -1,0 +1,126 @@
+unit <%UnitName%>; // RTC Remote Functions Wizard output file;
+(*
+Copyright ( c ) 2007 Glynn Owen,
+RealThinClient components,
+All Rights reserved.
+*)
+interface
+
+uses
+  SysUtils, Classes,
+  rtcInfo, rtcConn, rtcFunction, rtcCliModule;
+
+type
+  <%ClassName%> = class
+  private
+    // Local objects
+    FEventResult: TRtcResult;
+    FLastResult: TRtcValue;
+    // Pointer to external object
+    FCliModule: TRtcClientModule;
+    FStatus: shortint;
+
+  protected
+    { General-purpose Result Event handler }
+    procedure ResultReturn(Sender: TRtcConnection; Data, Result: TRtcValue);
+    { General-purpose Result Aborted handler }
+    procedure ResultAborted(Sender: TRtcConnection; Data, Result: TRtcValue);
+
+  public
+    { Constructor and destructor }
+    constructor Create(const ClientModule:TRtcClientModule);
+    destructor Destroy; override;
+
+// BEGIN User-defined remote functions
+<%FunctionSignatureList%>
+// END User-defined remote functions
+  end;
+
+implementation
+
+uses rtcDataCli;
+
+Var ErrorList:array[0..3] of string = (
+  ': Error waiting for a response.',
+  ': Server response had incorrect data type.',
+  ': Server not listening.',
+  ': Function returned NULL.');
+
+procedure RaiseError(ErrNo:integer; Src:string);
+Begin
+  Raise Exception.Create(Src+ErrorList[ErrNo]);
+End;
+
+procedure <%ClassName%>.ResultReturn(Sender: TRtcConnection; Data, Result: TRtcValue);
+  begin
+  // Extract the Result to our private variable
+  FLastResult.Clear;
+  FLastResult.asObject:=Result.asObject;
+  Result.asObject:=nil;
+  FStatus:=1;
+  end;
+
+procedure <%ClassName%>.ResultAborted(Sender: TRtcConnection; Data, Result: TRtcValue);
+  begin
+  // Set OK to False (no valid response from server)
+  FStatus:=-1;
+  FLastResult.Clear;
+  end;
+
+constructor <%ClassName%>.Create(const ClientModule:TRtcClientModule);
+  begin
+  inherited Create;
+  FCliModule := ClientModule;
+  // Create the "RtcResult" object and assign the event handler
+  FEventResult:=TRtcResult.Create(nil);
+  FEventResult.OnReturn:=ResultReturn;
+  FEventResult.RequestAborted:=ResultAborted;
+  // Create the ResultData object, where all results will be moved to
+  FLastResult:=TRtcValue.Create;
+  end;
+
+destructor <%ClassName%>.Destroy;
+  begin
+  FEventResult.Free;
+  FLastResult.Free;
+  inherited;
+  end;
+
+<%FunctionImplementation%>
+// BEGIN function implementation
+function <%ClassName%>.<%FunctionSignature%>
+  begin
+  <%NILResult%>;
+  FStatus:=0;
+  with FCliModule do
+    begin
+    // Function name should equal class Method name - for simplicity
+    with Data.newFunction('<%FunctionName%>') do
+      begin
+      // Set all remote function parameters here ...
+      <%FunctionParameters%>
+      end;
+    Call(FEventResult);
+    // Using WaitForCompletion to block execution until we get a response
+    if not WaitForCompletion then
+      RaiseError(0,'<%FunctionName%>');
+    end;
+
+  if FStatus<=0 then
+    RaiseError(2,'<%FunctionName%>')
+  // Check if the result we have received is an exception and raise it
+  else if FLastResult.isType=rtc_Exception then
+    raise Exception.Create(FLastResult.asException)
+  else if FLastResult.isType=rtc_NULL then
+    RaiseError(3,'<%FunctionName%>')
+  // Check if the result is of our expected type and return the data
+  else if FLastResult.isType=<%RtcReturnEnum%> then
+    With FLastResult do begin
+      Result:=<%RtcReturnAs%>;
+      <%PreserveReturn%>
+      end
+  else RaiseError(1,'<%FunctionName%>');
+  end;
+// END function implementation
+
+end.

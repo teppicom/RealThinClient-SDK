@@ -1,0 +1,60 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+******************************************************************
+*                                                                *
+* RealThinClient SDK v6.36 (2014.Q2), released August 13th 2014. *
+*                                                                *
+******************************************************************
+
+---------------------------------------------------------
+* Changes in v6.36 (2014.Q2)
+---------------------------------------------------------
+
+1) "AddHostToChannel", "AddListenerToChannel", "AddUserToChannel" and "RemoveUserFromChannel" methods 
+   added to the "TRtcGateway" component to make it easy to manage Groups of Hosts and Listeners in Channels.
+   Users can be Hosts and/or Listeners on any number of Channels. Hosts can get notified about Listeners,
+   and Listeners can get notified about Hosts joining and leaving their Channels. Notifications are being 
+   sent in form of Group notifications when users are leaving or joining the Group specified for each User.
+
+2) GateChatServer Demo updated to use the new "AddUserToChannel" and "RemoveUserFromChannel" methods
+   from the "TRtcGateway" component, instead of manually implementing Group notifications. Even though 
+   only one channel is used for all Users in this example (channel:"Chat"), this example shows how all
+   users can get notified about other users connecting to the Gateway and disconnecting from the Gateway
+   by using Group messages through the new "AddUserToChannel" and "RemoveUserFromChannel" methods.
+
+---------------------------------------------------------
+* Changes in v6.35
+---------------------------------------------------------
+
+1) "SetClient" method on the "TRtcAbsGateClientLink" class made virtual.
+
+---------------------------------------------------------
+* Changes in v6.34
+---------------------------------------------------------
+
+1) Request and Response Cookie delimiter is now set to ";" by default, 
+   instead of scanning the Cookie Text guessing the delimiter. 
+   If your Cookies are using a different delimiter, use the "Cookie.Delimiter" 
+   property to change it before accessing Cookie values by name.
+
+2) Fixed Timeouts on the TRtcGateClient component to correctly disconnect the 
+   Client from the Gateway in case of long communication delays.
+
+3) StreamSec Mobile Plugins added to the "LibPlugins" folder.
+
+---------------------------------------------------------
+* Changes in v6.33
+---------------------------------------------------------
+
+1) RAD Studio XE6 compatibility update.
+
+---------------------------------------------------------
+* Changes in v6.32
+---------------------------------------------------------
+
+1) TRtcDataRouter and TRtcLoadBalancer components updated for SSL support using 3rd-party encryption components.
+
+2) LoadBalancer3 Demo extended with SSL encryption support (using StreamSec Tools 2.1)
+
+3) BrowserUpload QuickStart example extended with SSL encryption support (using StreamSec Tools 2.1)
+

@@ -1,0 +1,61 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************
+*                                                      *
+* RealThinClient SDK v9.50, released January 8th 2019. *
+*                                                      *
+********************************************************
+
+!!IMPORTANT!! In the RTC SDK v9.00 update, some breaking changes were introduced.
+If you are updating from any older RTC SDK version (v6.x, v7.x or v8.x), read the
+"Updates_v900_2017Q4.txt" file if you get any compile errors in your Project(s)!
+
+*** !! READ BEFORE UPDATING !! ***************************************************************
+We are cleaning up the RealThinClient SDK, to make it more light-weight and easier to maintain.
+As part of this clean-up process, units and/or components which we NO LONGER PLAN TO MAINTAIN
+OR SUPPORT (DEPRECATE) are being moved to a new "Legacy" folder. If you are still using any 
+of these units or components (see list below) and want to continue using them after this update,
+in addition to installing the packages you want from the "Legacy\SDKPackages_Legacy.bpg" Group,
+update your Delphi's Library Search Path to include the new "Legacy" folder (as well as "Lib").
+********************************************************************************************
+
+---------------------------------------------------------
+* Changes in v9.50
+---------------------------------------------------------
+
+1. Units moved from "Lib" to the "Legacy" folder ...
+
+   * rtcDB.pas -> "TRtcMemDataSet" & "TRtcDataSetMonitor" components // now in "rtc_DBA" package
+	* rtcDBCli.pas -> "TRtcClientDataSet" component // now in "rtc_DBA" package
+	* rtcRegisterDBA.pas -> installed with the "rtc_DBA" package
+	* rtcRegisterDBCli.pas -> installed with the "rtc_DBA" package
+
+	* rtcGateSrv.pas -> "TRtcGateway" & "TRtcHttpGateway" components // now in "rtc_Gate" package
+	* rtcGateCli.pas -> "TRtcHttpGateClient", "TRtcGateClientLink", "TRtcGateAccountManager", 
+	                    "TRtcHttpMultiGateClient", "TRtcMultiGateClientLink" & "TRtcGCThread"
+							  components // now in "rtc_Gate" package
+	* rtcGateConst.pas -> required for "rtcGateSrv.pas & rtcGateCli.pas" units
+	* rtcRegisterGate.pas -> installed with the "rtc_Gate" package
+
+	* rtcTcpCli.pas -> "TRtcTCPClient" component // now in "rtc_Raw" package
+	* rtcTcpSrv.pas -> "TRtcTCPServer" component // now in "rtc_Raw" package
+	* rtcUdpCli.pas -> "TRtcUDPClient" component // now in "rtc_Raw" package
+	* rtcUdpSrv.pas -> "TRtcUDPServer" component // now in "rtc_Raw" package
+	* rtcRegisterRaw.pas -> installed with the "rtc_Raw" package
+
+	* rtcDnsQuery.pas -> unsupported DNS Query class
+	
+2. Units moved from "LibPlugins" to the "Legacy" folder ...
+
+   * kbmMW2rtcCli.pas -> unsupported example classes for use with "kbmMW"
+	* kbmMW2rtcSrv.pas -> unsupported example classes for use with "kbmMW"
+	
+3. Units moved from "Examples\DataProvider" to the "Legacy" folder ...
+
+	* rtcPhpProvider.pas (+dfm) -> used as part of WebServer Examples, unsupported
+	* rtcPHP.pas -> required for "rtcPhpProvider.pas"
+	* rtcPHPTypes.pas -> required for "rtcPhpprovider.pas"
+
+	* rtcDBTypes.pas -> unused DB example code
+	* rtcIBODBPool.pas -> unused IBO/DB example code
+	

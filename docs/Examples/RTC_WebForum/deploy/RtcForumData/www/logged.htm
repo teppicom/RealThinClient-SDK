@@ -1,0 +1,30 @@
+<div id=loginarea>
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	  <%if:show_forum_filter%>
+		<form method="post" enctype="multipart/form-data" name="frm_filter" id="frm_filter">
+		<%endif:show_forum_filter%>
+		<tr>
+			<td align="right">
+				<a href="?sid=<%sid%>">Home</a>&nbsp;
+				<a href="?cmd=logout&sid=<%sid%>">Logout</a>&nbsp;
+				<a href="?cmd=changepwd&sid=<%sid%>">Change password</a>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<%if:show_forum_filter%>
+		<tr>
+			<td align="right">	
+				<strong>filter</strong>&nbsp;<input name="filter_text" type="text" class="loginedit" style="width:250px" id="filter_text" value="<%filter_text%>"/>
+				<input name="btnSubmit" type="submit" id="btnSubmit" value="Set" style="width: 50px"/>
+			</td>
+		</tr>
+ 	  <input name="cmd" type="hidden" value="setfilter">
+		<input name="sid" type="hidden" value="<%sid%>">
+		</form>
+		<%endif:show_forum_filter%>
+  </table>
+</div>
+<div id=userinfoarea>Welcome, <strong><%user_name%></strong>.<BR>Your IP: <%logged_ip_address%>
+<br><%now_datetime%>&nbsp;</div>

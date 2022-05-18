@@ -1,0 +1,24 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************************
+*                                                                  *
+* RealThinClient SDK v9.29 (2018.Q3), released September 2nd 2018. *
+*                                                                  *
+********************************************************************
+
+!!IMPORTANT!! In the RTC SDK v9.00 update, some breaking changes were introduced.
+If you are updating from any older RTC SDK version (v6.x, v7.x or v8.x), read the
+"Updates_v900_2017Q4.txt" file if you get any compile errors in your Project(s)!
+
+---------------------------------------------------------
+* Changes between v9.25 and v9.29 (2018.Q3)
+---------------------------------------------------------
+
+1. Added "OnFilterRequest" event to "TRtcDataServerLink" and "TRtcDualDataServerLink" components.
+
+2. Fixed "ERangeError" when using Linked Objects with range checking enabled.
+
+3. "WakeUpAllDelayedCalls" function added to the "rtcSrvModule.pas" unit.
+	
+4. "TRtcMessageServer" component updated to support partial request content processing by 
+   using the "ProcessData" method in conjunction with "GetConnection" and "PutConnection".

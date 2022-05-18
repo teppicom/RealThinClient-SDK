@@ -1,0 +1,539 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+******************************************************************
+*                                                                *
+* RealThinClient SDK v7.53 (2016.Q3), released October 2nd 2016. *
+*                                                                *
+******************************************************************
+
+---------------------------------------------------------
+* Changes in v7.53 (2016.Q3)
+---------------------------------------------------------
+
+1. Fixed RTC connection provider shut-down procedure.
+
+---------------------------------------------------------
+* Changes in v7.52
+---------------------------------------------------------
+
+1. Fixed Memory Leaks on mobile platforms using Auto-Reference-Counting (ARC)
+   caused by RTC objects cross-referencing each other (Connections <-> Threads).
+
+2. Extended RTC List classes with "extractFirst" and "extractLast" methods
+   to avoid a strange bug in the Delphi ARC implementation causing the Object 
+   Reference Counter to be incremented twice when it should only have been
+   incremented once (assigning the Result of a "First" method to a variable
+   using a hard typecast), which was resulting in a Memory Leak, but did
+   NOT show as a "Leak" in the "Instruments" Tool from XCode.
+
+3. Updated the "RtcFreeAndNil" function to check the Reference Counter
+   when using Auto-Reference-Counting (ARC) and call "DisposeOf" if
+   the Object is being referenced somewhere else (RefCount>1) before
+   setting its pointer to NIL. This ensures that the Object destructor
+   will be called even if the object is still referenced somewhere else, 
+   and ... helps detect possible Memory Leaks using "Instruments" from XCode.
+
+4. "TRtcObject" class was redesigned for ARC (Auto-Reference-Counting).
+   - "Kill" method (previously used to destroy the object) was removed.
+   - "SingleUse" method was added and should be implemented to return 
+     FALSE if the object should NOT be destroyed after use (re-usable),
+	 or TRUE if the object is for single-use only and can be destroyed.
+	 By default, the "SingleUse" method returns TRUE.
+
+5. To avoid problems with Auto-Reference-Counting (ARC) on mobile platforms
+   when posting Jobs to background Threads, where a "Job" could have been
+   executed in the background Thread even before the "PostJob" method returned, 
+   resulting in the "Job" object reference counter to be higher than 1 in the 
+   "RtcFreeAndNil" method called from the Backround Thread, "PostJob" methods 
+   have been updated to set the "Job" object pointer to NIL immediately after 
+   placing the Job into the job queue for all "SingleUse" jobs (see point 4).
+
+---------------------------------------------------------
+* Changes in v7.51
+---------------------------------------------------------
+
+1. Fixed Memory Leaks on platforms with ARC (Auto-Reference-Counting)
+   reported by the "Instruments" tool (included witn XCode on MacOSX) and
+   caused by the use of "DisposeOf" inside the "RtcFreeAndNil" procedure.
+
+2. Fixed a stupid bug in "tXSList", "tXList" and "tXObjList" object destructors
+   (found thanks to iOS Crash Logs), were the "Destroy" method was being called 
+   on an internal Object Pool instead of "Free", resulting in the Object Pool's 
+   destructor to be called twice on platforms with ARC (Auto-Reference-Counting),
+   which (sometimes) resulted in the App to CRASH on iOS and Android platforms.
+
+3. Updated the RTC Object Pool destructor to set all pointers to NIL before destroying
+   or down-sizing its internal pointer array, to avoid potential problems with ARC.
+
+4. Updated RTC Timers to use the "GetTickTime64" function ("rtcInfo.pas" unit)
+   to keep track of time, which is faster and more precise than the previous 
+   version, which was using "Now" with a precision of 50 "ticks" per second.
+
+5. Updated RTC Worker Threads, created and used by the RTC Thread Pool and
+   all RTC components in Multi-Threaded mode, to give up some of their CPU
+   time to other Threads (including the Main Thread) after executing each Job.
+   This allows RTC Worker Threads to better distribute CPU times between them
+   and avoids a situation where a single Worker Thread running with higher priority
+   would block one CPU while executing several jobs in a row, without a break.
+
+---------------------------------------------------------
+* Changes in v7.50
+---------------------------------------------------------
+
+1. Removed the "NeedThread" flag (used to mark high-priority threads) 
+   from the PING Timer used by the TRtcHttpGateClient component 
+   to reduce the number of threads required for Gate Clients.
+   
+---------------------------------------------------------
+* Changes in v7.49
+---------------------------------------------------------
+
+1. When the Gate Client (TRtcHttpGateClient component) was behind a Proxy 
+   or using one of the APIs with a built-in connection pool (for example the 
+   WinInet API with "useProxy=TRUE" or WinHTTP API with "useWinHTTP=True"), 
+   there was a chance for the Gateway to receive a new request from the Client 
+   to open a new Output Stream before the old Stream was closed. If that 
+   happened, Clients request to open a new Output Stream was ignored by the 
+   Gateway and the Client was forced to reset both connections to continue.
+   This should now be fixed.
+   
+---------------------------------------------------------
+* Changes in v7.47 & v7.48
+---------------------------------------------------------
+
+1. To make sure the "TRtcHttpGateClient" component will get destroyed
+   regardless of the internal component and connection states, components 
+   destructor was updated to destroy internal connection components manually 
+   after a specified Timeout if the "Release" methods didn't finish "on time".
+   Default Timeout is 30 seconds, but can be updated by setting the 
+   "CLIENTRELEASE_MAXWAIT" variable from the "rtcGateConst.pas" unit.
+
+2. To speed-up RTC Application shut-down and make sure RTC Applications terminate
+   within a reasonable time, even if a lot of RTC Worker Threads are still active, 
+   RTC Thread Pool shut-down procedure was updated to stop accepting normal jobs 
+   and exit all waiting loops during shut-down, then release virtual threads left 
+   in memory once all worker threads close or after a Timeout (what comes first).
+   The default Timeout is set to 30 seconds, but can be changed by setting the 
+   "RTC_THREAD_POOL_CLOSEWAIT" global variable declared in the "rtcThrPool.pas" unit.
+
+3. If you want your Application to terminate even faster, you can now use the 
+   "rtcShutDown" function (added to the "rtcConn.pas" unit) from your Main Form's 
+   "OnCloseQuery" or your Main DataModule's "OnDestroy" event. This will tell RTC 
+   to shut down its Threads and Timers immediately and skip most clean-up procedures,
+   resulting in the fastest possible Application shut-down. But, it will also raise
+   a number of Exceptions and leak a lot of Memory, so you should ONLY use that
+   procedure if you HAVE TO terminate your Application NOW and skip clean-up.
+  
+4. Moved all method implementations for the "TRtcSocket" class from "Lib/synsock/*.inc" 
+   files into the "rtcSynAPI.pas" file to make the unit easier to debug and read/analyze.
+   
+5. To speed-up manual disconnects using blocking sockets APIs ("TRtcSocket" class) when 
+   a previous API call is blocking in the background thread (example: trying to connect),
+   sockets will now be closed immediately from the thread calling "Disconnect" before a 
+   "disconnect" job is placed into the background Thread responsible for socket API calls.
+
+6. To avoid name conflicts with the "TObjectList" class from the Delphi RTL, the 
+   "TObjectList" class declared in the "rtcInfo.pas" unit renamed to "TRtcObjectList".
+
+7. If the "TRtcHttpGateClient" component was in the process of logging in to the Gateway,
+   but has NOT logged in yet, setting "AutoLogin" or "Active" to FALSE had no effect,
+   making a clean "Gate Client" shut-down impossible when the Gateway was unreachable,
+   or the "TRtcHttpGateClient" was using wrong parameters. This has been fixed.
+ 
+8. Fixed missing "TRtcISAPIServer" component description in the HELP file.
+
+9. Updated the RTC Thread and Timer Pools to ensure that all events triggered by RTC 
+   components will either be executed from the Main Thread or from one of the RTC 
+   Worker Threads - managed by the RTC Thread Pool. Previously, Multi-Threaded RTC 
+   Timer events which did NOT explicitly create a TRtcThread instance and a TRtcJob 
+   to encapsulate the event and execute it in the RTC Thread were executed directly 
+   from the inside a background Thread responsible for triggering RTC Timer events.
+   
+10. "Sync" method on the "TRtcThread" class is now a class function which can be 
+    used from inside any RTC Thread to synchronize an Event with the Main Thread.
+    
+    But! Unlike any previous implementations, where the Event would be executed 
+    directly in case the "Sync" method was called from the Main Thread, the updated 
+    "Sync" class function will ONLY execute the Event if the "Sync" class function 
+    was called from a RTC Worker Thread managed by the RTC Thread Pool.
+	
+    If the "Sync" class function is called from the Main Thread or any other TThread 
+    which was NOT created by the RTC Thread Pool, it will do nothing and return FALSE.
+
+    By changing the "Sync" method into a class function and returning FALSE if the call
+    was made from inside the Main Thread (TRUE if called from a background RTC Thread), 
+    it is now possible to use "if TRtcThread.Sync(MyEvent) then Exit;" from any user event 
+    to synchronize that Event with the Main Thread, in case access to the GUI is required.
+	
+11. All "Sync" methods on "TRtcConnection" component descendants have been updated
+    to use the updated "Sync" class function and return FALSE if called from the 
+    Main Thread or any other Thread NOT created and managed by the RTC Thread Pool.   
+
+    These modifications make it possible to use "if Sender.Sync(MyEvent...) then Exit;" 
+    at the top of any RTC event with a "Sender:TRtcConnection" parameter, or ...
+    use "if TRtcThread.Sync(MyEvent) then Exit;" from inside any event, method or 
+    function directly or indirectly called from a RTC event running inside a 
+    RTC Thread, in case that code requires access to the Main Thread / GUI.
+   
+12. "TRtcTimer" class constructor now accepts a "BackThread:TRtcThread" as parameter.
+    If "BackThread" is specified, all Timer events will be executed from that "BackThread". 	
+    If "BackThread" is NOT specified, but the Timer is created for Multi-Threaded use, 
+    a TRtcThread will be created internally (accessible using the new "Thread" parameter)
+    and all events triggering, including Jobs enabled without specifying the (now optional)
+    "Thr:TRtcThread" parameter, will be posted to and executed from that RTC Thread.
+	
+13. "TRtcTimer.Enable" method used for triggering jobs was updated to make the "Thr:TRtcThread" 
+    parameter optional, for which the "Job" and "Thr" parameters had to trade places, 
+    so be prepared to fix compiler errors if you are using the "TRtcTimer" class directly.
+   
+14. "TRtcThread" class extended with a new "PostEvent" class function for posting events without 
+    parameters (TRtcSyncEvent), which is the same event type as used by the "Sync" class function.
+	
+15. To reduce chances of "dead" Gate Client connections resulting in Timeouts on previously working 
+    Gate Client connections because of a PING being sent too late while removing "dead" connections,
+    TRtcGateway and TRtcHttpGateway components are now using one dedicated high-priority RTC Timer 
+    for resuming paused connections (using a bandwidth limiter) and sending PINGs to active Clients, 
+    and a separate normal-priority RTC Timer for checking idle connection timeouts and disconnecting,	
+    logging out and removing inactive Gate Clients from the Gateway.
+	
+16. To make sure Gate Clients will be sending a PING to the Gateway in regular intervals,
+    all "TRtcHttpGateClient" component are now using a dedicated high-priority RTC Timer.
+	
+17. Fixed "BeforeLogin" and some other "GUI" events NOT triggering on the "TRtcHttpGateClient" 
+    component if the Login procedure was initiated automatically by the component. To make sure 
+    no GUI events can go "missing" without notice (at least while debugging), an exception will 
+    now be raised if any (assigned) GUI event (which should have been triggered) does NOT trigger.
+    
+---------------------------------------------------------
+* Changes in v7.46
+---------------------------------------------------------
+
+1. Default RTC Thread Pool size parameters updated to reduce CPU load 
+   and reduce chances of thread congestion on devices with slower CPUs.
+   By default, RTC Thread Pool will now be creating up to 128 worker threads
+   for normal usage and up to 128 additional threads for high priority jobs.
+   
+   If you want to limit your App to use even less threads, or increase the
+   number of worker threads if the App is running on high performance hardware, 
+   you can modify all RTC Thread Pool parameters at the start of your Application 
+   by using these global variables (declared in the rtcThrPool.pas unit):
+
+   // Min. number of unused threads to keep active
+   RTC_THREAD_POOL_PLUS:word=5;
+   // Max. number of unused threads to keep active
+   RTC_THREAD_POOL_OVERSIZE:word=256;
+   // Max. number of "normal" Threads in our thread pool.
+   RTC_THREAD_POOL_MAX:word=128;
+   // Absolute Thread Pool Limit, including high priority threads.
+   RTC_THREAD_POOL_LIMIT:word=256;
+   
+---------------------------------------------------------
+* Changes in v7.45
+---------------------------------------------------------
+
+1. Added safety Timeouts when waiting for connection providers to be released (rtcConn.pas) unit.
+
+  RTC_WAITFOR_RELEASE_PROVIDER:integer=15;
+  - maximum time (in seconds) allowed for any connection component 
+    to wait for its connection provider to be released.
+	
+  RTC_WAITFOR_PROVIDER_FINISH:integer=50;
+  - Time to wait (in milliseconds) after releasing a connection provider 
+    for background thread to finish.
+
+---------------------------------------------------------
+* Changes in v7.44
+---------------------------------------------------------
+
+1. A new Tool using FireMonkey (created with Delphi 10.1 Belin and fully cross-platform) is now 
+   available in the "Tools/FMXGateStressClient" folder, providing a simple way to test RTC Gate 
+   Clients running on all devices and stress-test Apps built using TRtcGateway or TRtcHttpGateway
+   components by dynamically creating multiple TRtcHttpGateClient components (based on parameters),
+   with an easy-to-use Graphical User Interface and Graphical Status display for all Gate Clients.
+   For more details, read the comments at the top of the main unit (GCUnit1.pas).
+
+2. Renamed the following "TRtcLoadBalancer" component methods/properties (added in v7.43):
+
+   function "GetServerList" renamed to "ServerList"
+    - Get a list of all registered Servers with "ServerAddr:ServerPort" separatey by CR+LF
+
+   function "GetServerCount" renamed to "ServerCount"
+    - Get the number of registered Servers
+	
+   function "CheckServerState" renamed to "IsServerEnabled"
+    - Check if Server "ServerAddr:ServerPort" is Enabled.
+      Returns TRUE only if Server with "ServerAddr:ServerPort" was found and is Enabled.
+      Use ServerAddr='' for all Server Addresses and/or ServerPort='' for all Server Ports. 
+
+   property "ServerState" renamed to "ServerEnabled"
+    - Set -> Enable (:=True) or Disable (:=False) all Servers matching "ServerAddr:ServerPort" 
+	  Get -> Check if Servers matching "ServerAddr:ServerPort" are Enabled.
+
+3. Fixed a bug in the "TRtcHttpGateClient" destructor which was causing an AV if TRtcHttpClient 
+   components used internally haven't been created yet, which is usually the case at design-time
+   inside the IDE when closing a Form/DataModule which had a TRtcHttpGateClient component, or at 
+   runtime if neither the "Active" nor the "AutoLogin" property changed to TRUE before destruction.
+
+---------------------------------------------------------
+* Changes in v7.43
+---------------------------------------------------------
+
+1. "TRtcLoadBalancer" component extended with the following methods:
+
+  function GetServerCount:integer;
+    - Get the number of registered Servers
+
+  function GetServerList:RtcString;
+    - Get a list of all registered Servers with "ServerAddr:ServerPort" separatey by CR+LF
+	
+  procedure UpdateServerState(const ServerAddr,ServerPort:RtcString; ServerEnabled:boolean);
+    - Update Server "ServerAddr:ServerPort" state (Enabled/Disabled)
+      Use ServerAddr='' for all Server Addresses and/or ServerPort='' for all Server Ports. 
+
+  function CheckServerState(const ServerAddr, ServerPort: RtcString):boolean;
+    - Check if Server "ServerAddr:ServerPort" is Enabled.
+      Returns TRUE only if Server with "ServerAddr:ServerPort" was found and is Enabled.
+      Use ServerAddr='' for all Server Addresses and/or ServerPort='' for all Server Ports. 
+
+  function ServerStateCount(const ServerAddr, ServerPort: RtcString; ServerEnabled:boolean):integer;
+    - If called with "ServerEnabled=True", returns the number of ENABLED Servers matching "ServerAddr:ServerPort".
+      If called with "ServerEnabled=False", returns the number of DISABLED Servers matching "ServerAddr:ServerPort".
+      Use ServerAddr='' for all Server Addresses and/or ServerPort='' for all Server Ports. 
+	  
+  property ServerState[const ServerAddr,ServerPort:RtcString]:boolean;
+    - Set -> Enable (:=True) or Disable (:=False) all Servers matching "ServerAddr:ServerPort" 
+	  Get -> Check if Servers matching "ServerAddr:ServerPort" are Enabled.
+ 
+2. To avoid AVs when the "Active" or "AutoLogin" property on the "TRtcHttpGateClient" component 
+   is manually being changed from "True" to "False" and back to "True" again in a very short
+   time-span, connection providers (components responsible for communication) will ONLY be 
+   destroyed if some connection parameters were changed and the connection wasn't closed.
+
+---------------------------------------------------------
+* Changes in v7.42
+---------------------------------------------------------
+
+1. "TRtcHttpClient", "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" 
+   components have been improved to better handle disconnects, stream resets, 
+   connection provider changes and log-outs in Multi-Threaded mode.
+     
+2. RTC Thread Pool was improved to make sure that all high priority jobs are 
+   executed before any normal priority jobs and extended to allow components 
+   and jobs to request a new worker thread if all worker threads are busy.
+   
+3. "PostJob" and "PostEvent" methods extended with a "ForceThread" property,
+   allowing any "job" to force the creation of a new worker thread in case 
+   all worker threads in the RTC Thread Pool are currently busy. 
+
+4. "ForceThread" property added to the "TRtcQuickJob" component.
+   
+5. "RtcTotalThreadsBusy" and "RtcTotalThreadsIdle" functions in the "rtcThrPool"
+   unit fixed to return the correct number of busy and idle RTC Worker Threads.
+
+---------------------------------------------------------
+* Changes in v7.37 - v7.41 (2016.Q3)
+---------------------------------------------------------
+
+1. Fixed "TRtcMessageClient" and "TRtcMessageServer" component destructors in Multi-Threaded mode.
+
+2. Fixed a bug in "TRtcGateway" and "TRtcHttpGateway" components which (sometimes) resulted in 
+   Gate Client logins to FAIL when using the "GateUserAuth" and/or "GateUserInfo" properties 
+   on "TRtcHttpGateClient" or "TRtcHttpMultiGateClient" components.
+   
+3. Improved the functionality of "DisconnectNow" and "StopListenNow" methods.
+
+4. Updated Chat Client Demos to include "UserInfo" in LOG files and Chat History.
+
+---------------------------------------------------------
+* Changes in v7.36
+---------------------------------------------------------
+
+1. "SetupReceivingParams" and "SetupSendingParams" functions moved from the "rtcGateConst" unit 
+   to the "rtcConn" unit and renamed to "rtcSetupReceivingParams" and "rtcSetupSendingParams".   
+   These functions are global and affect all TCP/IP and HTTP-based components in the RTC SDK.
+
+2. Removed "SetupLowestReceiveSpeed" and "SetupLowestSendingSpeed" functions from the "rtcGateConst" unit.
+   Use "rtcSetupReceivingParams" and "rtcSetupSendingParams" functions from the "rtcConn" unit instead.
+
+3. The following global constants were moved from the "rtcSockBase" unit to the "rtcConn" unit:
+   SOCK_PACKET_SIZE, SOCK_SEND_BUFFER_SIZE, SOCK_READ_BUFFER_SIZE, SOCK_MAX_SEND_SIZE,
+   SOCK_MAX_READ_SIZE, SOCK_RECV_TIMEOUT and SOCK_SEND_TIMEOUT.
+
+4. "LongWord" replaced with "Cardinal" to avoid problems on the iOS64 target platform where "longword" is 
+   declared as a 64-bit integer type instead of a 32-bit unsigned integer type (as on all other platforms).
+
+5. Events used by the TRtcGateway component updated to use the "Cardinal" data type instead of "TGateUID"
+   for the "UserID" parameter to keep the event definition identical on all platforms and avoid problems
+   when using the same Project to compile for 32-bit and 64-bit target platforms.
+
+---------------------------------------------------------
+* Changes in v7.35
+---------------------------------------------------------
+
+1. Fixed bugs in Gateway and Gate Client components which resulted in *premature*
+   disconnects when using the "StreamBlockSizeIn" or "StreamBlockSizeOut" properties 
+   on Gate Client components with values other than 0 (zero).
+
+2. Updated Timeout checks on the Gateway to avoid closing connections which have been 
+   put "on hold" by the Gateway, either to slow down receiving/sending (using a speed limiter)
+   or to wait for all the received packages to be forwarded to all the recipients.
+
+3. Added "SetupLowestReceivingSpeed" and "SetupLowestSendingSpeed" functions to the 
+   "rtcGateConst" unit as a simple alternative for configuring the Gateway/GateClient network. 
+
+   By default, Gateway and Gate Client components are configured to work inside 
+   fast LAN with plenty of bandwidth and virtually no connection issues.
+   To make the Gateway and Gate Clients work over the Internet with lower bandwidths,
+   these functions can be used to set the lowest expected speed in each direction.
+   If connection speed drops below the specified limit in any direction, chances are 
+   high that a Timeout will be trigered on the Gateway or Client to drop that connection.
+
+---------------------------------------------------------
+* Changes in v7.34
+---------------------------------------------------------
+
+1. "TRtcGateway" components now works with a Single-Threaded and a Multi-Threaded Server.
+
+2. "TRtcHttpGateway" component has a new "MultiThreaded" property (default=FALSE).
+   To make the Gateway Multi-Threaded, set MultiThreaded:=TRUE before setting Active:=TRUE.
+   To use a single-threaded Gateway, set MultiThreaded:=FALSE before setting Active:=TRUE.
+
+3. "SetupConnectionParams" function from the "rtcGateConst" unit has been removed and 
+   is now replaced with two new functions: "SetupReceivingParams" and "SetupSendingParams".
+   
+4. "RtcSimpleGateway" Demo updated to use new Gateway options (see points 2 and 3).
+   
+---------------------------------------------------------
+* Changes in v7.33
+---------------------------------------------------------
+
+1. Optimized RTC Gateway components Memory usage and fixed Gateway Memory Leaks.
+
+2. Improved Streaming and Receiving Speed Limiter implementations on RTC Gateway components.
+
+3. Fixed the login procedure used by RTC Gateway and Gate Client components to correctly
+   handle Clients IP Address changes and Gateway restarts, avoiding long re-login delays.
+   
+4. Improved the Log-in and Log-out procedure on the RTC Gateway to eliminate the possibility 
+   of duplicate IDs and keep "expired" IDs reserved for a while after logging the user out.
+
+5. Timeout values and the PING interval used by RTC Gateway and Gate Client components 
+   have been reduced further, to recognize disconnected Gate Clients even faster. 
+   The Gateway is now also making a distinction between closed and open connections,
+   using a much shorter timeout for a connection which has already been closed.
+
+6. "SetupConnectionSpeed" function replaced with "SetupConnectionParameters" in the 
+   "rtcGateConst" unit. The new function sets connection parameters based on MTU
+   and the number of packets expected to be read and sent within a second, rather 
+   than calculating buffer values based on the lowest expected up/down speed.
+   
+7. Added "MaxUsersTotal" and "MaxUsersActive" properties to RTC Gateway components, giving 
+   the Gateway full control over the number of Active/Total Users allowed at the same time.
+
+8. Removed "UnLockAccess" and "ReLockAccess" methods from RTC Gateway components.
+   These methods are no longer required, since the Gateway is now fully Multi-threaded.
+  
+9. Fixed a bug in the "rtcLog" unit which resulted in log files to be created without a name 
+   (using only folder and extension) if the "RTC_LOG_FOLDER" variable was manually assigned.
+
+10. RTC Gateway and Gate Client Demos updated to reflect the changes listed above.
+   
+---------------------------------------------------------
+* Changes in v7.32
+---------------------------------------------------------
+
+1. "TRtcGateway" and "TRtcHttpGateway" components have received a major internal redesign.
+
+   Instead of using a single critical section to secure access to all data managed by 
+   the Gateway component, two critical sections will now be created by the Gateway for 
+   every connected Client (one for input-related and one for output-related data) and
+   a separate critical section for every User Group managed by each Client. 
+
+   This eliminates a bottleneck caused by multiple threads trying to acquire the lock 
+   on the same critical section and allows the Gateway to better utilize available CPUs.
+
+2. "StreamSpeedLimit" and "ReceiveSpeedLimit" properties on "TRtcGateway" and "TRtcHttpGateway" 
+   components are now per-Client instead of per-Gateway, allowing you to specify upload 
+   and download speed limits for each Client. By setting these speed limits, you don't  
+   have to worry about Clients on fast connections using up all the available bandwidth.
+
+3. Timeout values for Gateway and Gate Client components have been reduced,
+   making the Gateway and Gate Clients aware of "dead" connections sooner.
+
+4. "RtcSimpleGateway" demo updated.
+
+---------------------------------------------------------
+* Changes in v7.31
+---------------------------------------------------------
+
+1. Before this update, you were required to use the "rtcFMX.GUI" unit somewhere in your
+   Project if you were using Delphi XE3 or later version to target any platform other than 
+   Windows, or if you were using Delphi XE2 to tartet the Mac OSX platform. On the other 
+   hand, if you were using Delphi XE2 to target the iOS platform, you had to use the 
+   "rtcFUX_GUI" unit. Targeting the Windows platform did NOT have such requirements.
+
+   To eliminate this requirement to manually add a unit for the RTC SDK to work,
+   starting with this update, the RTC SDK will assume that you are using Delphi with
+   "FireMonkey" for your cross-platform Projects and will automatically include the 
+   unit required by the platform you are targeting, so you do NOT have to manually add 
+   the "rtcFMX.GUI" or the "rtcFMX_GUI" unit in your cross-platform Projects if you are
+   using Delphi XE2 or later version with FireMonkey for cross-platform App development.
+
+   NOTE: If you are using FreePascal without FireMonkey to develop Applications for iOS,
+   you will have to add the "RTC_NOFMX" compiler define to your Project in order to 
+   compile the RealThinClient SDK without dependencies to the FireMonkey framework.
+
+2. "InsideThread" method added to the "TRtcGCThread" component,
+   returning TRUE if called from inside components thread context.
+
+3. "RtcTotalThreadsBusy" and "TRtcTotalThreadsIdle" functions added to the "rtcThrPool" unit,
+   returning the current total number of Busy and Idle Worker Threads in the RTC Thread pool.
+
+---------------------------------------------------------
+* Changes in v7.30
+---------------------------------------------------------
+
+1. Fixed compatibility with OSX, iOS and Android platforms.
+
+---------------------------------------------------------
+* Changes in v7.29
+---------------------------------------------------------
+
+1. "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" components extended with a new "StreamSpeedLimit"
+   property, which makes it easy to set a speed limit (in KBits) for streaming data to the Gateway.
+
+   By setting a speed limit, the component will wait before sending more data out if sending
+   more data would result in the last sending operation to exceed the specified speed limit.
+
+   This speed limit does NOT affect the way "SendBytes" or "SendToGroup" methods work (they are 
+   always non-blocking and asynchronous) and it does NOT split larger packets into even smaller 
+   chunks to reduce the bandwidth usage, but ONLY forces a delay in the background thread 
+   where data is being sent, to keep the outgoing bandwidth usage below the specified limit.
+
+2. "TRtcGateway" and "TRtcHttpGateway" components extended with "StreamSpeedLimit" and "ReceiveSpeedLimit" 
+   properties, using which you can set a speed limits for receiving and streaming data through the Gateway.
+
+   By setting a "StreamSpeedLimit", the Gateway will wait before sending more data out to 
+   any Client if that would result in the last sending operation to exceed the specified limit.
+   This is a simple way to limit the amount of upload bandwidth the Gateway can use.
+
+   By setting a "ReceiveSpeedLimit", the Gateway will wait before reading more data from 
+   any Client if the amount of data already read has exceeded the specified speed limit.
+   This is a simple way to limit the amount of download bandwidth the Gateway can use.
+
+3. Improved exception handling in data processing code on the "TRtcHttpGateClient" component to ensure
+   that corrupted data does NOT terminate a background thread or raise an exception in the Main Thread.
+
+4. "GetTickTime64" function added to the "rtcInfo" unit.
+
+5. "GetAppRunTime" function in the "rtcGateConst" unit was changed to use the new "GetTickTime64"
+   function from the "rtcInfo" unit instead of the "Now" function, returning a 64-bit integer value.
+   As a result, the "RUN_TIMER_PRECISION" was updated to 1000 "ticks" per second instead of 20.
+
+6. "RtcSimpleGateway" Demo extended with "Max Out Speed" and "Min Out Speed" parameters to test 
+   the new "StreamSpeedLimit" and "ReceiveSpeedLimit" properties on the "TRtcHttpGateway" component.
+
+7. "Copy_Log" and "Delete_Log" procedures added to the "rtcLog" unit.
+
+8. "RtcGateTestClient" Demo updated to use only one LOG file per process, enable 
+   logging buffers to speed up logging and write more information to the LOG file.

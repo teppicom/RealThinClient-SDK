@@ -1,0 +1,22 @@
+<div id=loginarea>
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	<form method="post" enctype="multipart/form-data" name="login" onsubmit="xvalidateForm('user','','R','pwd','','R');return document.MM_returnValue">
+	  <tr>
+	    <td colspan="3" align="right">&nbsp;<a href="?sid=<%sid%>">Home</a>&nbsp;</td>
+	  </tr>
+	  <tr>
+		<th scope="col">username</th>
+		<th scope="col">password</th>
+		<th scope="col">&nbsp;</th>
+	  </tr>
+	  <tr>
+		<td><input name="user" id="user" type="text" style="width: 150px" class="loginedit" title="User name"></td>
+		<td><input name="pwd" id="pwd" type="password" style="width: 150px" class="loginedit" title="Password"></td>
+		<td><input name="submit" type="submit" value="Login" style="width: 50px"></td>
+	  </tr>
+    <input name="cmd" type="hidden" value="login">
+  </form>  
+  </table>
+</div>
+<div id=userinfoarea>Welcome, <strong><%user_name%></strong>.<BR>Your IP: <%logged_ip_address%>
+<br><%now_datetime%>&nbsp;</div>

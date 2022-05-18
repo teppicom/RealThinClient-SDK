@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpl_admin.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Edit package</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+
+<!-- InstanceParam name="sections_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tabsel" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tab" -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both">
+<div id=adminarea>
+<p class="page_header">Administration Panel</p>
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsections&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tabsel" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab"  onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" --><strong><%caption%></strong><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody"><!-- InstanceBeginEditable name="BodyRegion" -->
+              
+            <form method="post" enctype="multipart/form-data" name="" id="" onsubmit="xvalidateForm('name','','R');return document.MM_returnValue">
+                
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="editpack">
+                <tr>
+                  <td>Package name</td>
+                  <td width="75%" height="30" colspan="2"><input name="name" type="text" id="name" value="<%name%>" style="width: 100%" title="Package name"/></td>
+					  <script language="JavaScript" type="text/JavaScript">
+						  xfindObj('name').focus();
+						</script>
+                </tr>
+                <tr>
+                  <td>Visibility Level</td>
+                  <td width="75%" height="30" colspan="2"><select name="vis_level" size="1" id="vis_level" style="width: 30%" title="Package visibility level">
+                          <option <%public_selected%>>public</option>
+                          <option <%private_selected%>>private</option>
+                        </select></td>
+                </tr>
+                <tr>
+                  <td>Order link</td>
+                  <td height="30" colspan="2">
+				  <input name="order_link" type="text" id="order_link" style="width: 100%" value="<%order_link%>" title="Order link" /></td>
+                </tr>
+                <tr>
+                  <td>Extend license link</td>
+                  <td height="30" colspan="2">
+				  <input name="extend_lic_link" type="text" id="extend_lic_link" style="width: 100%" title="Extend license link" value="<%extend_lic_link%>" /></td>
+                </tr>
+                  
+                <tr>
+                  <td colspan="3">
+						<div align="center">
+                      <input type="submit" class="button" value="Submit" />
+                      <input name="Cancel" type="button" class="button" id="Cancel" value="Cancel" onclick="document.location='?cmd=showpacks&sid=<%sid%>'" />
+                      <input name="cmd" type="hidden" value="savepack" />
+                      <input name="sid" type="hidden" value="<%sid%>" />
+                      <input name="pack_id" type="hidden" value="<%pack_id%>" />
+                      </div></td>
+                </tr>
+              </table>
+              </form>
+            <!-- InstanceEndEditable -->
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table></div>
+  </div>
+</body>
+<!-- InstanceEnd --></html>

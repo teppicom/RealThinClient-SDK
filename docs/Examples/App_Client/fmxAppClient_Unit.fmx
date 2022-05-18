@@ -1,0 +1,878 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'RTC App Client demo (FMX version)'
+  ClientHeight = 368
+  ClientWidth = 370
+  Position = poScreenCenter
+  Visible = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnCloseQuery = FormCloseQuery
+  StyleLookup = 'backgroundstyle'
+  object Panel1: TPanel
+    Align = alClient
+    Width = 370.000000000000000000
+    Height = 368.000000000000000000
+    TabOrder = 0
+    object PageControl1: TTabControl
+      Align = alClient
+      Width = 370.000000000000000000
+      Height = 368.000000000000000000
+      TabOrder = 0
+      TabIndex = 0
+      TabHeight = 20.000000000000000000
+      object TabSheet1: TTabItem
+        Width = 80.000000000000000000
+        Height = 20.000000000000000000
+        TabOrder = 0
+        Font.Size = 13.000000000000000000
+        Index = 0
+        Text = 'Setup'
+        WordWrap = False
+        object Label11: TLabel
+          Position.Point = '(10,246)'
+          Width = 90.500000000000000000
+          Height = 19.500000000000000000
+          TabOrder = 0
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Module Name'
+          WordWrap = False
+        end
+        object Label12: TLabel
+          Position.Point = '(5,21)'
+          Width = 93.500000000000000000
+          Height = 19.500000000000000000
+          TabOrder = 1
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Server Address'
+          WordWrap = False
+        end
+        object Label13: TLabel
+          Position.Point = '(22,55)'
+          Width = 70.500000000000000000
+          Height = 19.500000000000000000
+          TabOrder = 2
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Server Port'
+          WordWrap = False
+        end
+        object Label30: TLabel
+          Position.Point = '(10,277)'
+          Width = 82.500000000000000000
+          Height = 19.500000000000000000
+          TabOrder = 3
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Module Host'
+          WordWrap = False
+        end
+        object lblPluginState: TLabel
+          Position.Point = '(22,207)'
+          Width = 114.500000000000000000
+          Height = 19.500000000000000000
+          TabOrder = 4
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'CryptPlugin state?'
+          WordWrap = False
+        end
+        object eModule: TEdit
+          Position.Point = '(108,240)'
+          Width = 243.000000000000000000
+          Height = 24.000000000000000000
+          OnExit = eModuleChange
+          TabOrder = 5
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = '/TEST'
+        end
+        object eServer: TEdit
+          Position.Point = '(103,17)'
+          Width = 248.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 6
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = eServerChange
+          Password = False
+          Text = 'localhost'
+        end
+        object xProxy: TCheckBox
+          Position.Point = '(25,148)'
+          Width = 89.000000000000000000
+          Height = 19.000000000000000000
+          OnClick = xProxyClick
+          TabOrder = 7
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'use Proxy'
+        end
+        object ePort: TEdit
+          Position.Point = '(102,50)'
+          Width = 46.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 8
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = eServerChange
+          Password = False
+          Text = '81'
+        end
+        object xSSL: TCheckBox
+          Position.Point = '(25,177)'
+          Width = 114.000000000000000000
+          Height = 20.000000000000000000
+          OnClick = xSSLClick
+          TabOrder = 9
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'SSL (HTTPS)'
+        end
+        object eModuleHost: TEdit
+          Position.Point = '(108,271)'
+          Width = 243.000000000000000000
+          Height = 24.000000000000000000
+          OnExit = eModuleChange
+          TabOrder = 10
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = 'localhost'
+        end
+        object xUseXML: TCheckBox
+          Position.Point = '(108,302)'
+          Width = 164.000000000000000000
+          Height = 20.000000000000000000
+          OnClick = xUseXMLClick
+          TabOrder = 11
+          Font.Size = 14.000000000000000000
+          Text = 'Use XML-RPC Format'
+        end
+        object xWinHTTP: TCheckBox
+          Position.Point = '(158,148)'
+          Width = 114.000000000000000000
+          Height = 19.000000000000000000
+          OnClick = xWinHTTPClick
+          TabOrder = 12
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'WinHTTP'
+        end
+        object xBlocking: TCheckBox
+          Position.Point = '(25,118)'
+          Width = 85.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xBlockingClick
+          TabOrder = 13
+          Font.Size = 14.000000000000000000
+          Text = 'Blocking'
+        end
+        object xCryptPlugin: TCheckBox
+          Position.Point = '(158,177)'
+          Width = 193.000000000000000000
+          Height = 20.000000000000000000
+          OnClick = xCryptPluginClick
+          TabOrder = 14
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'CryptPlugin (no SSL)'
+        end
+        object xRTCTimeouts: TCheckBox
+          Position.Point = '(25,89)'
+          Width = 119.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xRTCTimeoutsClick
+          TabOrder = 15
+          Font.Size = 14.000000000000000000
+          Text = 'RTC Timeouts'
+        end
+        object xHTTP10: TCheckBox
+          Position.Point = '(158,118)'
+          Width = 129.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xHTTP10Click
+          TabOrder = 16
+          Font.Size = 14.000000000000000000
+          Text = 'Force HTTP/1.0'
+        end
+        object xAPITimeouts: TCheckBox
+          Position.Point = '(158,89)'
+          Width = 158.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xAPITimeoutsClick
+          TabOrder = 17
+          Font.Size = 14.000000000000000000
+          Text = 'Socket API Timeouts'
+        end
+      end
+      object TabSheet2: TTabItem
+        Position.Point = '(80,0)'
+        Width = 80.000000000000000000
+        Height = 20.000000000000000000
+        TabOrder = 1
+        Font.Size = 13.000000000000000000
+        Index = 1
+        Text = 'User Test'
+        WordWrap = False
+        object Label1: TLabel
+          Position.Point = '(94,111)'
+          Width = 13.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 0
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '+'
+          WordWrap = False
+        end
+        object Label2: TLabel
+          Position.Point = '(202,111)'
+          Width = 13.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 1
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '='
+          WordWrap = False
+        end
+        object Label3: TLabel
+          Position.Point = '(5,135)'
+          Width = 46.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 2
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'waiting'
+          WordWrap = False
+        end
+        object Label4: TLabel
+          Position.Point = '(5,191)'
+          Width = 46.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 3
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'waiting'
+          WordWrap = False
+        end
+        object Label5: TLabel
+          Position.Point = '(94,166)'
+          Width = 9.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 4
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'x'
+          WordWrap = False
+        end
+        object Label6: TLabel
+          Position.Point = '(202,166)'
+          Width = 13.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 5
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '='
+          WordWrap = False
+        end
+        object Label7: TLabel
+          Position.Point = '(261,135)'
+          Width = 13.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 6
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '+'
+          WordWrap = False
+        end
+        object Label8: TLabel
+          Position.Point = '(261,191)'
+          Width = 13.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 7
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '='
+          WordWrap = False
+        end
+        object Label9: TLabel
+          Position.Point = '(261,246)'
+          Width = 46.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 8
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'waiting'
+          WordWrap = False
+        end
+        object Label10: TLabel
+          Position.Point = '(5,55)'
+          Width = 95.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 9
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Not connected.'
+          WordWrap = False
+        end
+        object lblCount: TLabel
+          Position.Point = '(49,218)'
+          Width = 8.000000000000000000
+          Height = 16.000000000000000000
+          TabOrder = 10
+          Font.Size = 14.000000000000000000
+          Text = '--'
+        end
+        object lblTotal: TLabel
+          Position.Point = '(153,215)'
+          Width = 8.000000000000000000
+          Height = 16.000000000000000000
+          TabOrder = 11
+          Font.Size = 14.000000000000000000
+          Text = '--'
+        end
+        object Label14: TLabel
+          Position.Point = '(5,218)'
+          Width = 43.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 12
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'To do:'
+          WordWrap = False
+        end
+        object Label15: TLabel
+          Position.Point = '(113,215)'
+          Width = 40.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 13
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Done:'
+          WordWrap = False
+        end
+        object Label22: TLabel
+          Position.Point = '(5,80)'
+          Width = 298.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 14
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Font.Style = [fsBold]
+          Text = 'Enter values to get results from the Server'
+          WordWrap = False
+        end
+        object Edit1: TEdit
+          Position.Point = '(5,105)'
+          Width = 75.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 15
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = Edit1Change
+          Password = False
+        end
+        object Edit2: TEdit
+          Position.Point = '(113,105)'
+          Width = 75.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 16
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = Edit1Change
+          Password = False
+        end
+        object Edit3: TEdit
+          Position.Point = '(222,105)'
+          Width = 80.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 17
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          ReadOnly = True
+          KeyboardType = vktDefault
+          Password = False
+        end
+        object Edit4: TEdit
+          Position.Point = '(5,160)'
+          Width = 75.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 18
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = Edit4Change
+          Password = False
+        end
+        object Edit5: TEdit
+          Position.Point = '(113,160)'
+          Width = 75.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 19
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          OnChange = Edit4Change
+          Password = False
+        end
+        object Edit6: TEdit
+          Position.Point = '(222,160)'
+          Width = 80.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 20
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          ReadOnly = True
+          KeyboardType = vktDefault
+          Password = False
+        end
+        object Edit7: TEdit
+          Position.Point = '(222,215)'
+          Width = 80.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 21
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          ReadOnly = True
+          KeyboardType = vktDefault
+          Password = False
+        end
+        object btnFlood: TButton
+          Position.Point = '(8,263)'
+          Width = 265.000000000000000000
+          Height = 31.000000000000000000
+          OnClick = btnFloodClick
+          TabOrder = 22
+          Font.Size = 14.000000000000000000
+          Text = 'User Flood Test: Send 1.000 requests'
+        end
+        object xFlood: TCheckBox
+          Position.Point = '(113,240)'
+          Width = 95.000000000000000000
+          Height = 21.000000000000000000
+          TabOrder = 23
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'Auto-Flood'
+        end
+        object xRepost: TCheckBox
+          Position.Point = '(5,240)'
+          Width = 100.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xRepostClick
+          TabOrder = 24
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'Auto-Repost'
+        end
+        object btnConnect: TButton
+          Position.Point = '(271,12)'
+          Width = 90.000000000000000000
+          Height = 45.000000000000000000
+          OnClick = btnConnectClick
+          TabOrder = 25
+          Font.Size = 14.000000000000000000
+          Text = 'Connect'
+        end
+        object xAutoConnect: TCheckBox
+          Position.Point = '(128,6)'
+          Width = 105.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xAutoConnectClick
+          TabOrder = 26
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'AutoConnect'
+        end
+        object xMultiThreaded: TCheckBox
+          Position.Point = '(5,6)'
+          Width = 119.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xMultiThreadedClick
+          TabOrder = 27
+          CanFocus = False
+          Font.Size = 14.000000000000000000
+          Text = 'Multi-Threaded'
+        end
+        object btnConnDisconn: TButton
+          Position.Point = '(8,295)'
+          Width = 153.000000000000000000
+          Height = 31.000000000000000000
+          OnClick = btnConnDisconnClick
+          TabOrder = 28
+          Font.Size = 14.000000000000000000
+          Text = '10 x conn/disconn'
+        end
+        object xEncrypt: TCheckBox
+          Position.Point = '(5,31)'
+          Width = 95.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xEncryptClick
+          TabOrder = 29
+          Font.Size = 14.000000000000000000
+          Text = 'Encryption'
+        end
+        object xCompress: TCheckBox
+          Position.Point = '(128,31)'
+          Width = 105.000000000000000000
+          Height = 21.000000000000000000
+          OnClick = xCompressClick
+          TabOrder = 30
+          Font.Size = 14.000000000000000000
+          Text = 'Compression'
+        end
+      end
+      object TabSheet3: TTabItem
+        Position.Point = '(160,0)'
+        Width = 160.000000000000000000
+        Height = 20.000000000000000000
+        TabOrder = 2
+        Font.Size = 12.000000000000000000
+        Index = 2
+        Text = 'Multi-connection Flooding'
+        WordWrap = False
+        object Label16: TLabel
+          Position.Point = '(151,288)'
+          Width = 82.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 0
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Connections:'
+          WordWrap = False
+        end
+        object Label17: TLabel
+          Position.Point = '(10,37)'
+          Width = 124.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 1
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Connections to use:'
+          WordWrap = False
+        end
+        object Label18: TLabel
+          Position.Point = '(15,65)'
+          Width = 118.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 2
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Requests per loop:'
+          WordWrap = False
+        end
+        object lblFlood: TLabel
+          Position.Point = '(265,309)'
+          Width = 10.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 3
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '0'
+          WordWrap = False
+        end
+        object lblClients: TLabel
+          Position.Point = '(242,288)'
+          Width = 22.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 4
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = '----'
+          WordWrap = False
+        end
+        object Label25: TLabel
+          Position.Point = '(151,309)'
+          Width = 98.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 5
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Requests done:'
+          WordWrap = False
+        end
+        object Label26: TLabel
+          Position.Point = '(25,98)'
+          Width = 110.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 6
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Update info after:'
+          WordWrap = False
+        end
+        object Label27: TLabel
+          Position.Point = '(5,6)'
+          Width = 345.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 7
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Font.Style = [fsBold]
+          Text = 'Open connections and flood Server with requests'
+          WordWrap = False
+        end
+        object Label28: TLabel
+          Position.Point = '(266,60)'
+          Width = 81.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 8
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Manual Test:'
+          WordWrap = False
+        end
+        object Label29: TLabel
+          Position.Point = '(15,271)'
+          Width = 102.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 9
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Auto-flood Test:'
+          WordWrap = False
+        end
+        object Label32: TLabel
+          Position.Point = '(212,37)'
+          Width = 85.500000000000000000
+          Height = 17.500000000000000000
+          TabOrder = 10
+          AutoSize = True
+          Font.Size = 14.000000000000000000
+          Text = 'Max Threads:'
+          WordWrap = False
+        end
+        object eConCnt: TEdit
+          Position.Point = '(138,31)'
+          Width = 60.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 11
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = '300'
+        end
+        object eReqCnt: TEdit
+          Position.Point = '(138,62)'
+          Width = 60.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 12
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = '200'
+        end
+        object btnMultiFlood: TButton
+          Position.Point = '(5,289)'
+          Width = 124.000000000000000000
+          Height = 36.000000000000000000
+          OnClick = btnMultiFloodClick
+          TabOrder = 13
+          Font.Size = 14.000000000000000000
+          Font.Style = [fsBold]
+          Text = 'Start Flooding'
+          Default = True
+        end
+        object xReqAutoRepeat: TCheckBox
+          Position.Point = '(10,246)'
+          Width = 164.000000000000000000
+          Height = 17.000000000000000000
+          TabOrder = 14
+          Font.Size = 14.000000000000000000
+          Text = 'Auto-Repeat Loops'
+        end
+        object eUpdCnt: TEdit
+          Position.Point = '(138,92)'
+          Width = 40.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 15
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = '5'
+        end
+        object xAutoDisconnect: TCheckBox
+          Position.Point = '(10,123)'
+          Width = 203.000000000000000000
+          Height = 20.000000000000000000
+          TabOrder = 16
+          Font.Size = 14.000000000000000000
+          Text = 'Disconnect after each loop'
+        end
+        object xReqAutoConnect: TCheckBox
+          Position.Point = '(10,148)'
+          Width = 149.000000000000000000
+          Height = 21.000000000000000000
+          TabOrder = 17
+          Font.Size = 14.000000000000000000
+          Text = 'Use Auto-Connect'
+        end
+        object btnMultiCreate: TButton
+          Position.Point = '(249,80)'
+          Width = 115.000000000000000000
+          Height = 31.000000000000000000
+          OnClick = btnMultiCreateClick
+          TabOrder = 18
+          Font.Size = 14.000000000000000000
+          Text = 'Create'
+        end
+        object btnMultiConnect: TButton
+          Enabled = False
+          Position.Point = '(249,110)'
+          Width = 115.000000000000000000
+          Height = 32.000000000000000000
+          OnClick = btnMultiConnectClick
+          TabOrder = 19
+          Font.Size = 14.000000000000000000
+          Text = 'Connect'
+        end
+        object btnMultiSend: TButton
+          Enabled = False
+          Position.Point = '(249,140)'
+          Width = 115.000000000000000000
+          Height = 32.000000000000000000
+          OnClick = btnMultiSendClick
+          TabOrder = 20
+          Font.Size = 14.000000000000000000
+          Text = 'Send requests'
+        end
+        object xReqMultiThread: TCheckBox
+          Position.Point = '(10,172)'
+          Width = 154.000000000000000000
+          Height = 21.000000000000000000
+          TabOrder = 21
+          Font.Size = 14.000000000000000000
+          Text = 'Multi-Threaded mode'
+        end
+        object xEncrypt2: TCheckBox
+          Position.Point = '(10,222)'
+          Width = 95.000000000000000000
+          Height = 20.000000000000000000
+          TabOrder = 22
+          Font.Size = 14.000000000000000000
+          Text = 'Encryption'
+        end
+        object xCompress2: TCheckBox
+          Position.Point = '(113,222)'
+          Width = 110.000000000000000000
+          Height = 20.000000000000000000
+          TabOrder = 23
+          Font.Size = 14.000000000000000000
+          Text = 'Compression'
+        end
+        object eThreads: TEdit
+          Position.Point = '(305,31)'
+          Width = 51.000000000000000000
+          Height = 24.000000000000000000
+          TabOrder = 24
+          Font.Size = 14.000000000000000000
+          KeyboardType = vktDefault
+          Password = False
+          Text = '64'
+        end
+        object xExtensiveTest: TCheckBox
+          Position.Point = '(10,197)'
+          Width = 239.000000000000000000
+          Height = 20.000000000000000000
+          TabOrder = 25
+          Font.Size = 14.000000000000000000
+          Text = 'Extensive Test (complex structure)'
+        end
+        object btnMultiSkip: TButton
+          Enabled = False
+          Position.Point = '(249,171)'
+          Width = 115.000000000000000000
+          Height = 32.000000000000000000
+          OnClick = btnMultiSkipClick
+          TabOrder = 26
+          Font.Size = 14.000000000000000000
+          Text = 'Skip requests'
+        end
+        object btnMultiDisconnect: TButton
+          Enabled = False
+          Position.Point = '(249,202)'
+          Width = 115.000000000000000000
+          Height = 32.000000000000000000
+          OnClick = btnMultiDisconnectClick
+          TabOrder = 27
+          Font.Size = 14.000000000000000000
+          Text = 'Disconnect'
+        end
+        object btnMultiFree: TButton
+          Enabled = False
+          Position.Point = '(249,233)'
+          Width = 115.000000000000000000
+          Height = 32.000000000000000000
+          OnClick = btnMultiFreeClick
+          TabOrder = 28
+          Font.Size = 14.000000000000000000
+          Text = 'Free'
+        end
+      end
+    end
+  end
+  object UpdateTimer: TTimer
+    Interval = 500
+    OnTimer = UpdateTimerTimer
+    Left = 232
+    Top = 352
+  end
+  object StopFloodTimer: TTimer
+    Enabled = False
+    OnTimer = StopFloodTimerTimer
+    Left = 264
+    Top = 352
+  end
+  object RtcClient: TRtcHttpClient
+    ServerAddr = 'localhost'
+    ServerPort = '81'
+    OnConnect = RtcClientConnect
+    OnDisconnect = RtcClientDisconnect
+    ReconnectOn.ConnectError = True
+    ReconnectOn.ConnectLost = True
+    ReconnectOn.ConnectFail = True
+    Left = 8
+    Top = 352
+  end
+  object RtcClientModule1: TRtcClientModule
+    AutoSyncEvents = True
+    Client = RtcClient
+    SecureKey = 'This is a test.'
+    AutoSessions = True
+    AutoRepost = 2
+    ModuleHost = 'LOCALHOST'
+    ModuleFileName = '/TEST'
+    OnEncryptWrongKey = RtcClientModule1EncryptWrongKey
+    OnResponseDone = RtcClientModule1ResponseDone
+    OnResponseAbort = RtcClientModule1ResponseAbort
+    Left = 40
+    Top = 352
+  end
+  object RtcResult1: TRtcResult
+    OnReturn = RtcResult1Return
+    Left = 72
+    Top = 352
+  end
+  object RtcResult2: TRtcResult
+    OnReturn = RtcResult2Return
+    Left = 104
+    Top = 352
+  end
+  object RtcResult3: TRtcResult
+    OnReturn = RtcResult3Return
+    Left = 136
+    Top = 352
+  end
+  object MultiResult: TRtcResult
+    OnReturn = MultiResultReturn
+    Left = 168
+    Top = 352
+  end
+  object SendResult: TRtcResult
+    OnReturn = SendResultReturn
+    Left = 200
+    Top = 352
+  end
+end

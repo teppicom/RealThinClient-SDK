@@ -1,0 +1,106 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************************
+*                                                                  *
+* RealThinClient SDK v6.28 (2013.Q4), released December 18th 2013. *
+*                                                                  *
+********************************************************************
+
+---------------------------------------------------------
+* Changes in v6.28 (2013.Q4)
+---------------------------------------------------------
+
+1) TRtcQuickJob component extended with a "Serialized" property,
+   making the component work as a serialized job queue, where jobs 
+   will be executed one at a time (serialized=True) instead of parallel.
+
+2) TRtcQuickJob component extended with a "Stop" method, which can be called before 
+   destroying the component to stop triggering events already posted into the queue.
+
+3) Fixed a coflict with Auto-Reference-Counting in the NextGen compiler for Mobile platforms (Delphi XE4 and XE5), 
+   which was causing random Access Violations when RTC Timers or Timeouts were used (affects iOS and Android Apps).
+
+---------------------------------------------------------
+* Changes in v6.27
+---------------------------------------------------------
+
+1) "GateChatClient" Demo extended with a simple "White-board" feature.
+
+   Now, all participants in a Chat Room will share a White-board,
+   which can be used by everyone for freehand drawing. 
+
+   This new feature demonstrates fast sending and receiving of small packages.
+
+   When a user is drawing on the White-board, messages are sent to the Gateway
+   and dispatched to all Clients in the Group, then used by each Client to
+   update their drawing in near-real-time. All users can draw on the White-board
+   at the same time, without interference from other users. It's like sharing
+   a Canvas. Each user has its own Pen and uses it to draw on the shared Canvas.
+
+   Drawing data is kept in an in-memory DataSet by each Client, keeping 
+   memory usage low, even when there are a lot of Chat Rooms with White-boards open.
+
+---------------------------------------------------------
+* Changes in v6.26
+---------------------------------------------------------
+
+1) Local User Group management methods on the TRtcHttpGateClient component
+   updated to allow concurrent calls from multiple threads.
+
+2) Removed a call to "ReleaseAllGroupIDs" from the User Login method,
+   to allow the Client to use the same Group IDs with a new User ID.
+   Call the "ReleaseAllGroupIDs" method manually when GroupIDs should be released.
+
+3) Gateway Test Projects moved from "Demos\RTC_Gateway" to "Demos\GatewayTest" folder.
+
+4) Two new Demos added: "GateChatClient" and "GateChatServer".
+
+   These two Demos use the new TRtcGateway, TRtcHttpGateClient and TRtcGateClientLink
+   components to implement a simple Chat Server and Chat Client where each Client can
+   open multiple Chat Rooms and invite other Clients to a group Chat. Notifications
+   are sent from the Gateway to Chat Clients when other Clients become available or 
+   unavailable, and ChatClients are using this info to update their "USERS ONLINE" List.
+
+---------------------------------------------------------
+* Changes in v6.25
+---------------------------------------------------------
+
+1) TRtcGateway, TRtcHttpGateClient and TRtcGateClientLink components added.
+
+   * TRtcGateway component provides a new "Gateway" implementation, which allows 
+     thousands of Clients using TRtcHttpGateClient components to communicate "directly".
+     
+     The only requirement for a Client to send messages to another Client is to know
+     the UserID of the receiving Client. Clients can also form their own Groups of 
+     Clients and dispatch messages to the whole Group, while sending data to the 
+     Gateway only once. Notifications are sent from the Gateway when a Client joins or 
+     leaves a group. All clients are automatically removed from other Clients groups 
+     if they lose connection to the Gateway, with notifications sent to active Clients.
+     
+     Events can be used on the Gateway for custom user authentication and group management.
+     For example, Gateway can check user credentials on login (see "BeforeLoginEvent")
+     and notify Clients when other Clients become available or unavailable
+     (check "OnUserReady" and "OnUserNotReady" events). Because Clients only need
+     the UserID of another Client for direct communication, any data other than 
+     the UserID can easily be exchanged between Clients directly, after receiving the 
+     "UserJoined" or "JoinedUser" notification from the Gateway.
+
+   * TRtcHttpGateClient component implements Client-side communication for sending
+     and receiving messages from other Clients connected to the same Gateway.
+
+   * One or more TRtcGateClientLink components can be attached to a 
+     TRtcHttpGateClient component to separate your code into different modules.
+
+2) New "rtcSDK_Gate" package introduced for registration of Gateway-related components.
+   Check the "RTC Gate" tab in the component palette after component registration.
+
+3) "SDKDemos_VCL_Gate" Project Group added with 2 Projects, 
+   which can be used for testing the new Gateway-related components:
+
+   * RTC_Gateway\RtcSimpleGateway.dpr is a simple Server using a TRtcGateway component.
+
+   * RTC_Gateway\RtcGateTestClient.dpr is a simple Gate Client for testing basic 
+     Gateway functionality. It can use UDP for dispatching messages to local Clients
+     and link them to work as a group, so that multiple instances can be started
+     and controlled at the same time to simplify stress-testing.
+                                    

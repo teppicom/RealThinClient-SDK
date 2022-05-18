@@ -1,0 +1,86 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v6.24 (2013.Q3), released October 25th 2013. *
+*                                                                 *
+*******************************************************************
+
+---------------------------------------------------------
+* Changes in v6.24 (2013.Q3)
+---------------------------------------------------------
+
+1) Fixed AV issues in Android Projects compiled with Delphi XE5.
+
+---------------------------------------------------------
+* Changes in v6.23
+---------------------------------------------------------
+
+1) To resolve conflicts with some C++Builder libraries, 
+   all "EOF" properties have been renamed to "Eof", and  "BOF" to "Bof".
+
+---------------------------------------------------------
+* Changes in v6.22
+---------------------------------------------------------
+
+1) Fixed AV when working with C++ Builder XE4.
+
+---------------------------------------------------------
+* Changes in v6.21
+---------------------------------------------------------
+
+1) New Android support for Delphi XE5
+
+2) New "SDKDemos_FMX2.bpg" Project group with 
+   "fmx2FileClient", "fmx2AppClient" and "fmx2AppServer" Projects.
+
+NOTE: "TRtcMemDateSet" component is NOT compatible with iOS or Android.
+Use "TClientDataSet" component with "TRtcDataSetMonitor" instead.
+
+---------------------------------------------------------
+* Changes in v6.20
+---------------------------------------------------------
+
+1) Fixed Unicode character support in TRtcDataSetMonitor.
+
+---------------------------------------------------------
+* Changes in v6.19
+---------------------------------------------------------
+
+1) "TRtcDataProvider" component extended with the "OnResponseDone" event.
+   This is the last event triggered after the complete Response was sent to the Client.
+
+---------------------------------------------------------
+* Changes in v6.18
+---------------------------------------------------------
+
+1) When using the WinInet or WinHTTP API, TRtcHttpClients sending requests with content body to the 
+   same URI using different content lengths has often resulted in an API error and a disconnect.
+   This has now been fixed.
+
+---------------------------------------------------------
+* Changes in v6.17
+---------------------------------------------------------
+
+1) Fixed XE4 iOS compiler compatibility.
+
+---------------------------------------------------------
+* Changes in v6.16 
+---------------------------------------------------------
+
+1) Connect and Disconnect methods on the TRtcHttpClient component updated to allow opening and closing 
+   the connection directly from RTC events triggered by the TRtcHttpClient component, even if the component
+   is being used with MultiThreaded=TRUE. This allows the Client to close the connetion and re-open it directly 
+   from a RTC Event, in case the connection has to be "reset" for any reason (like bad response from the Server).
+
+2) Updated WinInet and WinHTTP connection providers to use SOCK_READ_BUFFER_SIZE and SOCK_SEND_BUFFER_SIZE
+   global variables from the rtcSockBase unit to set reading and sending buffer sizes.
+   This allows you to set different buffer sizes for your Client Applications, while keeping
+   buffer sizes uniform across all connection providers (WinSock, WinInet and WinHttp).
+
+   NOTE: To read data in smaller chunks, use the new "Response.ExpectedBytes" property to define how many 
+   bytes you want to read next. If that property is 0 (default), maximum buffers will be used for reading.
+
+3) LISTEN_BACKLOG constant in the rtcSynAPI unit changed to a variable, so it can be modified if the Server 
+   has to be capable of accepting a very high number of new incoming connections in a very short time.
+   Default value is set to 200, which should be enough for most Servers.

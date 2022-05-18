@@ -1,0 +1,123 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 447
+  ClientWidth = 228
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnCloseQuery = FormCloseQuery
+  DesignerMasterStyle = 0
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Position.X = 8.000000000000000000
+    Position.Y = 96.000000000000000000
+    Size.Width = 213.000000000000000000
+    Size.Height = 344.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Viewport.Width = 209.000000000000000000
+    Viewport.Height = 340.000000000000000000
+  end
+  object btnConnect: TButton
+    Position.X = 8.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Text = 'C'
+    OnClick = btnConnectClick
+  end
+  object btnSendText: TButton
+    Position.X = 56.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    Text = 'Tx'
+    OnClick = btnSendTextClick
+  end
+  object btnSendBinary: TButton
+    Position.X = 96.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Bi'
+    OnClick = btnSendBinaryClick
+  end
+  object btnSendPing: TButton
+    Position.X = 136.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    Text = 'Pi'
+    OnClick = btnSendPingClick
+  end
+  object btnSendPong: TButton
+    Position.X = 176.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = 'Po'
+    OnClick = btnSendPongClick
+  end
+  object btnClear: TButton
+    Anchors = [akRight, akBottom]
+    Position.X = 182.000000000000000000
+    Position.Y = 399.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'X'
+    OnClick = btnClearClick
+  end
+  object eSrvAddr: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 11
+    Text = '192.168.1.102'
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 213.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Client: TRtcHttpClient
+    ServerAddr = '192.168.1.102'
+    ServerPort = '80'
+    OnConnect = ClientConnect
+    OnDisconnect = ClientDisconnect
+    OnConnectFail = ClientConnectFail
+    OnConnectLost = ClientConnectLost
+    OnConnectError = ClientConnectError
+    Left = 28
+    Top = 116
+  end
+  object SockReq: TRtcDataRequest
+    Client = Client
+    OnResponseDone = SockReqResponseDone
+    OnDataSent = SockReqDataSent
+    OnConnectLost = SockReqConnectLost
+    OnWSConnect = SockReqWSConnect
+    OnWSDataReceived = SockReqWSDataReceived
+    OnWSDataOut = SockReqWSDataOut
+    OnWSDataIn = SockReqWSDataIn
+    OnWSDataSent = SockReqWSDataSent
+    OnWSDisconnect = SockReqWSDisconnect
+    Left = 84
+    Top = 120
+  end
+end

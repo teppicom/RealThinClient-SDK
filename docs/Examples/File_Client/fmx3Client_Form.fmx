@@ -1,0 +1,762 @@
+object RtcFileClient: TRtcFileClient
+  Left = 0
+  Top = 0
+  Caption = 'RTC File Client demo (FMX version)'
+  ClientHeight = 501
+  ClientWidth = 1024
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Panel3: TPanel
+    Touch.InteractiveGestures = [Zoom, Pan]
+    Align = Client
+    Size.Width = 1024.000000000000000000
+    Size.Height = 501.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Splitter1: TSplitter
+      Align = Left
+      Cursor = crHSplit
+      MinSize = 20.000000000000000000
+      Position.X = 514.000000000000000000
+      Size.Width = 5.000000000000000000
+      Size.Height = 501.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Panel5: TPanel
+      Align = Left
+      Size.Width = 514.000000000000000000
+      Size.Height = 501.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Label7: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 334.000000000000000000
+        Size.Width = 53.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Method'
+      end
+      object Label8: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 92.000000000000000000
+        Position.Y = 334.000000000000000000
+        Size.Width = 245.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'File Name, without "http://serveraddr/"'
+      end
+      object Label10: TLabel
+        Position.X = 83.000000000000000000
+        Position.Y = 358.000000000000000000
+        Size.Width = 8.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.Font.Style = [fsBold]
+        Text = '/'
+      end
+      object Label11: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 383.000000000000000000
+        Size.Width = 115.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Query parameters'
+      end
+      object Label9: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 303.000000000000000000
+        Size.Width = 77.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Host Name:'
+      end
+      object Label3: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 201.000000000000000000
+        Size.Width = 75.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Server Port:'
+      end
+      object Label2: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 92.000000000000000000
+        Position.Y = 201.000000000000000000
+        Size.Width = 99.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Server Address:'
+      end
+      object Label1: TLabel
+        Position.X = 4.000000000000000000
+        Position.Y = 278.000000000000000000
+        Size.Width = 74.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.Font.Style = [fsBold]
+        Text = 'REQUEST'
+      end
+      object Label12: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 475.000000000000000000
+        Size.Width = 121.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Total bytes in+out:'
+      end
+      object lblDataInOut: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 149.000000000000000000
+        Position.Y = 476.000000000000000000
+        Size.Width = 12.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = '0'
+      end
+      object Label13: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 92.000000000000000000
+        Size.Width = 408.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 
+          'Proxy Address, with "http://" and port number (empty for default' +
+          ')'
+      end
+      object Label14: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 146.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Proxy Username'
+      end
+      object Label15: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 201.000000000000000000
+        Position.Y = 146.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Proxy Password'
+      end
+      object lblStatus: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 4.000000000000000000
+        Position.Y = 256.000000000000000000
+        Size.Width = 99.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Not connected.'
+      end
+      object Label5: TLabel
+        AutoSize = True
+        StyledSettings = [Family, Style, FontColor]
+        Position.X = 420.000000000000000000
+        Position.Y = 74.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.WordWrap = False
+        Text = 'Reconnect:'
+      end
+      object eReqMethod: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 15
+        Text = 'GET'
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 352.000000000000000000
+        Size.Width = 70.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object eReqFileName: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 16
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 92.000000000000000000
+        Position.Y = 352.000000000000000000
+        Size.Width = 307.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = eReqFileNameChange
+      end
+      object eReqQuery: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 17
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 401.000000000000000000
+        Size.Width = 395.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object xSaveToFile: TCheckBox
+        Position.X = 4.000000000000000000
+        Position.Y = 438.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 18
+        Text = 'Save to file:'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+      object eFileName: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 19
+        Text = 'download\index.htm'
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 102.000000000000000000
+        Position.Y = 438.000000000000000000
+        Size.Width = 253.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object btnSaveAs: TButton
+        Position.X = 369.000000000000000000
+        Position.Y = 438.000000000000000000
+        Size.Width = 31.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 20
+        Text = '...'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnClick = btnSaveAsClick
+      end
+      object eReqHost: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 21
+        Text = 'www.realthinclient.com'
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 92.000000000000000000
+        Position.Y = 302.000000000000000000
+        Size.Width = 307.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object ePort: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 22
+        Text = '80'
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 222.000000000000000000
+        Size.Width = 75.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = ePortChange
+      end
+      object eAddr: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 23
+        Text = 'www.realthinclient.com'
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 92.000000000000000000
+        Position.Y = 222.000000000000000000
+        Size.Width = 307.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = eAddrChange
+      end
+      object xUseProxy: TCheckBox
+        Position.X = 137.000000000000000000
+        Position.Y = 36.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 24
+        Text = 'Proxy'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xUseProxyClick
+      end
+      object xThreads: TCheckBox
+        Position.X = 4.000000000000000000
+        Position.Y = 36.000000000000000000
+        Size.Width = 124.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 25
+        Text = 'Multi-Threaded'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xThreadsClick
+      end
+      object xUseSSL: TCheckBox
+        Position.X = 142.000000000000000000
+        Position.Y = 11.000000000000000000
+        Size.Width = 55.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 26
+        Text = 'SSL'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xUseSSLClick
+      end
+      object xAutoConnect: TCheckBox
+        IsChecked = True
+        Position.X = 4.000000000000000000
+        Position.Y = 11.000000000000000000
+        Size.Width = 109.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 27
+        Text = 'Auto-Connect'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xAutoConnectClick
+      end
+      object xWinHTTP: TCheckBox
+        Position.X = 107.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 28
+        Text = 'WinHTTP'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xWinHTTPClick
+      end
+      object eProxyAddr: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 29
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 113.000000000000000000
+        Size.Width = 395.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = eProxyAddrChange
+      end
+      object eProxyUsername: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 30
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 167.000000000000000000
+        Size.Width = 183.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = eProxyUsernameChange
+      end
+      object eProxyPassword: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 31
+        TextSettings.Font.Size = 14.000000000000000000
+        Position.X = 201.000000000000000000
+        Position.Y = 167.000000000000000000
+        Size.Width = 198.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = eProxyPasswordChange
+      end
+      object xBlocking: TCheckBox
+        Position.X = 4.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 85.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 32
+        Text = 'Blocking'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xBlockingClick
+      end
+      object xCryptPlugin: TCheckBox
+        Position.X = 220.000000000000000000
+        Position.Y = 11.000000000000000000
+        Size.Width = 184.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 33
+        Text = 'CryptPlugin (dummy)'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xCryptPluginClick
+      end
+      object xTrustServer: TCheckBox
+        Position.X = 220.000000000000000000
+        Position.Y = 34.000000000000000000
+        Size.Width = 174.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 34
+        Text = 'Trust anything received'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xTrustServerClick
+      end
+      object xAllowExpired: TCheckBox
+        Position.X = 220.000000000000000000
+        Position.Y = 59.000000000000000000
+        Size.Width = 179.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 35
+        Text = 'Allow Expired Certificates'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xAllowExpiredClick
+      end
+      object xUseHttp10: TCheckBox
+        Position.X = 92.000000000000000000
+        Position.Y = 276.000000000000000000
+        Size.Width = 223.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 36
+        Text = 'Use the old HTTP/1.0 protocol?'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+      object btnConnect: TButton
+        Position.X = 420.000000000000000000
+        Position.Y = 6.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 37
+        Text = 'Connect'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnClick = btnConnectClick
+      end
+      object btnDisconnect: TButton
+        Enabled = False
+        Position.X = 420.000000000000000000
+        Position.Y = 37.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 38
+        Text = 'Disconnect'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnClick = btnDisconnectClick
+      end
+      object btnPost: TButton
+        Default = True
+        Position.X = 420.000000000000000000
+        Position.Y = 178.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 39
+        Text = 'POST'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.Font.Style = [fsBold]
+        OnClick = btnPostClick
+      end
+      object btn100Post: TButton
+        Position.X = 420.000000000000000000
+        Position.Y = 210.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 40
+        Text = '100 x POST'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnClick = btn100PostClick
+      end
+      object btnCancelAll: TButton
+        Position.X = 420.000000000000000000
+        Position.Y = 244.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 41
+        Text = 'SKIP ALL'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnClick = btnCancelAllClick
+      end
+      object xReconError: TCheckBox
+        Position.X = 425.000000000000000000
+        Position.Y = 92.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 42
+        Text = 'on Error'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xReconErrorClick
+      end
+      object xReconFail: TCheckBox
+        IsChecked = True
+        Position.X = 425.000000000000000000
+        Position.Y = 113.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 43
+        Text = 'on Fail'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xReconFailClick
+      end
+      object xReconLost: TCheckBox
+        IsChecked = True
+        Position.X = 425.000000000000000000
+        Position.Y = 133.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 44
+        Text = 'on Lost'
+        TextSettings.Font.Size = 14.000000000000000000
+        OnChange = xReconLostClick
+      end
+      object xShowWarning: TCheckBox
+        IsChecked = True
+        Position.X = 425.000000000000000000
+        Position.Y = 154.000000000000000000
+        Size.Width = 85.000000000000000000
+        Size.Height = 21.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 45
+        Text = '>5? Stop!'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+    object Panel6: TPanel
+      Align = Client
+      Size.Width = 505.000000000000000000
+      Size.Height = 501.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object Splitter2: TSplitter
+        Align = Top
+        Cursor = crVSplit
+        MinSize = 20.000000000000000000
+        Position.Y = 225.000000000000000000
+        Size.Width = 505.000000000000000000
+        Size.Height = 3.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object Panel7: TPanel
+        Align = Top
+        Size.Width = 505.000000000000000000
+        Size.Height = 225.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object Panel9: TPanel
+          Align = Top
+          Size.Width = 505.000000000000000000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object Label4: TLabel
+            AutoSize = True
+            StyledSettings = [Family, FontColor]
+            Position.X = 10.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 75.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.Font.Style = [fsBold]
+            TextSettings.WordWrap = False
+            Text = 'RESPONSE'
+          end
+          object lblCount: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 236.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 71.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = '0 Received'
+          end
+          object lblRetry: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 118.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = '0 Reposts'
+          end
+        end
+        object Panel10: TPanel
+          Align = Client
+          Size.Width = 505.000000000000000000
+          Size.Height = 199.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object eResponseHeader: TMemo
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            DataDetectorTypes = []
+            Align = Client
+            Size.Width = 505.000000000000000000
+            Size.Height = 199.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Viewport.Width = 501.000000000000000000
+            Viewport.Height = 195.000000000000000000
+          end
+        end
+      end
+      object Panel8: TPanel
+        Align = Client
+        Size.Width = 505.000000000000000000
+        Size.Height = 273.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        object Panel11: TPanel
+          Align = Top
+          Size.Width = 505.000000000000000000
+          Size.Height = 53.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object lblTime: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 197.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 121.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = 'Time: 0 < 0 < 0 ms'
+          end
+          object Label6: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 10.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 72.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = 'Content in:'
+          end
+          object lblSpeed: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 442.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 44.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = '0 KB/s'
+          end
+          object lblBytes: TLabel
+            AutoSize = True
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 87.000000000000000000
+            Position.Y = 6.000000000000000000
+            Size.Width = 49.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 14.000000000000000000
+            TextSettings.WordWrap = False
+            Text = '0 bytes'
+          end
+          object pBar: TProgressBar
+            Orientation = Horizontal
+            Position.X = 8.000000000000000000
+            Position.Y = 23.000000000000000000
+            Size.Width = 489.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+        object Panel12: TPanel
+          Align = Client
+          Size.Width = 505.000000000000000000
+          Size.Height = 220.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object eResponseBody: TMemo
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            DataDetectorTypes = []
+            Align = Client
+            Size.Width = 505.000000000000000000
+            Size.Height = 220.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Viewport.Width = 501.000000000000000000
+            Viewport.Height = 216.000000000000000000
+          end
+        end
+      end
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 424
+    Top = 296
+  end
+  object Client: TRtcHttpClient
+    ServerAddr = 'www.realthinclient.com'
+    ServerPort = '80'
+    OnConnect = ClientConnect
+    OnDisconnect = ClientDisconnect
+    ReconnectOn.ConnectLost = True
+    ReconnectOn.ConnectFail = True
+    OnConnectFail = ClientConnectFail
+    AutoConnect = True
+    OnDataOut = ClientDataOut
+    OnDataIn = ClientDataIn
+    Left = 424
+    Top = 344
+  end
+  object DataRequest: TRtcDataRequest
+    AutoSyncEvents = True
+    Client = Client
+    OnBeginRequest = DataRequestBeginRequest
+    OnRepostCheck = DataRequestRepostCheck
+    OnResponseAbort = DataRequestResponseAbort
+    OnDataReceived = DataRequestDataReceived
+    Left = 424
+    Top = 392
+  end
+end

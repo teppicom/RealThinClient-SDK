@@ -1,0 +1,494 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************************
+*                                                                  *
+* RealThinClient SDK v7.17 (2015.Q4), released December 14th 2015. *
+*                                                                  *
+********************************************************************
+
+---------------------------------------------------------
+* Changes in v7.17 (2015.Q4)
+---------------------------------------------------------
+
+1. StreamSec plugins updated.
+
+---------------------------------------------------------
+* Changes in v7.16
+---------------------------------------------------------
+
+1. Updated the "rtcZLib" unit to always use the standard "ZLib" functions included with Delphi 
+   when compiling for Mobile platforms using Delphi XE4 and later to fix "Incompatible Version" 
+   Exceptions using RTC compression and decompression (remote functions), which were a result
+   of recent interface changes introduced by Apple, breaking backwards "ZLib" compatibility.
+
+2. "Status.ReadyToSend" property added to the "TRtcHttpGateClient" component.
+
+---------------------------------------------------------
+* Changes in v7.15
+---------------------------------------------------------
+
+1. Fixed "Integer Overflow" and "Out of Range" Exceptions when using RSA encryption or the 
+   ISAAC random numbers generator in Projects with Overflow and/or Range Checking enabled.
+
+2. Fixed decryption problems when using Remote Functions with "EncryptionMode = rem_Isaac" in a mixed 
+   32/64-bit environment (for example, when the Server was compiled to 64-bit and Clients to 32-bit).
+
+---------------------------------------------------------
+* Changes in v7.14
+---------------------------------------------------------
+
+1. "IsMyUserID" and "IsMyUserAddr" methods added to "TRtcGateAccountManager" and descandant components,
+   returning TRUE if the UserID or UserAddr belongs to one of the Clients managed by the component.
+
+2. "AddUserToMyGroup", "RemoveUserFromMyGroup", "DisbandMyGroup", "UsersInMyGroup", "LeaveUsersGroup"
+   and "SendToMyGroup" methods added to the "RrtcHttpMultiGateClient" component to simplify working
+   with User Groups sharing the same GroupID on multiple Gateways and receiving the same data.
+
+3. "RemoveAllMyFriends" method added to the "TRtcHttpMultiGateClient" component.
+
+4. "RTCGateNode" example (shell) Project added in the "Demos\GatewayNode" folder, using RTC Gateway 
+   and Multi-Gate Client components with a flexible UI and basic User Management, including:
+    - Basic Gateway setup
+    - Basic Multi-Gate Client setup
+    - Basic Gate Account setup (creating Key and Public Accounts)
+    - Sending Account Copies (for Private, Link and Public Accounts)
+    - Sending Account Links (send Links to Private Accounts)
+    - Sending and changing a custom "DisplayName" for remote Users
+    - Simple Account activation and deactivation
+    - Online/Offline User notifications and Account verification ("eUsers" list)
+    - Load and Save "Gateway + Client + Account" setup (with Account permissions)
+    - Load and Save "Main Form" configuration
+
+   This example Project does NOT implement any Application-specific functionality
+   (only basic setup and connection testing), so it can be used as a starting
+   point for any VCL Application using Gateway and Multi-Gate Client components.
+
+---------------------------------------------------------
+* Changes in v7.13
+---------------------------------------------------------
+
+1. "PrepareLink" method now swaps the "LocalName" and "RemoteName" properties when used 
+   on a "Private" Account, but copies everything as-is on "Linked" and "Public" accounts,
+   removing the requirement for using a "fromRemote" parameter on the "receiver" side.
+
+2. "FromRemote" parameter removed from the "RegisterAccount", "RegisterFromCode" and
+   "CheckAccount" methods on "TRtcGateAccountManager" and "TRtcHttpMultiGateClient" components.
+
+3. "DisplayName" property used on "Private" and "Linked" Accounts 
+     with a different Local and Remote Name now uses a new format:
+   - for "Private" accounts, DisplayName returns 'Remote Name by Local Name'
+   - for "Linked" accounts,  DisplayName returns 'Remote Name for Local Name'
+   - for "Public" accounts,  DisplayName returns 'Local Name @ Remote Name'
+
+4. Moved the User Info clean-up procedure after the "OnInfoReceived" event, so the last 
+   received "UserInfo" string will now still be available from the "UserInfo" method on 
+   the "TRtcHttpMultiGateClient" component when processing the "gc_AccountLogOut" command.
+
+5. "Ready" property added to the "TRtcHttpMultiGateClient" component, 
+   returning the "Ready" state of the currently selected Client.
+
+---------------------------------------------------------
+* Changes in v7.12
+---------------------------------------------------------
+
+1. Package files and Project Groups used for installing RTC packages and 3rd-party 
+   plugins into multiple Delphi IDEs running on the same machine have been moved 
+   to a new "MultiIDE" folder (files for installation in up to 4 IDEs are included).
+
+   NOTE: The "MultiIDE" folder is NOT included in the "Starter" edition.
+
+---------------------------------------------------------
+* Changes in v7.11
+---------------------------------------------------------
+
+1. "CheckOrder" property added to the "TRtcGateway" component, so the RTC Gateway can 
+   also be attached to a Server using general-purpose Data Providers (file provider).
+
+2. "UserInfo" property/method added to "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" 
+   components, returning the last received "GateUserInfo" property for the User, as
+   long as the User is logged in with an Account managed by our AccountManager.
+
+3. "AuthCode", "AuthCodeValid" and "AuthCodeReset" methods added to
+   the "TRtcGateAccountManager" and "TRtcHttpMultiGateClient" components.
+   "AuthCode" is a random temporary X-digit code (default = 9 digits) generated 
+   by the component on-demand, valid for a limited time (default = 90 seconds).
+
+4. "FindLink" method added to "TRtcGateAccountManager" and "TRtcHttpMuliGateClient" 
+   components, returning the AccountID used to generate the 8-bit MD5 code. This method 
+   is similar to the "FindPrivate" method, but also checks Public and Linked accounts.
+
+5. "SendAccountData" method added to "TRtcHttpGateClient" and "TRtcHttpMultiGateClient"
+   components, providing an easy way to safely transfer Account Data to remote Clients,
+   using receiver's current "AuthCode" for encryption and Account Data validation.
+
+6. "Demos" folder reorganized.
+
+---------------------------------------------------------
+* Changes in v7.10
+---------------------------------------------------------
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! With this update, the protocol used by RTC Gateway and Gate Client components 
+!! is no longer compatible with the same components from RTC SDK v7.09 and earlier.
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+1. "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" components extended with a new 
+   "GateUserInfo:RtcString" property, which is sent to the Gateway during login and
+   forwarded by the Gateway to other Clients with Subscription and Account notifications,
+   then made available on the Client in the "OnInfoReceived" event through the 
+   "Data.UserInfo" property with "Data.Command" = "gc_SubscribeLogIn" or "gc_AccountLogIn".
+
+2. "BeforeUserLogin", "BeforeUserLogout", "OnUserReady" and "OnUserNotReady" events
+   on "TRtcGateway" and "TRtcHttpGateway" components extended with a new "UserInfo" 
+   parameter, which will be populated with the value assigned to the "GateUserInfo"
+   property on Gate Client components when the user logs in to the Gateway.
+
+3. "UserAuth" and "UserInfo" parameters on the "BeforeUserLogin" event 
+   on "TRtcGateway" and "TRtcHttpGateway" components are now passed as 
+   "var" parameters (instead of "const"), so you can modify them if needed
+   (for example, to add User's IP Address to the "UserInfo" parameter).
+
+4. "MaxUserAuthLen" property on the "TRtcGateway" and "TRtcHttpGateway" components
+    changed to "MaxUserInfoLen" and should be assigned the maximum combined length 
+    of "GateUserInfo" and "GateUserAuth" properties allowed for Gate Clients.
+
+5. Maximum value allowed for "GroupID's" used by RTC Gateway and Gate Client 
+   components increased to 4095 (it was 247 in RTC SDK v7.09 and earlier).
+
+6. "LWordTo6Bit" and "LWordFrom6bit" functions added to the "rtcInfo" unit and
+   used by the RTC Gateway and Gate Clients to encode and decode encrypted User IDs
+   with a custom 6-bit character encoding instead of using decimal numbers (0..9).
+
+7. Supported "command range" for all communication between the Gateway and 
+   Gate Client extended to allow up to 256 different commands in each direction
+   (the limit was 15 different commands in RTC SDK v7.09 and earlier),
+   making a lot of space for possible future protocol extensions.
+
+8. RTC Gateway and Gate Client package headers exended with validity checks.
+   With the extension of the GroupID range and the range of possible commands, all
+   RTC Gateway and Gate Client package headers are now 6 bytes long (was 4 bytes before).
+
+9. URIs used to access RTC Gateway functions modified to avoid conflicts 
+   with RTC Gate Clients compiled with RTC SDK v7.09 and older versions.
+
+---------------------------------------------------------
+* Changes in v7.09
+---------------------------------------------------------
+
+*** Are you using RTC Gateway and Gate Client components? ***
+
+ Starting with RTC SDK v6.62 and the extension of protocol used by RTC Gateway and Gate Clients
+ to support sending "ToGroupID" to users, using the GroupID 248 ($F8) was causing a protocol 
+ conflict resulting in an endless back-and-forth-loop between the Gateway and Clients when the 
+ Gateway would send a package with GroupID 248 to a Client, which the Client would try to 
+ decode as "extended ToGroupID command", raising an Exception in the "Bytes2IntCRC" function 
+ (CRC check failed), resetting the connection and trying again.
+
+ To fix this problem without making a breaking protocol change (making new Clients and Gateway
+ incompatible with old Clients and Gateway), the allowed range for GroupIDs used by Gate Clients 
+ is reduced with RTC SDK v7.09 to 0 - 247 (instead of 0 - 255) and new parameter validity checks 
+ have been added to all RTC Gateway and Gate Client methods working with GroupID's to raise
+ the "ERtcGateClient" exception if a method is called with a GroupID above 248. 
+
+ RTC Gateway and Gate Client Demos have been updated to work within the new GroupID range.
+
+ If you need to keep compatibility with older RTC Gateway and Gate Clients,
+ an alternative to using this update would be to revert back to RTC SDK v6.61
+ which does NOT have support for sending a "ToGroupID" (causing the current problem),
+ or to make sure that your Gateway and Gate Clients do NOT use the GroupID 248.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! This is the LAST UPDATE which does NOT entirely break compatibility with Projects 
+!! compiled using RTC Gateway and Gate Client components from the RTC SDK v7.08 and older.
+!!
+!! With the next update (v7.10), the protocol used by RTC Gateway and Gate Clients will 
+!! be changed to increase the allowed GroupID range, add support for sending custom Client 
+!! information to the Gateway during login, broadcast custom information to other Clients 
+!! with subscription and Account-related notifications, and make space for future protocol 
+!! extensions without the need for another change which would break backwards compatibility.
+!!
+!! But ... with the update to RTC SDK v7.10 (coming next), you will HAVE TO replace the 
+!! Gateway and all Gate Clients, because Gate Clients compiled with RTC SDK v7.09 and older 
+!! will NOT work with a RTC Gateway and Gate Clients compiled with RTC SDK v7.10 and later.
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+---------------------------------------------------------
+* Changes in v7.08
+---------------------------------------------------------
+
+1. Fixed a possible deadlock when using the "AcquireLock=True" parameter with 
+   "FirstClient", "LastClient", "NextClient", "PrevClient" and "FindClient"
+   methods on "TRtcHttpMultiGateClient" and "TRtcGateAccountManager" components.
+
+---------------------------------------------------------
+* Changes in v7.07
+---------------------------------------------------------
+
+1. Cleared "MyUID", "MyIP" and "MyKey" properties on "TRtcHttpGateClient" component after Logout.
+
+2. Added help for the "TRtcGateStateClientInfo" class and removed (unused) 
+   "LastDataIn" and "LastDataOut" properties from the class.
+
+3. "TRtcGateClientInState" and "TRtcGateClientOutState" values are now better sorted.
+
+4. Fixed the "Delete ..." function for "friends" and "ignore" user lists in the 
+   "RTC Messenger Client" Demo Project. After receiving friends and ignore lists from 
+   the RTC Messenger Server, the Client would add all users to its local lists, 
+   without checking if the user has already been deleted.
+
+   NOTE: This bug is a result of a change in the TRtcRecord functionality,
+         when it was updated to support the storage of items with a NULL value,
+         but the RTC Messenger Demos have NOT been updated to reflect the change.
+
+---------------------------------------------------------
+* Changes in v7.06
+---------------------------------------------------------
+
+1. "TRtcHttpMultiGateClient" component extended with the following properties,
+   mapping to the properties of the same name on the currently selected Client:
+
+  - property State:TRtcGateClientStateInfo read GetState;
+  - property MyIP:RtcString read GetMyIP;
+  - property MyKey:RtcString read GetMyKey;
+  - property MyUID:TGateUID read GetMyUID;
+  - property MyAddr:RtcString read GetMyAddr;
+   
+2. "UnLockClient" method on the "TRtcGateAccountManager" and "TRtcHttpMultiGateClient" 
+   components changed to NOT automatically set the "Client" parameter to NIL,
+   in order to simplify its use inside "FirstClient" / "NextClient" loops,
+   since a pointer to a previous Client is required for the "NextClient" method.
+
+3. Added a validity check to the "RegisterFromCode" method on "TRtcGateAccountManager" and 
+   "TRtcHttpMultiGateClient" components to NOT do anything if the ByteArray parameter is empty.
+
+---------------------------------------------------------
+* Changes in v7.05
+---------------------------------------------------------
+
+1. "AcquireLock" parameter (default=False) added to all methods on 
+   "TRtcGateAccountManager" and "TRtcHttpMultiGateClient" components
+   which return a "TRtcHttpGateClient" component as a result
+   (FirstClient, LastClient, NextClient, PrevClient and FindClient)
+   to acquire a lock on the component (disallow its destruction).
+   To release the lock afterwards, "UnLockClient" method was added.
+
+2. To further simplify working with multiple Gateways, the following 
+   methods have been added to the "TRtcHttpMultiGateClient" component:
+
+  - function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word; const data:RtcByteArray):boolean; overload;
+  - function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word; const data:RtcString):boolean; overload;
+  - function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word):boolean; overload;
+  - function PingUser(const UserAddr:RtcString):boolean;
+  - function AddUserToGroup(const OwnerAddr:RtcString; GroupID:TGateUID; const UserAddr:RtcString):boolean;
+  - function RemUserFromGroup(const OwnerAddr:RtcString; GroupID:TGateUID; const UserAddr:RtcString):boolean;
+  - function RemoveGroup(const OwnerAddr:RtcString; GroupID:TGateUID):boolean;
+  - function AddFriend(const UserAddr:RtcString):boolean;
+  - function RemoveFriend(const UserAddr:RtcString):boolean;
+  - function RemoveAllFriends(const MyAddr:RtcString):boolean;
+  - function RequestUserVerifications(const UserAddr:RtcString):boolean;
+  - function RequestAccountVerification(const UserAddr:RtcString; const AccountID:RtcString):boolean;
+  - function UserNotVerified(const UserAddr:RtcString):boolean;
+  - function UserAllowed(const UserAddr:RtcString; const action:word):boolean;
+  - function VerifiedAllowed(const UserAddr:RtcString; const action:word):boolean;
+  - function UnVerifiedAllowed(const UserAddr:RtcString; const action:word):boolean;
+  - function AccountNotVerified(const UserAddr:RtcString; const AccountID:RtcString):boolean;
+  - function UserAccount(const UserAddr:RtcString; const AccountID:RtcString):boolean;
+  - function VerifiedAccount(const UserAddr:RtcString; const AccountID:RtcString):boolean;
+  - function UnVerifiedAccount(const UserAddr:RtcString; const AccountID:RtcString):boolean;
+
+  Methods (or properties) with the same name already exist on the "TRtcHttpGateClient" component.
+  Methods on the "TRtcHttpMultiGateClient" component internally use the "FindClient" method to find and 
+  lock the appropriate "TRtcHttpGateClient" component (based on "UserAddr", "OwnerAddr" or "MyAddr" parameter), 
+  use the "TRtcHttpGateClient" component to call the appropriate method/property and then release the lock.
+
+---------------------------------------------------------
+* Changes in v7.04
+---------------------------------------------------------
+
+1. Changed component packaging from 5 design-time packages used in prior versions 
+   into 2 run-time and 2 design-time packages, which will be used from here on.
+
+   New runtime packages are:
+   -> rtcSDK.dpk (contains units from old rtcSDK, rtcSDK_Raw and rtcSDK_Gate packages)
+   -> rtcSDK_DBA.dpk (contains units from old rtcSDK_DBA and rtcSDK_DBCli packages)
+
+   New design-time packages are:
+   -> rtcSDKD.dpk (registers ISAPI components and everything from the new rtcSDK package)
+   -> rtcSDKD_DBA.dpk (registers all components from the new rtcSDK_DBA package)
+
+  All packages are included in the "SDKPackages_Main.bpk" Project Group.
+  Runtime packages need to be compiled before design-time packages.
+  
+  "rtcSDK" (runtime) package can now be compiled for any platform, but a 
+  32-bit Windows version is required for design-time packages and the Delphi IDE.
+
+2. Demos from the "SDKDemos_VCL_Gate.bpg" Project Group moved to "SDKDemos_VCL.bpg"
+
+3. Removed deprecated units "rtcWinTimer.pas" and "rtcTrashcan.pas".
+
+4. The following units have been updated to skip code compilation if the
+   unit is being compiled for the wrong platform or using the wrong compiler. 
+
+   Units that compile only for Windows:
+   - rtcService.pas
+   - rtcHWndPool.pas 
+   - rtcWinSock.pas
+   - rtcWinSocket.pas
+   - rtcWInetHttpCliProv.pas
+   - rtcWinHttpCliProv.pas
+   - rtcISAPISrvProv.pas 
+   - rtcISAPISrv.pas
+   - rtcISAPIApp.pas
+
+  Unit that compiles only for iOS using FreePascal:
+   - rtcNixSock.pas
+
+  Units that compile only with Delphi 2010 and a later compiler:
+   - rtcSrcTree.pas 
+   - rtcSrcList.pas 
+
+  Unit that compiles only if the "RTC_NORSA" compiler directive is NOT declared:
+   - rtcRSA.pas 
+
+---------------------------------------------------------
+* Changes in v7.03
+---------------------------------------------------------
+
+1. "Release" method on all RTC Connection components updated to immediately disable all 
+   user events except "BeforeDestroy" to minimize the chance of Exceptions caused by the 
+   component calling user events from background threads when it is about to be destroyed.
+
+2. Added optional "Timeout" (default = infinite), "UserInterractionAllowed" and 
+   "AllowMessageProcessing" parameters to "StopListeNow" and "DisconnectNow" methods.
+   With the addition of a Timeout parameter, it is now possible that the connection
+   won't be closed in the time specified, so the "StopListenNow" and "DisconnectNow"
+   procedures have been changed to functions returning "wait_OK" in case of success.
+
+3. To make the component destruction procedure identical on all platforms, 
+   the "DisposeOf" method is now used instead of "Free" on mobile platforms.
+
+---------------------------------------------------------
+* Changes in v7.02
+---------------------------------------------------------
+
+1. Connection component destructors modified to disable all user events before the 
+   destruction process begins to minimize the chance of Exceptions caused by the 
+   component calling user events from background threads while being destroyed.
+
+2. Added "BeforeDestroy" event to "TRtcHttpClient" and "TRtcHttpServer" components to 
+   simplify writing custom classes which dinamically create and destroy these components.
+
+3. Fixed bugs in "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" components which 
+   have been causing the Application to freeze (stop responding) when closing connections.
+
+4. Added "RtcWaitFor" function in the "rtcThrPool" unit, which can be used to wait for any 
+   condition (requests to complete processing, connection to close, etc) and modified all 
+   "DoWaitFor..." methods on RTC components to use the new "RtcWaitFor" function.
+
+5. Fixed a bug in the RTC Thread Pool which could have resulted in a worker thread to be 
+   assigned a new job while still being busy relesing another virtual thread from memory.
+
+---------------------------------------------------------
+* Changes in v7.01
+---------------------------------------------------------
+
+1. "TRtcHttpMultiGateClient" and "TRtcMultiGateClientLink" components added 
+   to simplify writing Gate Clients communicating through multiple Gateways.
+
+2. "GateChatClient3" Demo Project added to show how "TRtcHttpMultiGateClient"
+   and "TRtcMultiGateClientLink" components can be used to work with multiple Gateways.
+
+---------------------------------------------------------
+* Changes in v7.00
+---------------------------------------------------------
+
+1. "UserNotVerified" and "AccountNotVerified" properties added to the "TRtcHttpGateClient" 
+   component, returning the verification status of "Linked" (remote Private) User accounts.
+
+2. "HasValue" property added to "TRtcHttpValues" and "TRtcParse" classes, 
+   returning TRUE if a specified attribute "index" has a value assigned.
+
+---------------------------------------------------------
+* Changes in v6.65
+---------------------------------------------------------
+
+1. Fixed a possible Client "deadlock" issue (introduced in v6.64)
+   when using the "AccountManager" with a TRtcHttpGateClient component.
+
+2. Fixed "ChatClient" and "ChatClient2" Demos, where GUI elements were 
+   accessed from Client events in background threads instead of using Sync.
+
+---------------------------------------------------------
+* Changes in v6.64
+---------------------------------------------------------
+
+1. RTC Gateway and Gate Client components have ben modified to use 2 commnds instead 
+   of 4 for subscription notifications. This is a change in the communication protocol 
+   which requires RTC Gateway and Gate Clients using the "Subscribe" method with 
+   "Private" Channels to be recompiled and updated to use the new protocol.
+
+   NOTE: In a productive environment, all the Gateways need to be replaced before Gate Clients,
+         to make sure the OLD Gateways won't be sending invalid commands to NEW Gate Clients.
+
+2. "Commands" used for notifications about Subscriptions (manual calls to the "Subscribe" 
+   and "Unsubscribe" methods) on the "TRtHttpGateClient" component have changed:
+
+   - "gc_UserReady" and "gc_UserWaiting" commands are now "gc_UserSubscribeLogIn"
+   - "gc_UserNotReady" and "gc_UserNotWaiting" commands are now "gc_UserSubscribeLogOut"
+
+3. "TRtcHttpGateClient" component extended with (optional) automatic verification for 
+   remote "Private" and "Linked" accounts. Accounts managed by the "AccountManager" will 
+   now be receiving notifications different from those received for the "Subscribe" method:
+
+   "gc_AccountLogIn" - remote user logged in to the "Data.AccountID" account.
+   "gc_AccountLogOut" - remote user logged out of the "Data.AccountID" account.
+   "gc_AccountVerified" - remote user verified a "Private" or "Linked" account "Data.AccountID"
+   "gc_AccountBadVerify" - remote user failed to verify a "Private" or "Linked" account "Data.AccountID"
+
+4. "RequestAccountVerification" method added to the "TRtcHttpGateClient" component, which can be 
+   used to (manually) request verification for a specific active "gat_Linked" account (remote Private).
+   After receiving the "gc_AccountVerified" Command in the OnInfoReceived event, you can rest 
+   assured that the User Account is authentic (User has the correct Private RSA Encryption Key).
+
+5. "RequestUserVerifications" method added to the "TRtcHttpGateClient" component, which can be 
+   used to (manually) request verifications for the User on all its active "gat_Linked" accounts.
+   After receiving the "gc_AccountVerified" Command in the OnInfoReceived event, you can rest 
+   assured that the User Account is authentic (User has the correct Private RSA Encryption Key).
+
+6. "AutoVerifyAccounts" property added to the "TRtcGateAccountManager". When AutoVerifyAccounts is 
+   set to TRUE, all linked "TRtcHttpGateClient" components will be automatically requesting account 
+   verification for any "gat_Linked" account immediately when the remote Account becomes accessible.
+
+7. "TRtcHttpGateClient" component using the "AccountManager:TRtcGateAccountManager" extended 
+   to provide properties to easily check User Prermissions based on currently active User Accounts, 
+   verification status of "Private" and "Linked" accounts and Permissions set for each Account.
+
+    { Is the User "UserID" logged in with the Account "AccountID"?
+      Returns TRUE for logged in Public accounts and VERIFIED "Private" or "Linked" accounts. }
+ -> property UserAccount[const UserID:TGateUID; const AccountID:RtcString]:boolean read CheckUserInAccount;
+
+    { Is the User "UserID" allowed to perform Action "action"?
+      Based on Permissions for "Public" accounts and VERIFIED "Private" or "Linked" Accounts. }
+ -> property UserAllowed[const UserID:TGateUID; const action:word]:boolean read GetUserAllowed;
+
+    { Is the User "UserID" logged in with a VERIFIED account "AccountID"?
+      Returns TRUE only for logged in and VERIFIED "Private" and "Linked" accounts.
+      Returns FALSE for "Public" accounts and NOT verified "Private" or "Linked" accounts. }
+ -> property VerifiedAccount[const UserID:TGateUID; const AccountID:RtcString]:boolean read CheckUserInVerifiedAccount;
+
+    { Is the User "UserID" *verified* allowed to perform Action "action"?
+      Based on Permissions for logged in and *VERIFIED* "Private" and "Linked" accounts. }
+ -> property VerifiedAllowed[const UserID:TGateUID; const action:word]:boolean read GetVerifiedAllowed;
+
+    { Is the User "UserID" *maybe* logged in (account NOT verified) with the Account "AccountID"?
+      Returns TRUE for all logged in Accounts ("gc_AccountLogIn" notification has been received). }
+ -> property UnVerifiedAccount[const UserID:TGateUID; const AccountID:RtcString]:boolean read CheckMaybeInAccount;
+
+    { Is the User "UserID" *maybe* (account logged in but NOT verified) allowed to perform Action "action"?
+      Based on Permissions for all logged in accounts, regardless of their verification status. }
+ -> property UnVerifiedAllowed[const UserID:TGateUID; const action:word]:boolean read GetMaybeAllowed;
+

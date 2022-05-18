@@ -1,0 +1,38 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+***********************************************************
+*                                                         *
+* RealThinClient SDK v4.05 (2010.Q4), December 29th 2010. *
+*                                                         *
+***********************************************************
+
+---------------------------------------------------------
+* Changes since v4.00 (2010.Q3)
+---------------------------------------------------------
+
+1) "CancelCalls" method added to the TRtcClientModule component, allowing you to cancel
+   *all* unsent calls prepared after "StartCalls" and decrement "CallsLevel" to zero (0).
+
+2) When using RTC Client or Server components with MultiThreaded=TRUE, an exception was *sometimes*
+   being raised from within a background thread during application shutdown as a result of the thread
+   pool still being "up and running" after some objects (which are required by the thread pool) have
+   already been destroyed from the finalization section of other units. This has now been fixed.
+
+3) "TimedOut" method added to all TRtcConnection component descendants:
+    - TRtcHttpClient, TRtcHttpServer, TRtcISAPIServer, TRtcMessageClient, TRtcMessageServer.
+    
+   "TimedOut" will return TRUE if a connection was closed (OnDisconnect / OnConnectLost)
+   because of a timeout set with the "Timeout" property.
+
+4) Fixed the "change password" feature in the RTC Messenger Server Demo Project.
+
+5) Fixed an AccessViolation in the RTC Messenger Server Demo Project.
+
+6) Added "RTC_INFO" logging for all "toCode" methods.
+
+7) Added more information to ZLib exception messages.
+
+8) Declared a new "ERtcInfo" exception type, which is now used
+   for all RTC exceptions raised from the "rtcInfo.pas" unit.
+
+9) ZLib updated to the latest version (1.2.5)

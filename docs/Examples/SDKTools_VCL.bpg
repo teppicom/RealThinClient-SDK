@@ -1,0 +1,46 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = RtcFunctionsWizard.exe RTCRouterCheck.exe ConsolAppCli.exe \
+  MaxMem.exe MaxStrRefs.exe MemTest.exe StrTest.exe RtcWebLogReader.exe \
+  RTCWebStressTool.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+RtcFunctionsWizard.exe: RemoteFn_Wizard\RtcFunctionsWizard.dpr
+  $(DCC)
+
+RTCRouterCheck.exe: RouterCheck\RTCRouterCheck.dpr
+  $(DCC)
+
+ConsolAppCli.exe: UnitTesting\ConsolAppCli.dpr
+  $(DCC)
+
+MaxMem.exe: UnitTesting\MaxMem.dpr
+  $(DCC)
+
+MaxStrRefs.exe: UnitTesting\MaxStrRefs.dpr
+  $(DCC)
+
+MemTest.exe: UnitTesting\MemTest.dpr
+  $(DCC)
+
+StrTest.exe: UnitTesting\StrTest.dpr
+  $(DCC)
+
+RtcWebLogReader.exe: WebServer_LogReader\RtcWebLogReader.dpr
+  $(DCC)
+
+RTCWebStressTool.exe: WebStress_Client\RTCWebStressTool.dpr
+  $(DCC)
+
+

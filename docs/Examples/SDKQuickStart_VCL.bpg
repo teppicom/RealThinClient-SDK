@@ -1,0 +1,91 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = BrowserUpload.exe RTCDualServer.exe rtcUploadClient.exe \
+  rtcUploadServer.exe CliProject1.exe SrvProject1.exe rtcParseTest.exe \
+  template.exe templateForm.exe RTCScriptTester.exe rtcServer1.exe rtcServer2.exe \
+  rtcServer2b.exe rtcServer3.exe rtcServer4.exe RTC_XMLRPCTest.exe LinksLocal.exe \
+  LinksClient.exe LinksServer.exe MyHttpServer.exe MyHttpServer2.exe \
+  WSockServTest.exe WSockCliTest.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+BrowserUpload.exe: BrowserUpload\BrowserUpload.dpr
+  $(DCC)
+
+RTCDualServer.exe: DualServer\RTCDualServer.dpr
+  $(DCC)
+
+rtcUploadClient.exe: ClientUpload\rtcUploadClient.dpr
+  $(DCC)
+
+rtcUploadServer.exe: ClientUpload\rtcUploadServer.dpr
+  $(DCC)
+
+CliProject1.exe: RemoteFunctions\CliProject1.dpr
+  $(DCC)
+
+SrvProject1.exe: RemoteFunctions\SrvProject1.dpr
+  $(DCC)
+
+rtcParseTest.exe: rtcParse1\rtcParseTest.dpr
+  $(DCC)
+
+template.exe: rtcParse2\template.dpr
+  $(DCC)
+
+templateForm.exe: rtcParse3\templateForm.dpr
+  $(DCC)
+
+RTCScriptTester.exe: rtcScript\RTCScriptTester.dpr
+  $(DCC)
+
+rtcServer1.exe: ServerLesson1\rtcServer1.dpr
+  $(DCC)
+
+rtcServer2.exe: ServerLesson2\rtcServer2.dpr
+  $(DCC)
+
+rtcServer2b.exe: ServerLesson2b\rtcServer2b.dpr
+  $(DCC)
+
+rtcServer3.exe: ServerLesson3\rtcServer3.dpr
+  $(DCC)
+
+rtcServer4.exe: ServerLesson4\rtcServer4.dpr
+  $(DCC)
+
+RTC_XMLRPCTest.exe: XMLRPCTest\RTC_XMLRPCTest.dpr
+  $(DCC)
+
+LinksLocal.exe: LinkedObjects\LinksLocal.dpr
+  $(DCC)
+
+LinksClient.exe: LinkedObjects\LinksClient.dpr
+  $(DCC)
+
+LinksServer.exe: LinkedObjects\LinksServer.dpr
+  $(DCC)
+
+MyHttpServer.exe: ConsoleServer\MyHttpServer.dpr
+  $(DCC)
+
+MyHttpServer2.exe: ConsoleServer\MyHttpServer2.dpr
+  $(DCC)
+
+WSockServTest.exe: WebSockServer\WSockServTest.dpr
+  $(DCC)
+
+WSockCliTest.exe: WebSockClient\WSockCliTest.dpr
+  $(DCC)
+
+

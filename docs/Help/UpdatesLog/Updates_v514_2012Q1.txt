@@ -1,0 +1,135 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*****************************************************************
+*                                                               *
+* RealThinClient SDK v5.14 (2012.Q1), released April 17th 2012. *
+*                                                               *
+*****************************************************************
+
+---------------------------------------------------------
+* Changes in v5.14 (2012.Q1)
+---------------------------------------------------------
+
+1) "RTC_noWideUString" compiler directive added.
+
+  Starting with RTC SDK v5.13, a new "UString" type was introduced, mapping 
+  to the "String" type when compiled with Delphi 2009 and later (Unicode),
+  but to "WideString" when compiled with FPC or older Delphi versions.
+
+  If you do NOT want the "UString" type to be mapped to a WideString type
+  when compiled with  FPC and older Delphi versions, but preffer the old behavior, 
+  where "UString" was always euqal to  "String", declare "RTC_noWideUString".
+
+---------------------------------------------------------
+* Changes in v5.13
+---------------------------------------------------------
+
+1) New type introduced: UString; ("rtcTypes.pas" and "rtcInfo.pas" units)
+
+   When compiled with Delphi 2009 and later, "UString" equals "String" (Unicode String),
+   so nothing changes when you are using a fully Unicode-enabled compiler.
+
+   When compiled with older Delphi version (which don't have native Unicode support),
+   or with FPC (iOS simulator or device), "UString" type will be mapped to "WideString",
+   with all methods, properties and functions which are Unicode-enabled with Delphi 2009 
+   and later, become WideString-enabled when compiled with FPC (iOS) or older Delphi versions.
+
+   This change was required to ensure that Unicode strings will always be correctly handled,
+   regardless of the platform the app is running on, or the compiler used to compile it.
+
+   A negative side-effect (only for applications compiled with older Delphi versions or FPC)
+   might be a slight performance degradation when using Unicode-enabled properties, because 
+   the WideString type is NOT refference counted (AnsiString and UnicodeString types are).
+
+   You should also get warnings from the compiler about ambigous type casting, if you have
+   been explicitly typecasting results from properties like "asText" to PChar or PAnsiChar,
+   because "asText" now returns a WideString when compiled with FPC and older Delphi versions
+   instead of a String (=AnsiString on FPC and all older/non-unicode Delphi versions).
+
+2) Fixed Unicode support in the XML-RPC parser and generator.
+
+3) Added JSON parser and generator (full Unicode support) to all TRtcValue objects.
+
+4) "QuickStart/XMLRPCTest" Project extended, so it can now be used for
+   testing RTC, XML-RPC as well as the new JSON parser and generator.
+
+---------------------------------------------------------
+* Changes in v5.12
+---------------------------------------------------------
+
+1) Fixed compatibility with Lazarus/FPC on Linux.
+
+---------------------------------------------------------
+* Changes in v5.11
+---------------------------------------------------------
+
+1) Added the "NeedMoreData" method to TRtcTcpClient and TRtcTcpServer components to allow
+   the use of raw TCP/IP components on non-Windows platforms (see below for more info).
+
+   For the components to work on non-Windows platforms, your protocol has to follow a strict 
+   request/response scheme, or be defined strictly enough for both sides to know when to expect 
+   data from the other side and when to send data (at any given point in time, you can either 
+   be a dedicated receiver or a dedicated sender, but not both at the same time).
+
+   For raw TCP components to work on non-Windows platforms, you will need to use the "NeedMoreData" 
+   method when you are expecting data from the other side. For example, a HTTP Server would call 
+   “NeedMoreData” immediately after a client opens a new connection and then again in case the 
+   received data doesn’t contain a complete request. A HTTP Client, on the other end, would call 
+   “NeedMoreData” after sending a complete request to the Server and then again after receiving 
+   some data in case received content doesn’t contain the complete response.
+
+   If your protocol allows sending and receiving at the same time, then you won't be able to
+   use raw TCP/IP components from the RTC SDK to implement it for non-Windows platforms.
+
+---------------------------------------------------------
+* Changes in v5.08 - v5.10
+---------------------------------------------------------
+
+1) "DisconnectNow" method added to TRtcHttpClient and TRtcMessageClient components.
+   This method calls "Disconnect" and waits for the Client connection to close.
+
+2) "StopListenNow" method added to TRtcHttServer and TRtcMessageServer components.
+   This method calls "StopListen" and waits for the Server listener to stop listening.
+
+---------------------------------------------------------
+* Changes in v5.07
+---------------------------------------------------------
+
+1) "RtcPrepareSqlWhere", "RtcSetSqlWhereParams", "RtcPrepareSqlAction" and "RtcSetSqlActionParams" 
+   functions added to the "rtcDB" unit to simplify the process of applying Client-side DataSet 
+   changes to a Database on the Server. The only requirement is that the Database Engine 
+   is SQL-capable and uses the "TParams" class from the "DB" unit to prepare SQL parameters.
+
+2) "BDEDemoServer" Project updated to use new functions from the "rtcDB" unit to build a select 
+   query and to apply changes to the Database instead of having custom functions in the main unit.
+
+3) "FishFactServer3" Project added, using new functions from the "rtcDB" unit to apply changes
+   to the "biolife" table instead of using a custom "PrepareQueryAction" implementation.
+
+---------------------------------------------------------
+* Changes in v5.06
+---------------------------------------------------------
+
+1) Fixed WideString support in the "TRtcMemDataSet" component for iOS Projects.
+
+2) "FishFactServer" Project extended to convert all "AnsiString" fields to "WideString"
+   for testing WideString field type support on different platforms.
+
+3) "FishFacts.data" file updated to use "WideString" fields instead of "AnsiString".
+
+4) "iosTestClient" Project extended to display "Category" and "CommonName" field values.
+
+5) "iosTestClient2" Project added, using TRtcMemDataSet as Client-side dataset and allowing changes
+   to be made to "Category" and "CommonName" fields (two Edit fields) and sent to the FishFactServer.
+
+---------------------------------------------------------
+* Changes in v5.05
+---------------------------------------------------------
+
+1) Added [ComponentPlatformsAttribute] for all components registered on the Delphi component palette,
+   so the IDE will know which components have support for Win32, Win64 and Mac OSX platforms.
+   
+   NOTE: This does NOT fix the problem with the Delphi XE2 IDE which filters out RTC SDK components 
+   from the component palette (grey) when you create a new or open an existing FireMonkey iOS Project.
+   To get around that problem in the Delphi XE2 IDE, you will need to DELETE your Projects ".dproj" 
+   file before you can start adding RTC SDK components to your FireMonkey iOS Form or DataModule.

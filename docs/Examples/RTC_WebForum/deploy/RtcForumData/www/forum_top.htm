@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title><%title_of_document%></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both">
+<div class="page_header"><img src="folder_open.gif" width="16" height="13" border="0"/> <a class="page_header" href="?cmd=forum&sid=<%sid%>"><%forum_page_header%></a></div>

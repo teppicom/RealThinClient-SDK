@@ -1,0 +1,216 @@
+.files {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #003366;
+	padding-left: 25px;
+}
+.editpack {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #000000;
+	background-color: #CCCCCC;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.head {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #990000;
+}
+A.menu:link {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #000099;
+	text-decoration: none;
+	font-weight: bold;
+}
+A.menu:visited {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #000099;
+	text-decoration: none;
+	font-weight: bold;
+}
+A.menu:hover {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FF0000;
+	text-decoration: none;
+	font-weight: bold;
+}
+A.little:link {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000099;
+	text-decoration: none;
+	padding-right: 2px;
+	padding-left: 1px;
+
+}
+A.little:visited {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000099;
+	text-decoration: none;
+	padding-right: 2px;
+	padding-left: 1px;
+
+}
+A.little:hover {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #FF0000;
+	text-decoration: none;
+	padding-right: 2px;
+	padding-left: 1px;
+
+}
+.h1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	color: #660000;
+}
+.button {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #000066;
+	background-color: #CCCCCC;
+	width: 100px;
+}
+.sp {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	padding-right: 15px;
+	padding-left: 30px;
+}
+.tabsel {
+	background-color: #99CCFF;
+	border: 1px solid #99CCFF;
+}
+.tab {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: solid;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-left-color: #000000;
+}
+.tdbody {
+	border: 1px solid #99CCFF;
+	padding: 5px;
+}
+.trcaption {
+	background-color: #99CCFF;
+	border: 1px solid #99CCFF;
+	height: 30px;
+}
+.items {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #003366;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCCCCC;
+}
+
+.filectrl {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #000066;
+	background-color: #CCCCCC;
+}
+.editpack2 {
+
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #000000;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.expiredate {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	width: 90px;
+	border: 1px groove #999999;
+}
+.itemsgreen {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #00CC00;
+	padding-left: 25px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCCCCC;
+}
+.pack_header {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	background-color: #D4D0C8;
+	color: #000000;
+	border: 1px solid #999999;
+	vertical-align: middle;
+	padding-right: 0px;
+	padding-left: 5px;
+}
+.pack_filesblock {
+	background-color: #FFFFF0;
+	border: 1px solid #CCCCCC;
+	padding-right: 20px;
+	padding-left: 20px;
+}
+.pack_td {
+	padding-left: 30px;
+}
+.pack_file {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	border-bottom: 1px solid #CCCCCC;
+}
+A.file:link {
+	text-decoration: none;
+}
+A.file:visited {
+	text-decoration: none;
+}
+A.file:hover {
+	color: #FF0000;
+	text-decoration: none;
+}
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+}
+.filerows {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+.msg {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	background-color: #FF0000;
+	border: 1px solid #000000;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #FFFFFF;
+	font-weight: bold;
+	padding: 3px 10px;
+	width: 400px;
+	clear: both;
+}
+.msgword {font-style: italic; font-weight: bolder; color: yellow;}

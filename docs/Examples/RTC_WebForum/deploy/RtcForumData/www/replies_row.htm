@@ -1,0 +1,30 @@
+<tr class="reply_row" bgColor="<%if:preview%>#FFFFFF<%elseif:preview%><%if:odd_row%>#F5F5F5<%elseif:odd_row%>#F0F0F0<%endif:odd_row%><%endif:preview%>">
+  <%if:preview%><a name="preview"><%endif:preview%>
+	<td width="150" valign="top" class="reply_row"><b><%user_name%></b><br><br>
+	<div class="smalltext"><%post_timestamp%><br><%user_type%></div></td>
+	<td valign="top" class="reply_row">
+	  <%if:view%>
+			<div id=replytext><%reply_text%></div>
+	  <%elseif:view%>
+		  <form action="#" method="post" enctype="multipart/form-data" onsubmit="xvalidateForm('edit_reply_text','','R');return document.MM_returnValue">
+				<textarea name="reply_text" id="edit_reply_text" style="width: 100%" rows="20" title="Message"><%reply_text%></textarea>
+				<input type="submit" class="button" value="Submit"/>
+				<input type="button" value="Cancel" class="button" onclick="document.location='?cmd=viewtopic&topic_id=<%topic_id%>&section_id=<%section_id%>&reply_id=<%reply_id%>&sid=<%sid%>'"/>
+				<input name="cmd" type="hidden" value="savetopic"/>
+				<input name="section_id" type="hidden" value="<%section_id%>"/>
+				<input name="topic_id" type="hidden" value="<%topic_id%>"/>
+				<input name="reply_id" type="hidden" value="<%reply_id%>"/>
+				<input name="sid" type="hidden" value="<%sid%>"/>
+			</form>
+			<script language="JavaScript" type="text/JavaScript">
+				xfindObj('edit_reply_text').focus();
+			</script>
+	  <%endif:view%>
+	</td>
+	<%if:moderator_access%>
+		<td width="55" align="center" class="reply_row">
+			<a href="?cmd=viewtopic&topic_id=<%topic_id%>&section_id=<%section_id%>&ed_reply_id=<%reply_id%>&sid=<%sid%>"><img src="b_edit.png" alt="Edit" title="Edit" width="16" height="16" border="0"></a><%if:moderator_delete%>&nbsp;
+			<a href="?cmd=delreply&section_id=<%section_id%>&topic_id=<%topic_id%>&reply_id=<%reply_id%>&sid=<%sid%>" onClick="return xconfdel();"><img src="b_drop.png" alt="Delete" title="Delete" width="16" height="16" border="0"></a><%endif:moderator_delete%>
+		</td>
+	<%endif:moderator_access%>
+</tr>

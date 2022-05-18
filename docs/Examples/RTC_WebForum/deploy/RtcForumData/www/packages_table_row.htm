@@ -1,0 +1,11 @@
+<tr class="items" bgColor="#FFFFFF" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <td class="items" style="padding-left:15px"><%package_name%></td>
+  <td width="70" class="items"><div align="center"><%vis_level%></div></td>
+  <td width="60" class="items"><div align="center"><%files_count%></div></td>
+  <td width="70" class="items"><div align="right">
+    <a href="?cmd=editpack&pack_id=<%pack_id%>&sid=<%sid%>" class="little"><img src="b_edit.png" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+    <a href="?cmd=packfiles&pack_id=<%pack_id%>&sid=<%sid%>" class="little"><img src="s_files.png" alt="Files" title="Files" width="16" height="16" border="0"></a>
+    <a href="?cmd=delpack&pack_id=<%pack_id%>&sid=<%sid%>" class="little" onClick="return xconfdel();"><img src="b_drop.png" alt="Remove" title="Remove" width="16" height="16" border="0"></a>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,134 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v6.42 (2014.Q3), released October 27th 2014. *
+*                                                                 *
+*******************************************************************
+
+---------------------------------------------------------
+* Changes in v6.42 (2014.Q3)
+---------------------------------------------------------
+
+1) Removed the "VCL" package requirement from the "rtcSDK_DBCli" package
+   and included the "rtcDefs.inc" to the rtcDBCli unit, which made the 
+   "TRtcClientDataSet" component disabled for Mobile platforms. Now, 
+   the component is enabled for all platforms in Delphi XE4 and later.
+
+2) Added "SDKPackagesX2_*" and "SDKPackagesX3_*" Project Groups for developers
+   who have 2 or 3 Delphi versions running on the same machine, where each Group is
+   using a separate set of DPK files to avoid BPL name conflicts between Delphi versions.
+
+---------------------------------------------------------
+* Changes in v6.41
+---------------------------------------------------------
+
+1) Fixed a possible memory leak in the TRtcClientModule component when HyperThreading=True
+   if "Prepare", "Data" or "Param" were used to prepare a remote function call, but 
+   neither the "Execute" nor the "Call" method were used to post the remote call.
+
+2) "ClearData" method added to the "TRtcClientModule" component, giving you the possibility to manually 
+   clear any data prepared with the "Prepare" method or "Data" and "Param" properties, in case you 
+   won't be using that data to make a remote function call with the "Execute" or "Call" method.
+
+---------------------------------------------------------
+* Changes in v6.40
+---------------------------------------------------------
+
+1) "TRtcClientDataSet" component is now introduced as a new DB-Aware in-memory DataSet.
+   
+   By extending the standard TClientDataSet component from Delphi with change tracking, 
+   this new component is a good replacement for the TRtcMemDataSet component, providing
+   full TClientDataSet functionality with all the events and methods from the 
+   TRtcDataSetMonitor component, along with a simple write-only "asDataSet" 
+   property from the "TRtcMemDataSet" component for easy Data assignment.
+   
+   To install this new component on the Delphi component palette, open the
+   new "rtcSDK_DBCli" package and use the "Build" and "Install" buttons in Delphi.
+
+2) "FishFactClient3" Demo Project added to the list of available DB-Aware Examples,
+   to demonstrate the use of the new TRtcClientDataSet component in Delphi.
+
+---------------------------------------------------------
+* Changes in v6.39
+---------------------------------------------------------
+
+1) "TRtcHttpGateClient" component extended with 3 new methods:
+   "AddFriend", "RemoveFriend" and "RemoveAllFriends".
+
+2) TRtcGateClientCommand type extended with 4 new values:
+   "gc_BeFriend", "gc_UnFriend", "gc_FriendAdd" and "gc_FriendRemove".
+
+3) To reduce chances of malicious flood attacks to the Gateway by hackers
+   in which a hacker would log in anonymously, add thousands of random
+   UserIDs (by guessing IDs or trying to add all IDs in sequential order), 
+   then sending large amounts of data to all those users as a "Group send" ...
+   
+   "TRtcGateway" component was updated to allow adding Users to Groups 
+   ONLY if the Group Owner (who is adding a new User to his Group) was added 
+   as a Friend ("AddFriend" method) by the receiving User (who is being added).
+   
+   For example: 
+   User "A" wants to send Group messages to users "B", "C" and "D".
+   
+   First, user "A" will send an intivation message to each user individually.
+
+   When users "B", "C" and "D" receive the invitation from use "A", if they accept the
+   invitation, each of them will use the "AddFriend" method to add user "A" to their Friends 
+   list, then send a message to user "A" to let the user know they accept the invitation.
+
+   After user "A" receives a message from each user accepting the invitation, user "A" 
+   can use the "AddUserToGroup" method to add each user to his Group. Immediately after
+   using the "AddUserToGroup" method, that newly added user will start receiving all
+   messages sent to the group. No further action is required by the recipient.
+
+   But ... would user "A" use the "AddUserToGroup" method to add users "B", "C" and "D" 
+   to his group, without sending an invitation to these users and waiting for each user 
+   to add him to their Friends list and respond, the "AddUserToGroup" method would fail
+   on the Gateway and user "A" would get the "gc_UserOffLine" message for each user.
+
+   If you want to disable this new security feature of the TRtcGateway component 
+   to allow any User to add any other User to their Group, without requiring the
+   recipient User to add the Group Owner as his Friend (using the "AddFriend" 
+   method on the "TRtcHttpGateClient" component), change the global variable
+   "GATECHECK_FRIEND4GROUPS" to FALSE. It is declared in the rtcGateConst unit. 
+
+   NOTE: "AddUserToGroup" method of the "TRtcGateway" component, which can be used
+         directly on the Gateway to manually add users to User Groups, does NOT require 
+         the Group Owner to be added as a friend by the Users being added to his Group.
+         The new "FriendAdd" requirement only applies to commands received from Clients.
+
+4) "GateChatClient" Demo updated to use the new "AddFriend" method when accepting 
+   a chat invitation from another User, to accommodate the new requirement of all 
+   Group Owners to be registered as Friends of Users who are being added to a Group.
+
+---------------------------------------------------------
+* Changes in v6.38
+---------------------------------------------------------
+
+1) Minor StreamSec plugin bugfix
+
+2) Content parser in the TRtcHttpValues class extended to support uploading of multiple files
+   by using a single file input field with the "multiple" attribute, which is supported in HTML5. 
+
+   Using the ElementCount property, you can now check how many files were uploaded, with the 
+   Element property you will receive the names of all uploaded files and the GetFile method 
+   has a new "FileIndex" parameter, which allows you to select the file you want to store.
+   Check the "QuickStart/BrowserUpload" project for an example on how to use the above.
+
+3) Copy_FileEx function was added to the "rtcInfo.pas" unit to simplify copying parts of
+   files to other locations while limiting the ammount of memory used in the process. 
+
+   This new function is now used by the "GetFile" method (see above) for copying data from a 
+   temporary file to a storage file while using only 128KB of memory. This allows uploading 
+   of large files to the Server, without using too much memory on the Server. You can use the
+   RTC_FILEUPLOAD_COPYSIZE global variable if you want to change the buffer size for copying.
+
+---------------------------------------------------------
+* Changes in v6.37
+---------------------------------------------------------
+
+1) StreamSec Mobile plugin updated.
+
+2) "ZCompress_Ex" procedure in the rtcZLib.pas unit extended with the "inSize" parameter,
+   allowing partial compression of a Byte Array (no need to trim the array to compress less).

@@ -1,0 +1,180 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v7.78 (2017.Q1), released February 7th 2017. *
+*                                                                 *
+*******************************************************************
+
+---------------------------------------------------------
+* Changes in v7.78 (2017.Q1)
+---------------------------------------------------------
+
+1. In the RTC SDK v7.71 update, "TRtcClientModule" component was extended 
+   with a new "OnPreparing" event for centralized remote call monitoring,
+   but the way it was implemented introduced a change in components behavior,
+   which resulted in breaking backwards compatibility with some Applications 
+   using the TRtcClientModule component (which have previously been working).
+   This update makes the component backwards compatible again by using a 
+   slightly different approach to implement the new "OnPreparing" event.
+
+2. Added a "fmx4File_Client" Demo to the "SDKDemos_FMX3" Project Group.
+   
+---------------------------------------------------------
+* Changes in v7.77
+---------------------------------------------------------
+
+1. Added basic validity checks to "Mime_Decode" and "Mime_DecodeEx" 
+   functions to avoid range check errors when decoding invalid data.
+
+---------------------------------------------------------
+* Changes in v7.76
+---------------------------------------------------------
+
+1. TRtcClientModule's "AutoSessionsPing" feature updated to reset 
+   the PING Timer with every Remote Function Call sent to the Server.
+   As a result, the "OnPing" event will now ONLY be triggered if there
+   were NO Remote Function Calls sent using the "TRtcClientModule" 
+   component for longer than the "AutoSessionsPing" interval.
+   This avoids sending unnecessary "PING" calls to the Server.
+
+---------------------------------------------------------
+* Changes in v7.75
+---------------------------------------------------------
+
+1. TRtcMessageClient component's connection provider was missing the 
+   required code to increase the "Request.ContentOut" property after 
+   every "Write" or "WriteEx" method call. This has now been fixed.
+
+2. TRtcGateway and TRtcHttpGateway components updated with validity checks
+   for posting jobs to connection components running in background threads, 
+   to make sure the connection component hasn't been destroyed already
+   by the time the job leaves the queue and goes into execution.
+   
+3. Introduced a new (optional) RTCGATE_FULLDEBUG conditional define
+   and updated the way the old RTCGATE_DEBUG compiler define works.
+   
+   Declaring "RTCGATE_DEBUG" conditional define now includes the most
+   useful information in Debug LOGS created by the TRtcGateway component.
+
+   Declaring "RTCGATE_FULLDEBUG" adds a new layer of "validity checks" to 
+   the TRtcGateway component and includes even more details in Debug LOGs.
+
+---------------------------------------------------------
+* Changes in v7.74
+---------------------------------------------------------
+
+1. Introduced a new (optional) RTC_NOSLEEP conditional define.
+   By default, all RTC Worked Threads will be using Sleep(0) after every job 
+   to release the rest of their CPU cycle time to other threads and processes.
+   If you do NOT want this, add "RTC_NOSLEEP" to conditional defines for your Project.
+   This can make your Application run faster, but it will also use more CPU power 
+   and is not recommended in mixed Application environments or mobile platforms.
+
+---------------------------------------------------------
+* Changes in v7.73
+---------------------------------------------------------
+
+1. Update v7.70 fixed the "TRtcTimer" class to make auto-connect
+   work correctly in "RTC Portal VCL Clients", but broke compatibility 
+   with "RTC Gate Clients". THIS update fixes what update v7.70 broke :)
+   
+---------------------------------------------------------
+* Changes in v7.72
+---------------------------------------------------------
+
+1. There are no changes to the RTC SDK "Lib" in this update, but there is 
+   a new "MyHttpServer.dpr" example in the "QuickStart/ConsoleServer" folder, 
+   showing how to create, use and destroy TRtcHttpServer and TRtcDataProvider 
+   components directly in code, without a Delphi IDE and its visual designer.
+   
+---------------------------------------------------------
+* Changes in v7.71
+---------------------------------------------------------
+
+1. "OnPrepareCall" event added to the "TRtcClientModule" component,
+   providing a central place to monitor, modify or even skip sending
+   any remote call "posted" using this "TRtcClientModule" component.
+
+---------------------------------------------------------
+* Changes in v7.70
+---------------------------------------------------------
+
+1. Fixed a bug in the "TRtcTimer" class which broke the 
+   auto-reconnect feature in "RTC Portal VCL" Clients.
+
+---------------------------------------------------------
+* Changes in v7.69
+---------------------------------------------------------
+
+1. "rtcSSecTest" unit in the "LibPlugins" folder updated to 
+   work correctly with the latest "StreamSec Tools 2.3" version.   
+  
+---------------------------------------------------------
+* Changes in v7.68
+---------------------------------------------------------
+
+1. Fixed compatibility with FPC 3.0 and updated component 
+   package for Lazarus (rtcsdk_fpc.lpk) to also include 
+   the new RTC Gateway and Gate Client components.
+   
+---------------------------------------------------------
+* Changes in v7.67
+---------------------------------------------------------
+
+1. Removed <meta http-equiv="refresh" content="1"> from the "/$s" request provided by 
+   TRtcGateway and TRtcHttpGateway components to reduce unnecessary load on the Gateway.
+
+2. To simplify debugging of CONSOLE Applications, "LOG_TO_CONSOLE" and "XLOG_TO_CONSOLE" 
+   global variables added to the "rtcLog" unit. When set to TRUE, in addition to writing 
+   all "Log" and "xLog" calls to LOG files on disk (as before), any calls to these same 
+   functions (available in the "rtcLog" unit) will also be written to CONSOLE (stdout).
+   
+3. "rtcGatewayProvider" example Data Module added to "Demos/DataProvider" folder,
+   showing the most basic use of a TRtcGateway component in a RTC Server.
+
+4. "RTCWebServer" and "RTConWebServer" Demos extended with the option to enable 
+   a (standard) "RTC Gateway", using the "rtcGatewayProvider" example Data Module.
+
+5. "RTConWebServer" Demo extended with additional commands. Also, any changes 
+   to Server states (start / stop / error) will now be logged to the CONSOLE.
+
+---------------------------------------------------------
+* Changes in v7.66
+---------------------------------------------------------
+
+1. Fixed low-level POSIX socket layer for Linux.
+
+2. Removed automatic "rtcFMX.GUI" unit inclusion when compiling CONSOLE Projects 
+   for non-Windows platforms using Delphi XE2 and later (added in RTC SDK v7.31).
+
+3. Example modules "rtcFileProvider" and "rtcMessengerProvider" available in the 
+   "Demos\DataProviders" folder have been updated to be platform-independent, 
+   so they can be used with RTC Server Projects targeting non-Windows platforms.
+
+4. Added a new "RTConWebServer" Project in a new "SDKDemos_CON" Project Group,
+   demonstrating the use of RTC Server components in Console Applications,
+   using (updated) "rtcFileProvider" and "rtcMessengerProvider" modules.
+   NOTE: "RTConWebServer" Project is designed to be platform-independent.
+   
+5. All "ISAPI DLL" Projects previously located in the "SDKDemos_VCL" Project Group have 
+   been moved to the new "SDKDemos_CON" Project Group, since they do NOT use the VCL.
+   NOTE: Since ISAPI DLLs are specific to Windows, they can only be compiled for Windows.
+
+---------------------------------------------------------
+* Changes in v7.65
+---------------------------------------------------------
+
+1. There was a problem accessing remote functions provided by 3rd-party Web Servers hosted on
+   (sub-)domains using Mixed-Case or lower-case characters for the HOST name ("ModuleHost" property). 
+   
+   To fix this problem, the "ModuleHost" property on "TRtcClientModule" and "TRtcServerModule" 
+   components now accept Mixed-Case characters. In previous RTC SDK versions, any value 
+   assigned to the "ModuleHost" property was automatically converted to UPPERCASE.
+   
+---------------------------------------------------------
+* Changes in v7.64
+---------------------------------------------------------
+
+1. "TRtcTimer" class extended with a new "Tick" method / class procedure.
+   "Tick" triggers Timer 'Event'/'Job' and resets the elapsed time counter.

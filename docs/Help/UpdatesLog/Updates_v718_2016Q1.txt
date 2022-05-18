@@ -1,0 +1,33 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*****************************************************************
+*                                                               *
+* RealThinClient SDK v7.18 (2016.Q1), released April 27th 2016. *
+*                                                               *
+*****************************************************************
+
+---------------------------------------------------------
+* Changes in v7.18 (2016.Q1)
+---------------------------------------------------------
+
+1. Updated RTC Demos to use "StopListenNow" on TRtcHttpServer components instead of 
+   using "StopListen" and manually implementing the "Application.ProcessMessages" loop.
+
+2. "AllocFreeID" method added to the "Groups" property on the "TRtcHttpGateClient" component.
+
+3. "SharedGroups" property added to the "TRtcHttpMultiGateClient" component for
+   management of shared Group IDs, which can be used on all connected Gateways.
+
+4. "MyGroupID" property added to the "TRtcAbsMultiGateClientLink" component 
+    (and all descendants like "TRtcMultiGateClientLink") with automatic allocation 
+    of a new Group ID when a "TRtcHttpMultiGateClient" component is assigned to the 
+    "MultiClient" property and removal when the component is destroyed or property cleared. 
+
+5. "IsUserInMyGroup" method added to the "TRtcHttpMultiGateClient" component,
+   returning TRUE if the user was added to our Group with "AddUserToMyGroup"
+   and was NOT removed from our Group or disconnected from the Gateway.
+
+6. Fixed a possible AV in the "rtcHWndPool" unit on Application shutdown.
+
+7. Updated "rtcThrPool" and "rtcRSA" units to avoid compiler Hints
+   like "H2077 Value assigned to ___ never used" in Delphi 10.1

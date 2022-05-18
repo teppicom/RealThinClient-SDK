@@ -1,0 +1,147 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v6.48 (2014.Q4), released January 22nd 2015. *
+*                                                                 *
+*******************************************************************
+
+---------------------------------------------------------
+* Changes in v6.48 (2014.Q4)
+---------------------------------------------------------
+
+1. All RTC Value Object types, in addition to the "asCode" property, now also have the "asCodeEx" 
+   property to simplify encoding and decoding of RTC Value objects to and from Byte Arrays.
+
+2. TRtcClientModule and TRtcServerModule components (used to implement RTC Remote Functions)
+   extended with 2 new options for Data Encryption: "EncryptionMode" and "RSAKey". These new options are 
+   available on the "TRtcClientModule" component and work in combination with the "EncryptionKey" property.
+
+   "EncryptionMode" has 2 options now: "rem_Basic" (old) and "rem_ISAAC" (new).
+   - "rem_Basic" uses the "TRtcCrypt" class for Encryption and is 100% backwards compatible.
+   - "rem_ISAAC" uses the new "TRtcIsaaCrypt" class for Encryption to randomize the encrypted output.
+
+   "RSAKey" property extends the "TRtcClientModule" with the option for generating random RSA Key Pairs
+   for use in the initial Key Exchange required for Encryption (when starting a Session). Clients will send 
+   their PUBLIC RSA Key to the Server, the Server will generate a random Key, then encrypt their Key with
+   the PUBLIC Key received from the Client. Since only the Client (who generated and sent the PUBLIC Key) 
+   has the propper PRIVATE Key, only the Client will be able to Decrypt the Key received from the Server,
+   so the communication will be Secure between Clients and Servers, even if they do NOT use a "SecureKey".
+  
+   NOTE: By default, "EncryptionMode=rem_Basic" and "RSAKey=0" (zero) for 100% backwards compatibility, 
+   so you don't have to worry that your newly compiled Clients might stop working with your old Server(s).
+   The same goes for the Server. It is safe to use a RTC Server compiled with the new RTC SDK version in
+   combination with RTC Clients compiled with older and newer RTC SDK versions, because the TRtcServerModule
+   component will be using the Encryption mode requested by each Client (mix-and-match combinations are allowed).
+
+   IMPORTANT! Even though the addition of "ISAAC Encryption" and the use of random asymmetric "RSA Keys" do
+   increase communication security when working with RTC remote functions, Client and Server HTTP headers will 
+   continue being sent in plain text if you are NOT using SSL. And ... all communication over TRtcDataRequest
+   and TRtcDataProvider remains unencrypted, so you should NOT see this addition as a SSL/TLS replacement.
+   If you require absolute communication security between Clients and Servers, you need SSL/TLS Encryption,
+   which can be added by using 3rd-party SSL/TLS Encryption components from "StreamSec" or "Eldos".
+
+3. "RTC_RSA" compiler directive added to the "rtcDefs.inc" include file.
+
+   To use RSA and ISAAC Encryption modes with TRtcClientModule and TRtcServerModule components,
+   the compiler directive "RTC_RSA" has to be declared. It is declared by default, so there
+   is no need for change if you want to use this new functionality, but ... should you have problems 
+   compiling the RSA or ISAAC code with the compiler you are using, or if the code does NOT appear
+   to be working correctly on the platform(s) you are targetting, simply remove that compiler directive 
+   from the "rtcDefs.inc" file and all the refferences to "RSA" and "ISAAC" will be removed from the RTC SDK.
+
+   NOTE: If you undeclare the "RTC_RSA" compiler directive to remove "RSA" and "ISAAC" functionality
+   from the TRtcClientModule and TRtcServerModule components, the "EncryptionMode" and "RSAKey" properties 
+   on the TRtcClientModule component will be ignored and the components will be working in default mode
+   (EncryptionMode=rem_Basic; RSAKey=0). Also, should a Client with RSA and ISAAC features enabled try to 
+   communicate using RSA or ISAAC encryption with your Server where you have disabled these features, the 
+   Server will be responding with "Encryption disabled", even if Encryption is enabled for the standard mode.
+   If the Client does NOT tr to force encryption, communication security will automatically be lowered to
+   work without any encryption. But if the Client which is using RSA and ISAAC features also has its ForceEncryption
+   property set to TRUE, communication will NOT be possible with a Server which has these features disabled.
+
+---------------------------------------------------------
+* Changes in v6.47
+---------------------------------------------------------
+
+1. "Randomize", "RandomInt" and "GrowFromSeed" methods added to the "TRtcRSA" class in the "rtcRSA.pas" unit.
+
+    { Prepare the Random Numbers Generator by using the following parameters:
+        if useSeed <> 0, the specified Seed number will be used, plus
+        if useSelf = TRUE, this objects location in memory will be used, plus
+        if useTime = TRUE, the current Time will be used, plus
+        if useRND = TRUE, Random function from Delphi will be used.
+      Random Numbers are used for Key Generation, Encryption and the RND method. }
+    procedure Randomize(useSeed:longint=0; useSelf:boolean=False; useTime:boolean=False; useRND:boolean=False);
+
+    { Generate a "strong" Random positive 16-bit Integer (0-32766) using a
+      combination of the ISAAC algorithm, current Time, Memory and loops. }
+    function RandomInt:integer;
+
+    { Grow a new Array of Random Bytes using these parameters:
+       FromData = Random array of bytes to use as Source
+       Seed = Seed to be used for Random Growth generation
+       Size = Size to which the array should grow
+       Growth = Growth control number }
+    function GrowFromSeed(const FromData:RtcByteArray; Seed, Size:longint; Growth:byte):RtcByteArray;
+
+2. Introducing the "TRtcISAACrypt" class in the "rtcRSA.pas" unit:
+
+   This new Encryption/Decryption class extends the original TRtcCrypt class from the "rtcCrypt" unit 
+   by using the ISAAC random numbers generator to preudo-randomize the Encrypted output, extracting a Seed
+   Number from the provided Key to generate the same sequence of Numbers for Encryption and Decryption,
+   making even short encryption Keys produce seemingly random outputs after the Encryption process.
+
+---------------------------------------------------------
+* Changes in v6.46
+---------------------------------------------------------
+
+1. Introducing the "rtcRSA.pas" unit with the "TRtcRSA" class:
+
+  "TRtcRSA" is a simple class which provides a basic set of methods and properties for Asymmetric RSA 
+  Key Pair Generation, (De-)Serialization, Data Encryption, Decryption, Digest Signing and Verification 
+  using EMSA-PKCS#1-v1.5 encoding, based on multi precision integer arithmetic and RSA routines
+  written by W. Ehrhardt and made available online at http://www.wolfgang-ehrhardt.de/mp_intro.html
+
+2. Small Project for testing RSA functionality included in the "Tools\RSATest" folder.
+
+---------------------------------------------------------
+* Changes in v6.45
+---------------------------------------------------------
+
+1. Using script variables in the RTC Scripting Engine could have resulted in strange behavior or Access Violations
+   because some local function variables were not automatically initialized by the Delphi compiler. This is now fixed
+   by manually initializing local variables, which makes the Scripting Engine implementation compiler-independent.
+
+---------------------------------------------------------
+* Changes in v6.44
+---------------------------------------------------------
+
+1. "UnLockAccess" and "ReLockAccess" methods added to the "TRtcGateway" component.
+   You need to execute some longer-running code from within a Gateway event (for example, access a database)
+   but will NOT be using ANY other Gateway methods inside that code block and you want the Gateway to continue
+   processing input and output from other Clients while your code is executing instead of waiting? 
+   Now you can call "UnLockAccess; try" before your longer-running code block and "finally ReLockAccess; end;" 
+   after the last line of your longer-running code block. The "UnLockAccess" method will release access to 
+   internal Gateway memory, allowing other Clients to use it, until you call "ReLockAccess" to re-lock the access.
+   NEVER use "UnLockAccess" outside of Gateway events make sure to call "ReLockAccess" afterwards.
+
+   Usage example:
+
+     My_Gateway.UnLockAccess;
+     try
+       Some_Longer_Running_Code;
+     finally
+       My_Gateway.ReLockAccess;
+       end;
+
+---------------------------------------------------------
+* Changes in v6.43
+---------------------------------------------------------
+
+1. A new global variable "RTC_XMLRPC_GreaterStringEncode" introduced to extend the XML-RPC Encoder
+   for supporting decoders which require the >, " and ' characters to be encoded in Strings. By default, 
+   that variable is set to FALSE, so the XML-RPC Encoder will continue working as before (strictly 
+   based on the XML-RPC specification). To also encode >, " and ' characters in XML-RPC Strings, 
+   set the "RTC_XMLRPC_GreaterStringEncode" variable ("rtcInfo.pas" unit) to TRUE somewhere in your code, 
+   before starting to use the XML-RPC functionality in the RTC SDK.

@@ -1,0 +1,31 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = RTCWebForum.exe RTCWebServer2.exe WebForum_ISAPI.dll \
+  RTCWebForumTLS.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+
+RTCWebForum.exe: deploy\RTCWebForum.dpr
+  $(DCC)
+
+RTCWebServer2.exe: deploy\RTCWebServer2.dpr
+  $(DCC)
+
+WebForum_ISAPI.dll: deploy\WebForum_ISAPI.dpr
+  $(DCC)
+
+RTCWebForumTLS.exe: deploy\RTCWebForumTLS.dpr
+  $(DCC)
+
+

@@ -1,0 +1,39 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*****************************************************************
+*                                                               *
+* RealThinClient SDK v6.31 (2014.Q1), released March 26th 2014. *
+*                                                               *
+*****************************************************************
+
+---------------------------------------------------------
+* Changes in v6.31
+---------------------------------------------------------
+
+1) Added "DelphiDataSetToRtcArray" procedure to the "rtcDB.pas" unit, converting a 
+   TDataSet to a TRtcArray, containing a TRtcRecord for every record in the DataSet.
+
+---------------------------------------------------------
+* Changes in v6.30
+---------------------------------------------------------
+
+1) TRtcRecord extended to support the storage of NULL values (rtcInfo.pas unit).
+
+2) Fixed a potential memory leak in the PostEvent method (rtcThrPool.pas unit)
+
+3) Fixed a potential memory overwrite in Mime_Encode and Mime_EncodeEx functions (rtcInfo.pas unit).
+
+
+---------------------------------------------------------
+* Changes in v6.29
+---------------------------------------------------------
+
+1) Added a short delay in TRtcGateClient destructor to fix a memory leak caused by a 
+   background thread being interrupted (unable to complete) when the Application terminates.
+
+2) Exposed "GetServerVariable" API on the TRtcISAPIServer component, 
+   to make all Server variables accessible when writing ISAPI extensions.
+   
+   Check the "GetServerVariable" API in MSDN for more info:
+   http://msdn.microsoft.com/en-us/library/aa927099.aspx
+

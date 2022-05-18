@@ -1,0 +1,127 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v9.00 (2017.Q4), released October 26th 2017. *
+*                                                                 *
+*******************************************************************
+
+Some breaking changes were required in the RTC SDK (stuff moved between units),
+because some functions and classes required by lower-level units have ended up in 
+higher-level units in previous RTC SDK updates. To get a clean separation between 
+lower-level and higher-level units, these functions, classes and variables were 
+moved into separate units. Because some of these classes and functions could also 
+be used in your Projects, it is possible that you will get compile errors after this 
+update, in which case you should ONLY need to update your "uses" clause to fix them.
+For more details, please check the list of changes below ...
+
+---------------------------------------------------------
+* Changes in v8.29 - v9.00 (2017.Q4)
+---------------------------------------------------------
+
+1. Everything from the "rtcSyncObjs.pas" and "rtcFastStrings.pas" units, plus
+   a number of global variables, classes and functions previously declared in 
+   "rtcConn.pas", "rtcSynAPI.pas", "rtcSockBase.pas" and "rtcInfo.pas" units 
+   moved to a (new) "rtcSystem.pas" unit (which is now used by most RTC units).
+   
+   Since these units could be used in your Projects, it is possible that you will get 
+   a compile error after this update, especially if you are using the "rtcSyncObjs" 
+   or "rtcFastStrings" unit, in which case you should remove the old units from your 
+   "uses" list and add the "rtcSystem" unit instead (if it wasn't added by Delphi).
+   
+   NOTE: The "rtcSystem" unit will be added automatically by the Delphi IDE 
+   when saving a TForm or TDataModule containing a RTC component, so you don't 
+   have to add the unit manually if you are using RTC components at design-time.
+
+2. "TRtcQuickJob" component and "PostQuickJob" functions had to be moved from the 
+   "rtcThrPool.pas" unit into a new "rtcThrJobs.pas" unit, and the "Info" property 
+   as well as the "PostEvent" method had to be removed from the "TRtcThread" class,
+   to eliminate dependency of the "rtcThrPool.pas" unit on the "rtcInfo.pas" unit.
+
+   For backwards compatibility, a new "TRtcThreadEx" class was introduced in the 
+   "rtcThrJobs.pas" unit, extending the "TRtcThread" class with the "Info" property 
+   and the "PostEvent" method (both previously available on the "TRtcThread" class).
+   
+   If you are using the "TRtcQuickJob" component or any "PostQuickJob" function in 
+   your Project(s), you will get a compile error, in which case you should manually
+   add the "rtcThrJobs" unit to the "uses" list (if it wasn't added by Delphi).
+
+   NOTE: The "rtcThrJobs" unit will be added automatically by the Delphi IDE 
+   when saving a TForm or TDataModule containing a "TRtcQuickJob" component.
+
+3. Fast Search classes, previously implemented in "mem*List.pas" and "mem*Tree.pas" 
+   units (list below) have been re-implemented in "rtcSrcList.pas" and "rtcSrcTree.pas" 
+   units, with basic type declarations in the (new) "rtcSrcTypes.pas" unit. The new
+   implementation is based on the original source code, but does NOT use external
+   include files from the "Lib/sort" folder (like the old implementation), to make
+   debugging and maintenance easier. For backwards compatibility, old classes with 
+   their original names are now available in new units, as aliases to new classes.
+   The "Lib/sort" folder and the old units (no longer used) have been removed ...
+
+   -> "memBinList.pas", "memItemList.pas", "memObjList.pas", "memObjList64.pas",
+      "memStringIntList.pas", "memStringObjList.pas", "memStringPtrList.pas",
+      "memStrIntList.pas", "memStrList.pas", "memStrObjList.pas", "memXList.pas",
+      "memXObjList.pas" and "memXSList.pas" moved into the "rtcSrcList.pas" unit.      
+   -> "memBinTree.pas" and "memStrIntTree.pas" moved into the "rtcSrcTree.pas" unit.
+
+   NOTE: If you are using any of the (now deleted) "mem*" units in your Project(s),
+   simply remove all "mem*List" units from your "uses" list and use the "rtcSrcList" 
+   unit instead, and ... remove all "mem*Tree" units and use the "rtcSrcTree" unit.
+   
+4. The following RTC units were integrated into other RTC units
+   (code combined) and the old units were removed ...
+
+   -> "rtcHWndPool.pas" & "rtcSocketPool.pas" into "rtcWinSocket.pas"
+   -> "rtcSockBaseCliProv.pas" into "rtcSocketCliProv.pas"
+   -> "rtcSockBaseSrvProv.pas" into "rtcSocketSrvProv.pas"
+   -> "rtcSockBaseSyn.pas" into "rtcSynSocket.pas"
+   -> "rtcThrConnProv.pas" into "rtcConnProv.pas"
+   -> "rtcCliPool.pas" moved into "rtcDataRoute.pas"
+   -> "rtcScriptCompile.pas" moved into "rtcScript.pas"
+   -> "rtcKeyHash.pas" and "rtcRSA.pas" moved into "rtcCrypt.pas"
+   -> "memPtrPool.pas" moved into "rtcTypes.pas"
+   
+   Some of these units could be used in your Projects, in which case 
+   you will get a compile error where the (now deleted) unit is used. 
+   To fix the compile error, simply update your "uses" clause by removing 
+   the old unit and adding the new unit instead (if it isn't there already).
+   
+5. Removed deprecated "rtcFMX*.pas" and "rtcVCL*.pas" units from the "Lib" folder.
+
+   Starting with RTC SDK v8.0, the default RTC Thread Synchronization code works 
+   across all platforms by using a dedicated Thread with an Event queue (filled by 
+   other RTC Threads when calling the "Sync" method), which uses "TThread.Synchronize" 
+   to execute up to 100 events from the queue, or run for up to 1 second before 
+   returning, to allow other "things" to run in the Main Thread, even when there 
+   are a lot of RTC events that need to be synchronized with the Main Thread.
+
+   This new implementation removes the need for "rtcFMX.GUI" and "rtcFMX_GUI" units, 
+   minimizes the number of "Synchronize" calls on Windows and removes the need for 
+   a platform-specific (FireMonkey?) "TTimer" instance, which had to periodically 
+   check if there are RTC Events waiting to be executed from the Main Thread.
+   
+   You will get a compile error after this update if you are still using these
+   deprecated units. To fix these compile errors, simply remove "rtcFMX_GUI", 
+   "rtcFMX.GUI", "rtcFMX.FastGUI" and/or "rtcVCL" units from your "uses" lists.
+
+6. Include files previously located in the "Lib/synsock" folder were integrated
+   into the "rtcSynAPI.pas" unit and the old folder (no longer used) was removed.
+
+7. Fixed bugs in "TRtcThread" and "TRtcTimer" classes, which could have resulted
+   in Access Violations if "TRtcTimer" or "TRtcThread" classes were still being
+   used after RTC Timer and Worker Threads have already been closed and destroyed.
+
+8. "Lite" package and registration units have been removed from the "Lib" folder.
+   
+9. All RTC Example Projects, previously located in "Demos", "QuickStart" 
+   and "Tools" folders have been integrated into the new "Examples" folder 
+   and updated to use the new unit structure (see points 1 - 4 above).
+   
+10. RTC Messenger Client and Server Demos extended to support "JSON-RPC 1.0" and 
+    "JSON-RPC 2.0" as alternative Data Formats in addition to "RTC" and "XML-RPC".
+
+11. "SDKALL_VCL_Examples" Project Group added to the "Examples" folder, containing 
+    ALL Projects compatible with ALL supported Delphi versions (currently D7 - D10.2).
+
+12. "rtcSDK_Units_LowerLayers.png" image added to the "Help" folder, showing
+    the Hierarchy of Lower-Layer RealThinClient SDK Units (dependency graph).

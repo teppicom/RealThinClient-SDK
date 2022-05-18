@@ -1,0 +1,83 @@
+package rtcSDKx3;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$DESCRIPTION 'RealThinClient SDK 9.5'}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl;
+
+contains
+  rtcTypes in 'rtcTypes.pas',
+  rtcSystem in 'rtcSystem.pas',
+  rtcSrcTypes in 'rtcSrcTypes.pas',
+  rtcSrcList in 'rtcSrcList.pas',
+  rtcSrcTree in 'rtcSrcTree.pas',
+  rtcService in 'rtcService.pas',
+  rtcConn in 'rtcConn.pas',
+  rtcHttpSrv in 'rtcHttpSrv.pas',
+  rtcTimer in 'rtcTimer.pas',
+  rtcInfo in 'rtcInfo.pas',
+  rtcThrPool in 'rtcThrPool.pas',
+  rtcThrJobs in 'rtcThrJobs.pas',
+  rtcLog in 'rtcLog.pas',
+  rtcDataSrv in 'rtcDataSrv.pas',
+  rtcHttpCli in 'rtcHttpCli.pas',
+  rtcDataCli in 'rtcDataCli.pas',
+  rtcSrvModule in 'rtcSrvModule.pas',
+  rtcCliModule in 'rtcCliModule.pas',
+  rtcFunction in 'rtcFunction.pas',
+  rtcParse in 'rtcParse.pas',
+  rtcSocketCliProv in 'rtcSocketCliProv.pas',
+  rtcSocketSrvProv in 'rtcSocketSrvProv.pas',
+  rtcZLib in 'rtcZLib.pas',
+  rtcCrypt in 'rtcCrypt.pas',
+  rtcConnProv in 'rtcConnProv.pas',
+  rtcPlugins in 'rtcPlugins.pas',
+  rtcTransports in 'rtcTransports.pas',
+  rtcMsgCli in 'rtcMsgCli.pas',
+  rtcMsgCliProv in 'rtcMsgCliProv.pas',
+  rtcMsgSrv in 'rtcMsgSrv.pas',
+  rtcMsgSrvProv in 'rtcMsgSrvProv.pas',
+  rtcScript in 'rtcScript.pas',
+  rtcSocketHttpCliProv in 'rtcSocketHttpCliProv.pas',
+  rtcSocketHttpSrvProv in 'rtcSocketHttpSrvProv.pas',
+  rtcSockBase in 'rtcSockBase.pas',
+  rtcSockets in 'rtcSockets.pas',
+  rtcSynSocket in 'rtcSynSocket.pas',
+  rtcSynAPI in 'rtcSynAPI.pas',
+  rtcDataRoute in 'rtcDataRoute.pas',
+  rtcLoadBalance in 'rtcLoadBalance.pas',
+  rtcLink in 'rtcLink.pas',
+  rtcWinSocket in 'rtcWinSocket.pas',
+  rtcWInetHttp in 'rtcWInetHttp.pas',
+  rtcWinHttp in 'rtcWinHttp.pas',
+  rtcWInetHttpCliProv in 'rtcWInetHttpCliProv.pas',
+  rtcWinHttpCliProv in 'rtcWinHttpCliProv.pas',
+  rtcWinSock in 'rtcWinSock.pas',
+  rtcWinHttpSys in 'rtcWinHttpSys.pas',
+  rtcNixSock in 'rtcNixSock.pas';
+
+end.

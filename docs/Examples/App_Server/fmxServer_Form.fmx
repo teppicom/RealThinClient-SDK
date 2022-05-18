@@ -1,0 +1,239 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'RTC App Server (FMX version)'
+  ClientHeight = 402
+  ClientWidth = 284
+  Position = poScreenCenter
+  Visible = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnCloseQuery = FormCloseQuery
+  StyleLookup = 'backgroundstyle'
+  object Label1: TLabel
+    Position.Point = '(9,250)'
+    Width = 89.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 0
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Font.Style = [fsBold]
+    Text = 'Not listening'
+    WordWrap = False
+  end
+  object Label2: TLabel
+    Position.Point = '(100,202)'
+    Width = 70.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 1
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'Server Port'
+    WordWrap = False
+  end
+  object Label3: TLabel
+    Position.Point = '(8,323)'
+    Width = 46.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 2
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'Clients:'
+    WordWrap = False
+  end
+  object lblCliCnt: TLabel
+    Position.Point = '(87,323)'
+    Width = 10.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 3
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = '0'
+    WordWrap = False
+  end
+  object Label5: TLabel
+    Position.Point = '(9,202)'
+    Width = 80.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 4
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'Max Threads'
+    WordWrap = False
+  end
+  object Label7: TLabel
+    Position.Point = '(8,373)'
+    Width = 51.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 5
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'In+Out:'
+    WordWrap = False
+  end
+  object lblDataInOut: TLabel
+    Position.Point = '(67,373)'
+    Width = 20.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 6
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = '???'
+    WordWrap = False
+  end
+  object lblPluginState: TLabel
+    Position.Point = '(8,175)'
+    Width = 114.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 7
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'CryptPlugin state?'
+    WordWrap = False
+  end
+  object Label4: TLabel
+    Position.Point = '(8,348)'
+    Width = 69.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 8
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = 'Responses:'
+    WordWrap = False
+  end
+  object lblResult: TLabel
+    Position.Point = '(87,348)'
+    Width = 10.500000000000000000
+    Height = 19.500000000000000000
+    TabOrder = 9
+    AutoSize = True
+    Font.Size = 14.000000000000000000
+    Text = '0'
+    WordWrap = False
+  end
+  object btnListen: TButton
+    Position.Point = '(184,200)'
+    Width = 92.000000000000000000
+    Height = 47.000000000000000000
+    OnClick = btnListenClick
+    TabOrder = 10
+    Font.Size = 14.000000000000000000
+    Text = 'Listen'
+    Default = True
+  end
+  object ePort: TEdit
+    Position.Point = '(100,221)'
+    Width = 65.000000000000000000
+    Height = 24.000000000000000000
+    TabOrder = 11
+    Font.Size = 14.000000000000000000
+    Font.Style = [fsBold]
+    KeyboardType = vktDefault
+    Password = False
+    Text = '8080'
+  end
+  object xEncrypt: TCheckBox
+    Position.Point = '(8,8)'
+    Width = 95.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xEncryptClick
+    TabOrder = 12
+    Font.Size = 14.000000000000000000
+    Text = 'Encryption'
+  end
+  object xMultiThreaded: TCheckBox
+    Position.Point = '(8,93)'
+    Width = 272.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xMultiThreadedClick
+    TabOrder = 13
+    Font.Size = 14.000000000000000000
+    Text = 'Multi-Threaded mode (set before "Listen")'
+  end
+  object xCompress: TCheckBox
+    Position.Point = '(125,8)'
+    Width = 108.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xCompressClick
+    TabOrder = 14
+    Font.Size = 14.000000000000000000
+    Text = 'Compression'
+  end
+  object eThreads: TEdit
+    Position.Point = '(9,221)'
+    Width = 60.000000000000000000
+    Height = 24.000000000000000000
+    TabOrder = 15
+    Font.Size = 14.000000000000000000
+    KeyboardType = vktDefault
+    Password = False
+    Text = '64'
+  end
+  object xMonitorDataInOut: TCheckBox
+    Position.Point = '(8,121)'
+    Width = 287.000000000000000000
+    Height = 20.000000000000000000
+    TabOrder = 16
+    Font.Size = 14.000000000000000000
+    Text = 'Count Bytes In + Out (a lot slower)'
+  end
+  object xBlocking: TCheckBox
+    Position.Point = '(8,64)'
+    Width = 262.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xBlockingClick
+    TabOrder = 17
+    Font.Size = 14.000000000000000000
+    Text = 'Use Blocking API (set before "Listen")'
+  end
+  object xCryptPlugin: TCheckBox
+    Position.Point = '(8,149)'
+    Width = 247.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xCryptPluginClick
+    TabOrder = 18
+    Font.Size = 14.000000000000000000
+    Text = 'Use CryptPlugin (no SSL)'
+  end
+  object xRTCTimeouts: TCheckBox
+    Position.Point = '(8,37)'
+    Width = 116.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xRTCTimeoutsClick
+    TabOrder = 19
+    Font.Size = 14.000000000000000000
+    Text = 'RTC Timeouts'
+  end
+  object xAPITimeouts: TCheckBox
+    Position.Point = '(131,37)'
+    Width = 150.000000000000000000
+    Height = 21.000000000000000000
+    OnClick = xAPITimeoutsClick
+    TabOrder = 20
+    Font.Size = 14.000000000000000000
+    Text = 'Socket API Timeouts'
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = Timer1Timer
+    Left = 192
+    Top = 312
+  end
+  object RtcDataServer1: TRtcHttpServer
+    ServerPort = '8080'
+    RestartOn.ListenLost = True
+    OnClientConnect = RtcDataServer1ClientConnect
+    OnClientDisconnect = RtcDataServer1ClientDisconnect
+    OnListenStart = RtcDataServer1ListenStart
+    OnListenStop = RtcDataServer1ListenStop
+    OnListenError = RtcDataServer1ListenError
+    FixupRequest.RemovePrefix = True
+    OnResponseDone = RtcDataServer1ResponseDone
+    OnDataOut = RtcDataServer1DataOut
+    OnDataIn = RtcDataServer1DataIn
+    MaxHeaderSize = 16000
+    Left = 192
+    Top = 264
+  end
+end

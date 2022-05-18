@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><!-- InstanceBegin template="/Templates/tpl_admin.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Files list</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tabsel" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tab" -->
+</head>
+
+<body onLoad="showMessage(<%message_visible%>)">
+<p class="h1">Administration Panel</p>
+
+<div id="message" style="display: none" class="msg">
+<div style="float: left; padding: 3px 10px; width: 100%;"><%message_text%></div>
+<div style="float: right; width:10"><a href="#" onClick="show_hide_obj('message');"><img src="close.gif" alt="Close" border="0"></a></div>
+</div>
+
+<div style="clear: both">
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tabsel">
+<div align="center"><a href="/?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab">
+<div align="center"><a href="/?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td><div align="right"><a href="/?cmd=logout&sid=<%sid%>" class="menu">Logout</a></div></td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" --><strong>Edit package: <%package_name%></strong><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody"><!-- InstanceBeginEditable name="BodyRegion" -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              
+              <tr>
+                <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr class="editpack">
+    <td>file name</td>
+    <td>description</td>
+    <td width="50">
+<div align="center">action</div></td>
+  </tr>
+  <%table_rows%>
+</table>
+               </td>
+              </tr>
+              <tr>
+                <td height="20">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="editpack2">
+                    <form name="form1" method="post" action="/">
+                      <input name="cmd" type="hidden" value="addfile">
+					  <input name="sid" type="hidden" value="<%sid%>">
+                      <input name="pack_id" type="hidden" value="<%pack_id%>">
+                      <input type="submit" class="button" value="Add">
+                      <input name="Back" type="button" class="button" id="Back" value="Back" onClick="document.location='/?cmd=showpacks&sid=<%sid%>'">
+                    </form>
+                  </td>
+              </tr>
+            </table>
+            <!-- InstanceEndEditable -->
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</div>
+</body>
+<!-- InstanceEnd --></html>

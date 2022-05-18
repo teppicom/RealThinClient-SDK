@@ -1,0 +1,10 @@
+<tr class="items" bgColor="#FFFFFF" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <td width="90" class="items" style="padding-left:15px"><%user_login%></td>
+  <td class="items"><%user_name%>&nbsp;</td>
+  <td width="70" class="items"><div align="right">
+    <a href="?cmd=showsectionsaccess&user=<%user_login_enc%>&sid=<%sid%>" class="little"><img src="b_access.png" alt="Access settings" title="Access settings" width="16" height="16" border="0"></a>
+    <a href="?cmd=edituser&user=<%user_login_enc%>&sid=<%sid%>" class="little"><img src="b_edit.png" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+    <a href="?cmd=deluser&user=<%user_login_enc%>&sid=<%sid%>" class="little" onClick="return xconfdel();"><img src="b_drop.png" alt="Remove" title="Remove" width="16" height="16" border="0"></a>
+    </div>
+  </td>
+</tr>

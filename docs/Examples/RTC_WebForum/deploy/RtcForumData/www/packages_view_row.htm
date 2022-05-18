@@ -1,0 +1,9 @@
+<%if:grant%>
+	<%if:expired%>
+		<%include:user_pack_expired.htm%>			  
+	<%elseif:expired%>
+		<%include:user_pack_files.htm%>
+	<%endif:expired%>
+<%elseif:grant%>
+	<%include:user_pack_order.htm%>
+<%endif:grant%>

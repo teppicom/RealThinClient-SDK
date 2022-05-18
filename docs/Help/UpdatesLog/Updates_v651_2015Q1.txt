@@ -1,0 +1,69 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+****************************************************************
+*                                                              *
+* RealThinClient SDK v6.51 (2015.Q1), released April 2nd 2015. *
+*                                                              *
+****************************************************************
+
+---------------------------------------------------------
+* Changes in v6.51 (2015.Q1)
+---------------------------------------------------------
+
+1. Added ten ISO-8859 character sets (code-pages) to the list of Unicode <-> ANSI conversions supported by RTC out-of-the-box:
+   -> cpISO8859_1 (Latin 1)
+   -> cpISO8859_2 (Latin 2)
+   -> cpISO8859_3 (Latin 3)
+   -> cpISO8859_4 (Baltic)
+   -> cpISO8859_5 (Cyrillic)
+   -> cpISO8859_6 (Arabic)
+   -> cpISO8859_7 (Greek)
+   -> cpISO8859_8 (Hebrew)
+   -> cpISO8859_9 (Turkish)
+   -> cpISO8859_15 (Latin 9)
+
+---------------------------------------------------------
+* Changes in v6.50
+---------------------------------------------------------
+
+1. Porting Applications from non-Unicode Delphi versions to Delphi 2009 and later is still causing some problems
+   for developers used to working with ANSI Strings and code-pages. To make the transfer to Unicode Delphi versions
+   as easy as possible, RTC now has extended support for implicit ANSI <-> Unicode character conversions when using
+   the RtcString type (which is declared as Unicode, but should actually ONLY contain 8-bit characters).
+
+   The following code-pages are now supported by RTC for implicit ANSI <-> Unicode conversions:
+     -> cpWin1250 (Central Europe)
+     -> cpWin1251 (Cyrillic)
+     -> cpWin1252 (Latin I) = default
+     -> cpWin1253 (Greek)
+     -> cpWin1254 (Turkish)
+     -> cpWin1255 (Hebrew)
+     -> cpWin1256 (Arabic)
+     -> cpWin1257 (Baltic)
+     -> cpWin1258 (Vietnam)
+     -> cpWin874  (Thai)
+
+   By default, RTC will be using cpWin1252 (Latin I), as before. To change the code-page used by RTC, you have two options:
+
+   A) If you need one of the code-pages listed above, simply use the function "RtcSetAnsiCodePage" from the 
+      "rtcFastStrings" unit to set the code-page to be used from this point on. 
+
+   B) If support for the code-page you need is NOT included, then you can implement your own functions similar 
+      to the "RtcUnicodeToAnsiCharWin1252" and "RtcAnsiToUnicodeCharWin1252" functions provided in the "rtcFastSrings" unit, 
+      then assign their addresses to global "RtcUnicodeToAnsiChar" and "RtcAnsiToUnicodeChar" variables (function pointers).
+      NOTE: Only conversions for single-byte ANSI code-pages can be implemented.
+
+   To define how implicit ANSI<->Unicode conversions should work, use "RTC_STRING_FIXMODE" and "RTC_STRING_CHECK" variables.
+
+   By default, RTC_STRING_MODE will be set to rtcStr_FixDown and RTC_STRING_CHECK will be FALSE, which means that
+   implicit conversions will automatically be done from Unicode Strings to ANSI, but NOT in the other direction and
+   there will be NO exceptions if a Unicode character is found which can NOT be mapped to the current ANSI code-page.
+
+
+---------------------------------------------------------
+* Changes in v6.49
+---------------------------------------------------------
+
+1. There was a bug in the XML-RPC parser used by the TRtcClientModule component (remote functions), because of 
+   which Exception messages received from the Server would lose Unicode characters during message decoding.
+   This bug has now been fixed, Unicode characters are now also supported by the rtc_Exception type with XML-RPC.

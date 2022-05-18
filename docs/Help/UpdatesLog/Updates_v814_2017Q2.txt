@@ -1,0 +1,1647 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+****************************************************************
+*                                                              *
+* RealThinClient SDK v8.14 (2017.Q2), released June 19th 2017. *
+*                                                              *
+****************************************************************
+
+** IMPORTANT ** Several changes were made to Automatic Session handling 
+in "TRtcClientModule" and "TRtcServerModule" components, some of which
+require MANUAL CHANGES in YOUR code if you are using RTC Sessions.
+
+* If you were using RTC Remote Funcitons and manually creating Sessions on the 
+  Server, but have been relying on the Server to send your Session ID back to the 
+  Client (as part of the HTTP Response Cookie) and expected your Client to automatically
+  update its local Session ID and send this Session ID to the Server with every
+  remote funtion call, without having to manually include the Session ID as part
+  of remote function parameters or request headers, you now have to set the 
+  "AutoSessionCheck" property on your "TRtcServerModule" component to TRUE 
+  (default=FALSE) if you want to continue using this behavior.
+  
+  If "AutoSessions=FALSE" and "AutoSessionCheck=FALSE" on the "TRtcServerModule",
+  automatic checking and sending of "Session IDs" will be disabled by the Server.
+
+* If you were using the "DataSessionCookie" property, you should
+  update your code to use the new "AutoSessionMode" property instead.
+   
+* If you were using the "DataSessionField" property, you should
+  update your code to use the new "AutoSessionField" property instead.
+   
+*** !!! DO NOT PANIC if your Project(s) do NOT COMPILE after THIS UPDATE !!! ***
+*** !Compile Errors are there to make it easier for you to update your code! ***
+
+If you get a compile error while trying to compile your Project(s) after you update 
+to this RTC SDK version, either update YOUR CODE as described under (A) and (B) below, 
+or ... add a "RTC_OBJECT_CLASS" compiler define to your Project(s) if you are updating 
+from RTC SDK v7.51 and older version, or ... add the "RTC_OBJECT_CLASS2" compiler define 
+to your Projects if you are updating from RTC SDK versions between v7.52 and v8.00 rc4.
+
+What has to be changed in your code if you get a compile error and you did NOT declare 
+the "RTC_OBJECT_CLASS" and/or "RTC_OBJECT_CLASS2" compiler define in your Project?
+
+A) All assignments to "Obj" properties on "TRtcInfo/TRtcSession" containers
+   should be changed to "asObj" or "asPtr", depending on the Object being assigned:
+    
+   -> "asObj" has to be used for Objects which have to be managed by the object 
+      container and destroyed with the "TRtcInfo/TRtcSession" object container.
+       
+      Previously, this was the case with all "TRtcValueObject" descendants 
+      and all "TRtcObject" descendants using the default implementation of 
+      the "SingleUse" method (returning TRUE), so make sure to check how
+      the Object which was previously assigned to "Obj[]" was implemented.
+
+      The ONLY exception to this rule are "TRtcDelayedCall" objects, which
+      have previously been declared as "TRtcObject" and are being destroyed 
+      by the connection component in case of a disconnect, but should now
+      ONLY be assigned to the new "asPtr" property in all user code, or the 
+      Object could now be destroyed twice and result in Access Violations!
+
+   -> "asPtr" has to be used for Components and Objects managed externally,
+      which should NOT be destroyed by the "TRtcInfo/TRtcSession" container. 
+       
+      Previously, this was the case for ALL Objects which were NOT direct or 
+      indirect descendant of the "TRtcObject" class (TComponent, TObject, ...)
+      Now, this is also the case for "TRtcDelayedCall" objects (see above).
+    
+B) All classes extending "TRtcObject" should be updated to extend "TObject".
+
+See v8.00 rc5 - rc8 update logs (below) for more details.
+    
+========================================================================
+--- Short summary of changes from v7.78 (2017.Q1) to v8.14 (2017.Q2) ---
+========================================================================
+
+1. "TRtcConnection" component extended to provide direct access to all
+   properties and most methods of "TRtcDataClient" and "TRtcDataServer"
+   components by using the "Sender:TRtcConnection" parameter directly
+   from RTC events, without the (previous) need for explicit typecasts.
+   See v7.101 update log for details.
+
+2. "TRtcDataRequest" component extended with "Write", "WriteEx" and "PostMethod"
+   methods to simplify preparing and sending of requests with no request content 
+   body and/or content body small enough to fit into Clients Memory and to remove
+   the (previous) requirement to *always* implement the "OnBeginRequest" event.
+   See v7.102 update log for details.
+
+3. RTC components extended with a number of new methods and events for centralized
+   logging and monitoring of all content being received (Client and Server side)
+   without messing up the original content, while at the same time allowing raw
+   data to be modified in-place if needed, before it goes into "processing".
+   See v7.103 update log for details.
+
+4. Fixed a bug in the "TRtcHttpClient" component which resulted in the "OnResponseDone"
+   event and the last "OnDataReceived" event (with Response.Done=TRUE) NOT triggering 
+   on the Client if the Server was closing the connection after every request (HTTP/1.0)
+
+5. TRtcValue objects extended with new methods for "REST" support and improved parsing and
+   generation of XML-RPC and JSON content (including support for "JSON-RPC 1.0" and "2.0")
+   See v7.105 update log for details.
+
+6. RTC Remote Functions ("TRtcServerModule" and "TRtcClientModule" components) extended 
+   with built-in support for "JSON-RPC 1.0", "JSON-RPC 2.0" and plain "JSON" Data Formats,
+   plus a number of new "Data Request Modes" which can be used to communicate with a lot 
+   of different 3rd-Party APIs and/or write APIs for use by 3rd-Parties - including "REST"
+   and other request modes where any part of a remote function call can be in the "URI".
+   With "DataReqModes", you can even make complex remote function calls from the Address
+   line of any Web Browser - if you enable this mode on your "TRtcServerModule" component,
+   which can be used for quick testing or to provide public APIs for use by a 3rd-party.
+   See v7.106 - v7.109 update logs for details.
+
+7. "TRtcFunctionInfo" class (used to store and transport remote function objects), 
+   has been extended with new methods and properties to simplify writing and calling 
+   remote functions which accept parameters as an array (usually sent/received in 
+   the 'params' array) in addition to (or as a replacement for) named parameters.
+   See v7.110 update log for details.
+
+8. Added support for using anonymous methods as an alternative way to write event 
+   handlers for all RTC components. For this purpose, new "Anon" methods have been 
+   added to all RTC components, with an overloaded method for each event type.
+   See v7.111 and v7.112 update logs for details.
+
+9. When using the "TRtcClientModule" component with built-in RTC Encryption, 
+   the last Result received from the Server before closing the Session was 
+   being rejected by the Client, because the Client was closing its Session
+   before decrypting the Result received. This has now been fixed.
+
+10. Added support for using anonymous methods with "PostQuickJob" and "PostGUIJob" 
+    procedures - available in the "rtcThrPool" unit as a simple way for posting quick 
+    jobs to be executed asynchronously from the RTC Thread Pool or the Main Thread (GUI).
+
+11. All "Updates*.txt" files moved from the "Help" folder to "Help/UpdatesLog" sub-folder.
+
+12. "RealThinClient SDK Components Hierarchy" image and PDF file (ready to print) are
+    now available in the "Help" folder (rtcSDK_Components.png and rtcSDK_Components.pdf),
+    providing a simple overview of all components included in the RealThinClient SDK.
+
+13. The "Obj" property on "TRtcInfo" and "TRtcSession" classes was REPLACED with 
+    new "asObj" and "asPtr" properties, making the "TRtcObject" class OBSOLETE,
+    so it was REMOVED! RTC Demos and Example Projects have been updated, as needed.
+    Read below for more details (manual changes in user code might be required).
+
+14. "Version_SDK" property moved from "TRtcConnection" to "TRtcComponent"
+    class, and ... public variables on RTC Value Objects updated to properties.
+
+15. Added and/or replaced several properties on "TRtcClientModule" and
+    "TRtcServerModule" components to improve Automatic Session handling, and 
+    fixed "TRtcServerModule" and "TRtcClientModule" Automatic Session handling.    
+
+16. TRtcHttpClient, TRtcHttpServer, TRtcDataProvider, TRtcDataRequest, TRtcDataRouter 
+    and TRtcLoadBalancer components have been extended with support for WEB SOCKETS.
+    
+17. Introduced "RTC_OBJECT_CLASS" and "RTC_OBJECT_CLASS2" compiler defines as
+    a "quick fix" for Projects extending the "TRtcObject" class, without the
+    need for (other) manual changes described in points (A) and (B) below.
+
+18. Improved TRtcHttpGateClient components Login and AutoLogin functionality.
+
+19. Support for RAD Studio 10.2 Tokyo.
+
+20. Fixed the default Cookie delimiter for HTTP Requests.
+    See v8.02 updates for details (below).
+
+21. Fixed "OnResponseAbort" event NOT triggering.
+    See v8.03 updates for details (below).
+    
+22. Fixed "Sync" method, which was catching and silently 
+    swallowing all Exceptions raised in the Main Thread.
+    See v8.04 updates for details (below).
+
+23. Fixed a regression bug in the "TRtcClientModule" component, which 
+    broke remote function reposting in case of a failed Connect attempt, 
+    a Disconnect with a Reconnect, or in case of Session expiration.
+    See v8.01 and v8.05 updates for details (below).
+
+24. Fixed a problem with the old listening socket still blocking
+    the Port for some time after that socket was already closed.
+    See v8.05 update for details (below).
+  
+25. Fixed the SHA1 function on 64-bit platforms (WebSockets).
+    See v8.06 update for details (below).
+
+26. Improved compatibility with the FPC 3.0+ compiler.
+
+27. Fixed "FORCE_ANSI_STRING" and "FORCE_WIDE_STRING" support.
+
+28. Fixed Win64 blocking socket support for FPC.
+
+29. Added package file for CodeTyphon (http://www.pilotlogic.com)
+
+30. Fixed overflow handling in "GetTickTime" and "GetTickTime64" functions.
+
+31. Fixed Thread Synchronization issues and optimized Sync() memory usage.
+
+32. Fixed RTC Timers to work correctly on 32-bit and 64-bit platforms.
+
+33. Added "RtcTotalJobsQueued" function (jobs in the thread queueu, waiting).
+
+34. Reduced the number of unused Virtual and Worker Threads being created.
+
+35. Fixed WebSocket support on platforms with ARC (iOS and Android).
+
+36. Added "RTC_WINHTTP_AUTOLOGON_SECURITY_LEVEL" as a new global parameter.
+
+37. "Quick Start", "Demos" and "Tools" Project Groups moved to sub-folders.
+
+=========================================================
+---- Detailed list of all changes from v7.78 to v8.14 ---
+=========================================================
+
+---------------------------------------------------------
+* Changes in v8.14 (2017.Q2)
+---------------------------------------------------------
+
+1. The main folder became a bit too crowded. To clean it up, the 
+   "Quick Start" Project Group was moved to the "QuickStart" folder,
+   "Tools" Project Group was moved to the "Tools" folder and all
+   "Demos" Project Groups were moved to the "Demos" folder.
+
+---------------------------------------------------------
+* Changes in v8.13
+---------------------------------------------------------
+
+1. Fixed a few minor bugs in RTC Demos.
+
+---------------------------------------------------------
+* Changes in v8.12
+---------------------------------------------------------
+
+1. Added "RTC_WINHTTP_AUTOLOGON_SECURITY_LEVEL" as a global parameter/variable
+   to the "rtcWinHttpCliProv" unit, allowing Clients using the WinHTTP API
+   to change their Security Level to LOW (=1) or HIGH (=2) if needed.
+   The default value is MEDIUM (=0), to keep this update backwards compatible 
+   with prior RTC SDK versions, where this global variable was NOT available.
+
+---------------------------------------------------------
+* Changes in v8.11
+---------------------------------------------------------
+
+1. Fixed WebSocket support on platforms with ARC (iOS and Android).
+   
+---------------------------------------------------------
+* Changes in v8.10
+---------------------------------------------------------
+
+1. Added "RtcTotalJobsQueued" function to the "rtcThrPool.pas" unit,
+   returning the total number of jobs currently in the thread queue.
+
+2. To avoid unnecessary Thread creation in single-threaded Applications
+   and multi-threaded Applications which do NOT use the Sync() method,
+   the Thread used by the Sync() method is now created only if needed.
+   
+3. To avoid creating Virtual and/or Worker Threads for Timers which are never 
+   used, a Virtual Thread will now ONLY be created after the Timer is enabled.
+   
+4. To avoid creating a Virtual Thread for TRtcQuickJob components which do NOT 
+   need their own Virtual Thread (Serialized=FALSE), a Virtual Thread will now 
+   ONLY be created by the TRtcQuickJob component after setting Serialized:=TRUE.
+
+---------------------------------------------------------
+* Changes in v8.09
+---------------------------------------------------------
+
+1. Fixed overflow handling in "GetTickTime" and "GetTickTime64" functions 
+   and updated both functions to return the time in milliseconds since the
+   Application was started. In previous RTC SDK versions, both of these
+   functions were returning the time (in milliseconds) since the last 
+   System restart (Windows, MacOSX, iOS, Android, ...), which made the 
+   "GetTickTime" function useless on Systems running longer than 49 days,
+   even if the Application would never stay open for this long.
+
+2. Fixed Thread Synchronization issues and optimized Sync() memory usage.
+
+3. Fixed RTC Timers to work correctly on 32-bit and 64-bit platforms.
+
+---------------------------------------------------------
+* Changes in v8.08
+---------------------------------------------------------
+
+1. SHA1 functions updated to remove (unsafe) pointer arithmetics.
+
+2. Fixed Win64 blocking socket support for FPC (FreePascal).
+
+   FPC is using a different alignment model than Delphi with 
+   the {A+} compiler directive when targeting the Win64 platform,
+   which resulted in Projects using blocking sockets compiled for 
+   the Win64 platform with FPC to misbehave or NOT work at all.
+   Projects using Async Sockets (default) were NOT affected.
+
+3. Added package file for CodeTyphon (http://www.pilotlogic.com)
+    -> Lib/rtcsdk_typhon.ctpkg
+
+---------------------------------------------------------
+* Changes in v8.07
+---------------------------------------------------------
+    
+1. Fixed "FORCE_ANSI_STRING" and "FORCE_WIDE_STRING" support.    
+
+---------------------------------------------------------
+* Changes in v8.06
+---------------------------------------------------------
+
+1. Fixed the SHA1 function on 64-bit platforms. SHA1 is used in
+   the WebSocket handshake and is required for WebSockets to work.
+
+2. Improved compatibility with the FPC 3.0+ compiler (Unicode support).
+   
+---------------------------------------------------------
+* Changes in v8.05
+---------------------------------------------------------
+
+1. When using blocking sockets (always on non-Windows platforms), 
+   all socket options were set AFTER calling "Bind", which resulted 
+   in options required for "Bind" to be ignored. As a result, calling
+   Listen shortly after StopListen would keep failing, as long as 
+   there were connections open to the old socket. To fix this and 
+   other possible problems with socket options being ignored, all 
+   socket options are now set directly after creating the socket.
+
+2. Fixed a regression bug in the "TRtcClientModule" component, which 
+   broke remote function reposting if the 1st connect attempt failed.
+   NOTE: The fix applied in v8.01 only worked in case of a disconnect 
+   after the 1st attempt to post the request, but it did NOT work if
+   the 1st connection attempt failed. The new fix works in all cases.
+   
+---------------------------------------------------------
+* Changes in v8.04
+---------------------------------------------------------
+
+1. Fixed "Sync" method (used to synchronize events with the Main Thread), which
+   was catching and silently swallowing all Exceptions raised in the Main Thread.
+   
+   In case of an Exception being raised from the Main Thread while executing
+   an Event called using the "Sync" method, the Exception is now forwarded 
+   to the background thread (where "Sync" was called) and re-raised there.
+
+---------------------------------------------------------
+* Changes in v8.03
+---------------------------------------------------------
+
+1. Marking a failed Request for "reposting" without setting up the "TRtcHttpClient" 
+   component to reconnect after a connection problem ("ReconnectOn" properties) 
+   resulted in the Request to remain in the Request Queue without being reposted and 
+   leaving the Application in a state of "limbo" - until a manual call to "Connect".
+   
+   To fix this, in case of a connection problem, when the "TRtcHttpClient" component
+   is NOT configured to make another reconnect attempt, the "OnResponseAbort" event 
+   will be triggered and the last Request will be removed from the Request queue.
+   
+---------------------------------------------------------
+* Changes in v8.02
+---------------------------------------------------------
+
+1. Fixed the default Cookie delimiter for HTTP Requests.
+
+   There are now two default Cookie delimiters:
+   -> ';' is the default 'Cookie' delimiter for HTTP Requests
+   -> #13 (CR) is the default 'Set-Cookie' delimiter for HTTP Responses
+   
+---------------------------------------------------------
+* Changes in v8.01
+---------------------------------------------------------
+
+1. Fixed a regression bug in the "TRtcClientModule" component, which broke
+   remote function reposting in case of a Disconnect or Session expiration.
+   
+   In case of a disconnect before receiving a complete Response, or in case 
+   a Session expired on the Server and a new Session had to be negotiated, 
+   the ModuleFileName value was being added to the "Request.FileName"
+   property every time before posting the remote function call request.
+   As a result, when the 1st remote function call attempt failed, using
+   the automatic repost feature also had to fail every time, because 
+   each new Request was being sent with a wrong "FileName" property.
+   
+   To fix this, the "Request.FileName" property is update only once,
+   before making the 1st remote function call. In case a remote call
+   should fail and the last remote function call was being sent out 
+   again, the "Request.FileName" property will NOT be modified again.
+   
+---------------------------------------------------------
+* Changes in v8.00
+---------------------------------------------------------
+
+1. Fixed a few outdated Demos and Example Projects.
+
+---------------------------------------------------------
+* Changes in v8.00 rc17
+---------------------------------------------------------
+
+This RTC SDK version is compatible with RAD Studio 10.2 Tokyo.
+
+1. Default RTC Thread Synchronization code now works across all platforms by 
+   using a dedicated Thread with an Event queue (filled by other RTC Threads 
+   when calling the "Sync" method), which uses "TThread.Synchronize" to execute
+   up to 100 events from the queue, or run for up to 1 second before returning,
+   to allow other "things" to run in the Main Thread.
+
+   This new implementation removes the need for "rtcFMX.GUI" and "rtcFMX_GUI"
+   units, minimizes the number of "Synchronize" calls on Windows and removes 
+   the need for a platform-specific (FireMonkey?) "TTimer" instance periodically 
+   checking if there are Events waiting to be executed from the Main Thread.
+   
+   If you are using the "rtcFMX.GUI" or the "rtcFMX_GUI" unit in your FireMonkey 
+   Project(s) and you would like to use this new (now default) implementation for
+   Thread Synchronization, you should remove all references to "rtcFMX.GUI" and 
+   "rtcFMX_GUI" units from your Project(s) "uses" clauses.
+
+2. Fixed a problem of blocking sockets not closing on mobile platforms when 
+   calling Disconnect if data was currently being sent through that socket.
+
+3. Improved RTC Thread Pool shut-down procedure to speed-up Application termination,
+   even if there were connections left open and RTC Threads were still being used.     
+   
+---------------------------------------------------------
+* Changes in v8.00 rc16
+---------------------------------------------------------
+
+1. Improved TRtcHttpGateClient's Login and AutoLogin functionality.
+
+---------------------------------------------------------
+* Changes in v8.00 rc15
+---------------------------------------------------------
+
+1. "Changed" method added to "TRtcDataSetMonitor" component, returning TRUE
+   if monitored DataSet was changed since the last use of "ExtractChanges".
+
+---------------------------------------------------------
+* Changes in v8.00 rc14
+---------------------------------------------------------
+
+1. Introduced "RTC_OBJECT_CLASS" compiler define, allowing Project(s) upgrading 
+   from RTC SDK v7.51 and older versions to compile with this latest update, 
+   without the need to remove "TRtcObject" references and/or change code using 
+   the "Obj[]" property on "Info:TRtcInfo" or "Session:TRtcSession" objects
+   to use the new "asObj" or "asPtr" property (depending on the object type).
+   
+2. Introduced "RTC_OBJECT_CLASS2" compiler define, allow Project(s) upgrading 
+   from any RTC SDK version between v7.52 and v8.00 rc4, to compile with this update,
+   without the need to remove "TRtcObject" references and/or change code using 
+   the "Obj[]" property on "Info:TRtcInfo" or "Session:TRtcSession" objects
+   to use the new "asObj" or "asPtr" property (depending on the object type).
+
+---------------------------------------------------------
+* Changes in v8.00 rc13
+---------------------------------------------------------
+
+1. Default PING interval used by "TRtcHttpGateClient" and "TRtcHttpGateway" 
+   components reduced to once every 10 seconds (from once every 5 seconds).
+   (see "SEND_PING_INTERVAL" variable in the "rtcGateConst.pas" unit)
+
+2. Gate Account Managers lock on deactivated Group IDs increased to 120 seconds.
+   (see "GATEACCMAN_GROUPID_LOCK" variable in the "rtcGateConst.pas" unit)
+   
+3. To reduce a chance of failed authentication caused by slow connections or
+   users taking longer to enter the "AuthCode" manually, expiration times for 
+   the last "AutoCode" generated by the Account Manager increased to 3 minutes.
+   (see "GATEACCMAN_AUTHCODE_VALID" variable in the "rtcGateConst.pas" unit)
+
+---------------------------------------------------------
+* Changes in v8.00 rc12
+---------------------------------------------------------
+
+1. To improve Web Socket streaming performance, all "Web Socket" traffic going to and from 
+   "TRtcDataRouter" and "TRtcLoadBalancer" components is now being streamed as binary data,
+   without wasting time to analyze the content or separate raw data into Web Socket Frames.
+   In other words, after a HTTP connection is upgraded to a Web Socket, "TRtcDataRouter" 
+   and "TRtcLoadBalancer" components will be acting as raw TCP/IP tunnels, forwarding 
+   all TCP/IP packets received from one side to the other side and vice-versa.
+   
+---------------------------------------------------------
+* Changes in v8.00 rc11
+---------------------------------------------------------
+
+1. Fixed automatic recognition of "Web Socket upgrade" requests received from 
+   the "Mozilla FireFox" Web Browser, where the "Connect" HTTP request header
+   is being sent as "keep-alive, Upgrade" instead of only "Upgrade". To avoid 
+   similar problems with other Web Browsers, it is now enough for the "Upgrade" 
+   word to be found anywhere in the "Connect" HTTP Request header, if the HTTP 
+   request header "Upgrade" is also present and contains the word "websocket".
+
+2. "TRtcDataRouter" and "TRtcLoadBalancer" components extended with Web Socket support.
+
+---------------------------------------------------------
+* Changes in v8.00 rc10
+---------------------------------------------------------
+
+1. Fixed a bug which could have resulted in a Web Socket Frame used for sending
+   Payload data in multiple chunks to be auto-freed before the last chunk were sent.
+
+2. The following properties have been renamed and added on the "TRtcWSFrame" class:
+   - Renamed "wfAdd" method to "wfWrite"
+   - Renamed "wsAddEx" method to "wfWriteEx"
+   - Added "wfTotalLength" property
+   - Added "wfTotalInOut" property
+
+3. Web Socket Server and Client Test Projects updated and extended.
+
+---------------------------------------------------------
+* Changes in v8.00 rc9
+---------------------------------------------------------
+
+1. Assigning the same Object to the "asObj[]" property on the "TRtcInfo" instance
+   more than once without setting "asObj[]:=NIL" resulted in destroying the same
+   Object with the 2nd assignment. This has now been fixed.
+   
+2. *NEW* WEB SOCKET SUPPORT!
+
+   "TRtcHttpClient", "TRtcHttpServer", "TRtcDataRequest" and "TRtcDataProvider" 
+   components have been extended with "Web Socket" support when working with
+   socket-based APIs ("TRtcHttpClient": useProxy:=FALSE and useWinHTTP=FALSE).
+
+   Web Sockets are upgraded HTTP connections, which can be used to send and
+   receive Web Socket "Frames" at any time after the connection was upgraded,
+   using a TCP/IP connection previously established for HTTP communication,
+   while at the cost of LOSING the ability to send or receive HTTP requests 
+   and responses through that same connection. 
+
+   Unlike HTTP, which follows a strict Request->Response communication scheme, 
+   a Web Socket is fully bi-directional and allows either side to send and 
+   to receive data (Frames) at the same time. This is true for the Client
+   as well as Server, allowing free communication flow in both directions.      
+    
+   The down-side of Web Sockets is that most HTTP Proxy Servers do NOT
+   support the Web Socket upgrade protocol and block Web Socket data.
+
+   To learn more about working with Web Sockets using the RTC SDK,
+   check out the new "Web Socket" Test Projects (Client and Server)
+   in the "SDKExamples_QuickStart_VCL" Project Group, which demonstrate
+   how to upgrade a HTTP connection to a Web Socket connection on the
+   Client and the Server and how to send and receive Web Socket "Frames".
+
+
+   
+---------------------------------------------------------
+* Changes in v8.00 rc8
+---------------------------------------------------------
+
+1. Added "AutoSessionMode" property to the "TRtcServerModule" component.
+
+   For the ServerModule to automatically Lock a Session when a valid "Session ID" is
+   received from the Client, and to support Automatic Sessions when "NEW" is received
+   in the "Session ID" field from Clients, you have to define where this component should
+   check for the "Session ID". [rsm_Query] = Request Query, [rsm_Cookie] = Request Cookie,
+   or [rsm_Query, rsm_Cookie] = both, first in the Request Query and then Request Cookie.
+   
+   By default [rsm_Query], "Session ID" will only be checked in the Request "Query".
+
+2. Added "AutoSessionMode" property to the "TRtcClientModule" component, as a replacement 
+   for the "DataSessionCookie" property (added in RTC SDK v7.106 - removed now).
+   
+   Set 'AutoSessionMode:=rsm_Cookie' if the Session ID should be sent in 
+   the Request "Cookie" instead of the Request "Query" (URI). By default 
+   (AutoSessionMode=rsm_Query), Session IDs are sent in the Request "Query".
+
+3. Added "AutoSessionField" property to "TRtcServerModule" and "TRtcClientModule" components, 
+   as a replacement for "DataSessionField" (added in RTC SDK v7.106 - removed now).
+   
+   "AutoSessionField" property defines the Field Name in the Request "Query", Request "Cookie" 
+   and  Response "Cookie" which ClientModule and ServerModule should use for the "Session ID".
+   If not assigned, field name 'ID' will be used by default. This property has to be identical
+   on TRtcClientModule and TRtcServerModule components for automatic Session handling to work.
+   
+4. Added "AutoSessionCheck" property to the "TRtcServerModule" component, as a replacement for 
+   "AutoSessionsQuery" (added in RTC SDK v8.00 rc7) with a default value = FALSE (instead of TRUE).
+
+   With "AutoSessionCheck=FALSE" (default), this component will check the "Session ID"
+   ONLY if "AutoSessions=TRUE" and ONLY after receiving the entire Request content body.
+
+   Set 'AutoSessionCheck:=TRUE' if ...
+      
+   (A) you have set "AutoSessions:=TRUE" and want this component to check every
+       accepted Request as soon as the Request headers arrive to see if it contains
+       a valid "Session ID" and make sure the Session will be Locked automatically
+       BEFORE the Server starts receiving the rest of the Request, or if ...
+          
+   (B) you are manually creating RTC Sessions and have set "AutoSessions:=FALSE",
+       but want this ServerModule to automatically Lock Sessions if a "Session ID"
+       is received from the Client and you also want to automatically send a "Session ID"
+       back to the Client (in a Response Cookie) if a Session was used by the Server.
+
+---------------------------------------------------------
+* Changes in v8.00 rc7
+---------------------------------------------------------
+
+1. Fixed "TRtcServerModule" components automatic Session handling to work with Clients using 
+   the WinInet API, where the last received COOKIE is automatically added to every Request sent
+   back to the same Server, regardless of the physical connection through which the COOKIE was
+   received, which made it impossible to request a different Session for every Client Connection.
+
+2. Fixed "TRtcClientModule" components Automatic Session handling when using RTC Encryption,
+   where the Client was NOT sending an explicit request to open a new Session on the Server,
+   which could have resulted in the wrong Session ID to be used on the Server if the Client
+   Application was using more than one "TRtcHttpClient" component (see point 1 above).
+   
+3. "AutoSessionsQuery" property added to the "TRtcServerModule" component.
+      
+---------------------------------------------------------
+* Changes in v8.00 rc6
+---------------------------------------------------------
+
+1. "Version_SDK" property moved from "TRtcConnection" to "TRtcComponent"
+   class, to make the RTC SDK version number visible on most RTC SDK
+   components available at design-time, not only connection components.
+   
+PS. "Version_SDK" property returns the global constant "RTCSDK_VERSION",
+    declared (as RtcString) in the "rtcTypes.pas" unit and updated with
+    every RTC SDK update, so you can always use it to check or display
+    the RTC SDK version used to compile your RTC-based Applications.
+
+2. "AutoCreate", "reqID", "reqVer" and "FunctionName" - previously declared 
+   as normal public variables on RTC Value Objects have now all been updated
+   to properties with virtual getter and setter methods, so they can also
+   be overridden in an ancestor class - if required.
+    
+---------------------------------------------------------
+* Changes in v8.00 rc5
+---------------------------------------------------------
+
+*** !!! DO NOT PANIC if your Project(s) do NOT COMPILE after THIS UPDATE !!! ***
+*** !Compile Errors are there to make it easier for you to update your code! ***
+
+If you get a compile error while trying to compile your Project(s) after 
+you update to this RTC SDK version, you will HAVE TO update YOUR OWN code 
+to compile and work correctly with this RealThinClient SDK update!
+
+What has to be changed in your code?
+
+A) All assignments to "Obj" properties on "TRtcInfo/TRtcSession" containers
+   should be changed to "asObj" or "asPtr", depending on the Object being assigned:
+    
+   -> "asObj" has to be used for Objects which have to be managed by the object 
+      container and destroyed with the "TRtcInfo/TRtcSession" object container.
+       
+      Previously, this was the case with all "TRtcValueObject" descendants 
+      and all "TRtcObject" descendants using the default implementation of 
+      the "SingleUse" method (returning TRUE), so make sure to check how
+      the Object which was previously assigned to "Obj[]" was implemented.
+
+      The ONLY exception to this rule are "TRtcDelayedCall" objects, which
+      have previously been declared as "TRtcObject" and are being destroyed 
+      by the connection component in case of a disconnect, but should now
+      ONLY be assigned to the new "asPtr" property in all user code, or the 
+      Object could now be destroyed twice and result in Access Violations!
+
+   -> "asPtr" has to be used for Components and Objects managed externally,
+      which should NOT be destroyed by the "TRtcInfo/TRtcSession" container. 
+       
+      Previously, this was the case for ALL Objects which were NOT direct or 
+      indirect descendant of the "TRtcObject" class (TComponent, TObject, ...)
+      Now, this is also the case for "TRtcDelayedCall" objects (see above).
+    
+B) All classes extending "TRtcObject" should be updated to extend "TObject".
+   
+See points 1, 2 and 3 (below) for more details.
+   
+1. "Obj" property on "TRtcInfo" and "TRtcSession" classes was REPLACED with two new 
+   properties: "asObj" and "asPtr". By using one of these properties, you explicitly 
+   declare if the Object being assigned should be managed by the "TRtcInfo/TRtcSession"
+   container and destroyed with the containter (see "asObj" property), or if the Object 
+   being assigned is maintained externally, so that ONLY a pointer to that Object should 
+   be stored inside the "TRtcInfo/TRtcSession" container, but the Object itself should 
+   NOT be destroyed with the "TRtcInfo/TRtcSession" container (see "asPtr" property).
+   
+   In previous RTC SDK versions, ONLY Objects extending the "TRtcObject" class were 
+   managed by "TRtcInfo/TRtcSession" instances when assigned to their "Obj" property 
+   and were destroyed with the "TRtcInfo" or "TRtcSession" object container if their
+   "SingleUse" method was implemented to return *TRUE* (default for "TRtcObject"),
+   but ALL Components and Objects which were NOT direct or indirect descendants of 
+   the "TRtcObject" class were NEVER managed by "TRtcInfo/TRtcSession" instances, so 
+   they've had to be destroyed manually and could NOT simply be assigned to the 
+   "TRtcInfo/TRtcSession" container and be destroyed automatically by the container.
+
+   There are three reasons why this change was necessary:
+   
+   A) Now, it is clear during the assignment what will happen to an Object assigned 
+      to a "TRtcInfo/TRtcSession" object container, without having to look elsewhere 
+      in code to see how the Class behind each object was implemented.
+      
+   B) Now, you can assign ANY Object to the "asObj" property of "TRtcInfo/TRtcSession" 
+      object containers if you want the container to manage that Object and destroy it 
+      automatically when the container is being destroyed, without the need to implement 
+      a custom class based on "TRtcObject". This wasn't possible before.
+      
+   C) Now, you can use the "asPtr" property of "TRtcInto/TRtcSession" object containers
+      to assign a *pointer* to ANY Object and rest assured that your Object will NOT be 
+      destroyed by the container, regardless of how it was implemented. Previously, using
+      the "Obj" property implied that any "TRtcObject" descendants with a "SingleUse" 
+      method returning TRUE should be destroyed by the "TRtcInfo/TRtcSession" container,
+      making it "unwise" to assign objects like "TRtcDelayedCall" or any "TRtcValueobject"
+      descendants managed externally, because they were being destroyed by the container.
+
+2. "SingleUse" method, which was previously declared and implemented on the "TRtcObject" class,
+   has now moved up to the "TRtcJob" class with the same default implementation (returning TRUE).
+      
+3. "TRtcObject" class has become OBSOLETE and was REMOVED!
+
+4. RTC Demos and Example Projects have been updated (as needed).
+ 
+---------------------------------------------------------
+* Changes in v8.00 rc4
+---------------------------------------------------------
+
+1. All "Updates*.txt" files moved from the "Help" folder to "Help/UpdatesLog" sub-folder.
+
+2. "RealThinClient SDK Components Hierarchy" image and PDF file (ready to print) are
+   now available in the "Help" folder (rtcSDK_Components.png and rtcSDK_Components.pdf),
+   providing a simple overview of all components included in the RealThinClient SDK.
+
+3. Minor updates to some class declarations.
+   
+---------------------------------------------------------
+* Changes in v8.00 rc3
+---------------------------------------------------------
+
+1. Added support for using anonymous methods with "PostQuickJob" and "PostGUIJob" 
+   procedures - available in the "rtcThrPool" unit as a simple way for posting quick 
+   jobs to be executed asynchronously from the RTC Thread Pool or the Main Thread (GUI).
+
+---------------------------------------------------------
+* Changes in v8.00 rc2
+---------------------------------------------------------
+
+1. When using the "TRtcClientModule" component with built-in RTC Encryption, 
+   the last Result received from the Server before closing the Session was 
+   being rejected by the Client, because the Client was closing its Session
+   before decrypting the Result received. This has now been fixed.
+
+---------------------------------------------------------
+* Changes in v7.112
+---------------------------------------------------------
+
+1. This update extends support for writing RTC events using anonymous methods
+   to RTC Gateway, Gate Client, Data Router and Load Balancer components.
+   
+   All RTC components extending "TRtcComponent" class are now fully "equipped" 
+   with all "Anon" methods you will ever need to implement all RTC events 
+   using anonymous methods - if you are working with Delphi 2010 or newer.
+   
+PS. Because anonymous methods have been introduced in Delphi 2009, but did NOT
+    work correctly before Delphi 2010, you need Delphi 2010 or later to use them.
+    If you are using FreePascal or an older Delphi version, you will 
+    NOT see "Anon" methods on RTC components and will NOT be able to 
+    compile your Project(s) if you try using any "Anon" method.
+   
+---------------------------------------------------------
+* Changes in v7.111
+---------------------------------------------------------
+
+1. This update adds support for using anonymous methods as an alternative
+   way to write event handlers for RTC Client and Server components.
+   For this purpose, new "Anon" methods have been added to RTC Client
+   and Server components, with an overloaded method for each event type.
+   
+2. "MyHttpServer2" example Project added to "QuickStart/ConsoleServer" folder,
+   demonstrating how anonymous methods can be used to write RTC Server events.
+   NOTE: The same approach also works with events for RTC Client components.
+
+PS. Because anonymous methods have been introduced in Delphi 2009, but did NOT
+    work correctly before Delphi 2010, you need Delphi 2010 or later to use them.
+    If you are using FreePascal or an older Delphi version, you will 
+    NOT see "Anon" methods on RTC components and will NOT be able to 
+    compile your Project(s) if you try using any "Anon" method.
+   
+---------------------------------------------------------
+* Changes in v7.110
+---------------------------------------------------------
+
+1. Updated "TRtcClientModule" and "TRtcServerModule" components
+   to allow their "ModuleFileName" property to be empty,
+   in which case the root URI ('/') will be assumed.
+
+2. "TRtcFunctionInfo" class (used to store and transport remote function objects), 
+   has been extended with new methods and properties to simplify writing and calling 
+   remote functions which accept parameters as an array (usually sent/received in the 
+   'params' array) in addition or as a replacement for (the usual) named parameters.
+   
+   Here is the complete list of all new methods and properties added to 
+   the "TRtcFunctionInfo" class together with their descriptions:
+   
+ * function parCount:integer;
+    - Return the number of elements in the "params" array,
+      without auto-creating the "params" array (if it hasn't been created yet).
+  
+ * function Par:TRtcArray;
+    - This method is guaranteed to return the 'params' object as a RTC Array.
+      If the 'params' object has NOT yet been created, it will be auto-created now.
+      If any other object type (not RTC Array) has been assigned to the name 'params',
+      previously assigned object will be moved into the newly created array at index 0.
+      The main purpose of this method is to emphasize the use of "params" as a reserved
+      word inside function parameters when sending and receiving parameters as an array
+      and provide an easy and direct access to the "Params" array, without having to
+      manually check if isType['params']=rtc_Array before accessing the array object.
+
+ * procedure map(const srcIndex:integer; const dstName:RtcWideString; asCopy:boolean=False);
+    - Map source 'params' Array (Par) field from index 'srcIndex' to destination field name 'dstName'.
+      This method can be used at the beginning of a remote function if the entire
+      function has been implemented to work with named parameters, but you also
+      want to allow Clients to call this function using an array of parameters
+      (normally passed in as 'params' Array) and you do NOT want to manually
+      check everywhere inside your function how each parameter was sent/received.
+    - If 'params' Array (Par) exists and has an item at index 'srcIndex',
+      but a field with name 'dstName' has NOT been assigned yet, then ...	  
+   -> (A) if this method is called with "asCopy=FALSE" (default), the
+      original object from index 'srcIndex' in the 'params' Array (Par) will
+      be MOVED to the field name 'dstName' and removed from the 'params' Array.
+      This is the fastest option and has the smallest memory footprint,
+      because the original object will only exist once (no copying). Or ...	  
+   -> (B) if this method is called with "asCopy=TRUE", a COPY of the object
+      from index 'srcIndex' in the 'params' Array (Par) will be assigned to
+      the field name 'dstName', while leaving the 'params' Array (Par) unchanged.
+
+ * procedure map(const srcName:RtcWideString; const dstIndex:integer; asCopy:boolean=False);
+    - Map source field name 'srcName' to destination index 'dstIndex' in the 'params' Array (Par).
+      This method can be used at the beginning of a remote function if the entire
+      function has been implemented to work with an array or parameters (normally
+      using the 'params' Array - Par), but you also want to allow Clients to call
+      this function using named parameters and you do NOT want to manually check
+      everywhere inside your function how each parameter was sent/received.
+    - If a field with the name 'srcName' has been assigned (isNull[srcName]=FALSE),
+      but there is no object assigned at index 'dstIndex' in the 'params' Array
+      ( parNull[dstIndex]=TRUE ), then ...
+   -> (A) if this method is called with "asCopy=FALSE" (default),
+      the original object from field name 'srcName' will be MOVED to the
+      'params' Array at index 'dstIndex' and removed from field name 'srcName'.
+      This is the fastest option and has the smallest memory footprint,
+      because the original object will only exist once (no copying). Or ...
+   -> (B) if this method is called with "asCopy=TRUE", a COPY of the object stored
+      in the field name 'srcName' will be assigned to the 'params' Array (Par)
+      at index 'dstIndex', leaving a field with with name 'srcName' unchanged.
+
+ * function MakeArray(index: integer): TRtcArray;
+    - Assign a new, fresh Array to the 'index' field in the 'params' (Par) Array.
+      To turn the 'index' field into an array of values,
+      you have to call "makeArray" or assign already created TRtcArray
+      using parArray[]:= (assigns a copy of the array) or
+      parObject[]:= (assigns existing array instance).
+
+ * function MakeRecord(index: integer): TRtcRecord;
+    - Assign a new, fresh Record to the 'index' field in the 'params' (Par) Array.
+      To turn the 'index' field into a record of values,
+      you have to call "MakeRecord" or assign already created TRtcRecord
+      using parRecord[]:= (assigns a copy of the record) or
+      parObject[]:= (assigns existing record instance). 
+
+ * function MakeDataSet(index: integer): TRtcDataSet;
+    - Assign a new, fresh DataSet to the 'index' field in the 'params' (Par) Array.
+      To turn the 'index' field into a dataset of values,
+      you have to call "MakeDataSet" or assign already created TRtcDataSet
+      using parDataSet[]:= (assigns a copy of the dataset) or
+      parObject[]:= (assigns existing dataset instance). 
+
+ * function MakeFunction(index: integer; const func_name:RtcWideString=''): TRtcFunctionInfo;
+    - Assign a new, fresh FunctionInfo to the 'index' field in the 'params' (Par) Array.
+      To turn the 'index' field into a function call,
+      you have to call "MakeFunction" or assign already created TRtcFunctionInfo
+      using parFunction[]:= (assigns a copy of the FunctionInfo object) or
+      parObject[]:= (assigns existing FunctionInfo instance). 
+
+ * function MakeByteStream(index: integer): TStream;
+    - Assign a new, fresh Byte Stream to the 'index' field in the 'params' (Par) Array.
+      To turn the 'index' field into a Byte Stream,
+      you have to call "MakeByteStream" or assign already created TStream
+      using parByteStream[]:= (assigns a copy of the Stream data) or
+      parObject[]:= (assign existing TStream instance). 
+
+ * function MakeByteArray(index: integer; InitialSize:Integer=0): RtcByteArray;
+    - Assigns a new, fresh ByteArray to the 'index' field in the 'params' (Par) Array,
+      containing "InitialSize" items (filled with zero).
+
+ * function MakeBoolean(index: integer): boolean;
+    - Assign a new, fresh Boolean value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Boolean.
+      You DO NOT have to use this function before accessing as Boolean value. 
+
+ * function MakeCurrency(index: integer): Currency;
+    - Assign a new, fresh Currency value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Currency.
+      You DO NOT have to use this function before accessing as Currency value. 
+
+ * function MakeDateTime(index: integer): TDateTime;
+    - Assign a new, fresh DateTime value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to DateTime.
+      You DO NOT have to use this function before accessing as DateTime value. 
+
+ * function MakeException(index: integer):RtcWideString;
+    - Assign a new, fresh Exception value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Exception.
+      You DO NOT have to use this function before accessing as Exception value. 
+
+ * function MakeVariable(index: integer):RtcWideString;
+    - Assign a new, fresh VariableName value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to VariableName.
+      You DO NOT have to use this function before accessing as VariableName. 
+
+ * function MakeInteger(index: integer): rtcInteger;
+    - Assign a new, fresh Integer value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Integer.
+      You DO NOT have to use this function before accessing as Integer value. 
+
+ * function MakeCardinal(index: integer): rtcCardinal;
+    - Assign a new, fresh Cardinal value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Cardinal.
+      You DO NOT have to use this function before accessing as Cardinal value. 
+
+ * function MakeLargeInt(index: integer): rtcLargeInt;
+    - Assign a new, fresh Large Integer value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Large Integer.
+      You DO NOT have to use this function before accessing as Large Integer value.
+
+ * function MakeFloat(index: integer): rtcFloat;
+    - Assign a new, fresh Floating-point value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Floating-point.
+      You DO NOT have to use this function before accessing as Floating-point value.
+    
+ * function MakeString(index: integer): RtcString;
+    - Assign a new, fresh RtcString value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to RtcString.
+      You DO NOT have to use this function before accessing as RtcString value.
+
+ * function MakeWideString(index: integer): RtcWideString;
+    - Assign a new, fresh RtcWideString value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to RtcWideString.
+      You DO NOT have to use this function before accessing as RtcWideString value. 
+
+ * function MakeText(index: integer):RtcWideString;
+    - Assign a new, fresh Text value to the 'index' field in the 'params' (Par) Array.
+      Only sets the type to Text.
+      You DO NOT have to use this function before accessing as Text value.
+
+ * function parCheckType(const index:integer; typ:TRtcValueTypes):boolean;
+    - Check if 'index' field  in the 'params' (Par) Array can be accessed (read) using Type "typ". 
+
+ * property parNull[index:integer]:boolean;
+    - read: Is the 'index' field  in the 'params' (Par) Array = NULL (not assigned) ? /
+    - write: TRUE = set 'index' field  in the 'params' (Par) Array to NULL 
+             (this will destroy any object stored there)
+
+ * property parType[index:integer]:TRtcValueTypes;
+    - Check 'index' field in the 'params' (Par) Array type.
+      NULL values always return rtc_Null.
+
+ * property parValue[index:integer]:Variant;
+    - Read/Write 'index' field in the 'params' (Par) Array as native value (Variant).
+      You can use this property to get/set all native types:
+      Boolean,Integer,Float,Currency,DateTime,RtcString. @html(<br>)
+      You CAN NOT use this property to get or set complex structures like
+      Record, Array, DataSet or FunctionInfo. }
+
+ * property parBoolean[index:integer]:boolean;
+    - Read/Write 'index' field in the 'params' (Par) Array as Boolean value 
+
+ * property parInteger[index:integer]:rtcInteger;
+    - Read/Write 'index' field in the 'params' (Par) Array as Integer value
+
+ * property parCardinal[index:integer]:rtcCardinal;
+    - Read/Write 'index' field in the 'params' (Par) Array as Cardinal value
+
+ * property parLargeInt[index:integer]:rtcLargeInt;
+    - Read/Write 'index' field in the 'params' (Par) Array as Large Integer value
+
+ * property parFloat[index:integer]:rtcFloat;
+    - Read/Write 'index' field in the 'params' (Par) Array as Float value
+    
+ * property parCurrency[index:integer]:Currency;
+    - Read/Write 'index' field in the 'params' (Par) Array as Currency value 
+
+ * property parDateTime[index:integer]:TDateTime;
+    - Read/Write 'index' field in the 'params' (Par) Array as DataTime value
+
+ * property parException[index:integer]:RtcWideString;
+    - Read/Write 'index' field in the 'params' (Par) Array as Exception value (#ErrorCode:ErrorMessage)
+
+ * property parErrorCode[index:integer]:rtcLargeInt;
+    - Read/Write 'index' field in the 'params' (Par) Array as Error Code (part of Exception info) 
+
+ * property parErrorMessage[index:integer]:RtcWideString;
+    - Read/Write 'index' field in the 'params' (Par) Array as Error Message (part of Exception info)
+
+ * property parErrorData[index:integer]:TRtcValue;
+    - Read/Write 'index' field in the 'params' (Par) Array as Error Data (part of Exception info)
+
+ * property parVarName[index:integer]:RtcWideString;
+    - Read/Write 'index' field in the 'params' (Par) Array as VariableName (integer)
+
+ * property parOID[index:integer]:TRtcObjectID;
+    - Read/Write 'index' field in the 'params' (Par) Array as Linked Object ID
+
+ * property parLinkedObject[index:integer]:TObject;
+    - Read/write 'index' field in the 'params' (Par) Array as a Linked Object.
+      NOTE: Wherever possible, use "parOID" instead of "parLinkedObject" because
+      "parLinkedObject" requires an active "Object Manager" for the current thread.
+      Reading "parLinkedObject" is identical to "GetRtcObjectManager.FindObject(parOID[..]);"
+      Writing to "parLinkedObject" is identical to "parOID[..]:=GetRtcObjectManager.FindOID(<TObject>);"
+
+ * property parString[index:integer]:RtcString;
+    - Read/Write 'index' field in the 'params' (Par) Array as RtcString value (raw access)
+
+ * property parWideString[index:integer]:RtcWideString;
+    - Read/Write 'index' field in the 'params' (Par) Array as RtcWideString value (raw access)
+
+ * property parText[index:integer]:RtcWideString;
+    - Read/Write 'index' field in the 'params' (Par) Array as Text value (UTF-8 encode on write, decode on read)
+
+ * property parByteArray[index:integer]:RtcByteArray;
+    - read: Access Byte Array stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source Byte Array to the 'index' field in the 'params' (Par) Array
+
+ * property parCodeEx[index:integer]:RtcByteArray;
+    - Read: return 'index' field in the 'params' (Par) Array coded as a RtcByteArray,
+             from which the object can be reconstructed anytime. /
+    - Write: reconstruct object from RtcByteArray and assign to
+             the 'index' field in the 'params' (Par) Array. 
+ 
+ * property parCode[index:integer]:RtcString;
+    - Read: return 'index' field in the 'params' (Par) Array coded as a RtcString,
+            from which the object can be reconstructed anytime. /
+    - Write: reconstruct object from RtcString and assign to
+             the'index' field in the 'params' (Par) Array. 
+
+ * property parXMLrpc[index:integer]:RtcString;
+    - Read: return 'index' field in the 'params' (Par) Array coded as an XML-RPC RtcString,
+            from which the object can be reconstructed. /
+    - Write: reconstruct object from XML-RPC RtcString and assign to
+             the 'index' field in the 'params' (Par) Array .
+
+ * property parJSON[index:integer]:RtcWideString;
+    - Read: return 'index' field in the 'params' (Par) Array coded as an JSON String,
+            from which the object can be reconstructed. /
+    - Write: reconstruct object from JSON String and assign to
+             the 'index' field in the 'params' (Par) Array.
+
+ * property parByteStream[index:integer]:TStream;
+    - read: Access Stream stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source Stream to the 'index' field in the 'params' (Par) Array
+
+ * property parArray[index:integer]:TRtcArray;
+    - read: Access array stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source TRtcArray to the 'index' field in the 'params' (Par) Array
+
+ * property parRecord[index:integer]:TRtcRecord;
+    - read: Access record stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source TRtcRecord to the 'index' field in the 'params' (Par) Array
+
+ * property parDataSet[index:integer]:TRtcDataSet;
+    - read: Access DataSet stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source TRtcDataset to the 'index' field in the 'params' (Par) Array
+
+ * property parFunction[index:integer]:TRtcFunctionInfo;
+    - read: Access FunctionInfo stored in the 'index' field in the 'params' (Par) Array /
+    - write: assign a copy of the source TRtcFunctionInfo to the 'index' field in the 'params' (Par) Array
+
+ * property parObject[index:integer]:TRtcValueObject;
+    - Read: Access information in the 'index' field in the 'params' (Par) Array as TRtcValueObject
+    - Write: NIL = remove object from the 'index' field in the 'params' (Par) Array without destroying it
+    - Write: object = Assign object to the 'index' field in the 'params' (Par) Array.
+             Assigned object will be maintained and destroyed with this structure,
+             as long as it isn't removed by calling parObject[index]:=nil.
+
+  WARNING: NEVER! use "parObject" to assign an object which you did not create yourself,
+           or to assign an object to more than one TRtcValueObject structure.
+           If the same object instance is assigned to more than one structure,
+           you WILL end up with Access Violation Errors when those objects are
+           released by the connection component. To assign a copy of an object,
+           allways use the object.CopyOf function or assign the object to a
+           specific 'par...' or 'as...' property - which don't assign the original
+           object pointer, but instead create a copy and assign the object copy.
+
+---------------------------------------------------------
+* Changes in v7.109
+---------------------------------------------------------
+
+1. Added support to "TRtcServerModule" to accept and parse arrays and 
+   single values received from Clients using "DataReqModes" which specify 
+   a "FunctionName" in the "URI", regardless of the "DataFormat" used to 
+   serialize that data. If an array is received, it will be stored as 
+   the "params" array, starting at index 0 (zero). If a single value is 
+   received, it will be stored at index 0 (zero) in the "params" array.
+     
+---------------------------------------------------------
+* Changes in v7.108
+---------------------------------------------------------
+
+1. "TRtcDataReqMode" type extended with "req_contentBodyOptional", to distinguish
+   between a Request Mode where parameters are mandatory and should always be
+   present in the content body, and a Request Mode which allows the content
+   body to be empty ("GET" requests) if there are no function parameters.
+   
+2. "reqMethod" property removed from "TRtcFunctionInfo" class, because it is 
+   already available through the "Request.Method" property on RTC connection 
+   components (when preparing and processing remote function calls) and 
+   directly on the "TRtcClientModule" component (when preparing a call).
+   
+3. In addition to preparing custom Request headers by using the "Request" 
+   property available on the "TRtcClientModule" component, "Request.FileName" 
+   property can now also be used to prepare additional parameters to be 
+   appended directly after "ModuleFileName" in the Request "FileName" (URI). 
+   This makes it possible to use the "TRtcClientModule" to post requests 
+   to Servers using a custom format to identify resource in the "URI".
+
+4. Before executing a remote function, "TRtcServerModule" now removes all
+   information from the "Request.FileName" which has already been extracted 
+   by the component while preparing a remote function call for execution.
+   This makes it possible to use the "TRtcServerModule" component to handle
+   requests where resources are identified in the "URI" using a custom format.
+
+---------------------------------------------------------
+* Changes in v7.107
+---------------------------------------------------------
+
+1. Fixed Exceptions raised by "TRtcClientModule" if a response received from
+   the Server in "JSON" or "XML-RPC" format contained whitespace after data.
+
+2. Fixed a possible infinite loop in "TRtcClientModule" and "TRtcServerModule"
+   when parsing a content body with whitespace at the end (or with invalid data).
+
+3. Fixed Encoding and Decoding in "TRtcClientModule" and "TRtcServerModule"
+   components when remote function calls are sent as part of the Request URI.
+
+4. Improved error handling in the "TRtcClientModule" component.
+
+5. Extended JSON parser in the "TRtcExceptionValue" class to recognize 
+   "errors" as an alternative to "data" in the "error" object structure.
+   
+6. "Request.Method" is now automatically set to "GET" instead of "POST" when using a 
+   "DataReqMode" where the entire remote function call is sent in the URI (no content body).
+   
+7. "TRtcValueResult.FromJSON" now correctly extracts "reqVer" and "reqID" parameters.
+
+8. "FromJSONrpc" method added "TRtcValue" and "TRtcValueResult" classes for parsing 
+   remote function calls and results received in any JSON format, to eliminate the 
+   need for making the JSON parser in all RTC Value objects recognize all JSON formats.
+   Now, "JSON" support in "TRtcClientModule" and "TRtcServerModule" components works
+   independently of states set for "RTC_JSON_Parser*" global variables (rtcInfo unit).
+
+9. "URL_Encode" function updated to also escape the '/' character by default.
+   This was required to allow the use of '/' as part of a String in "REST" requests.
+   
+10. "DataContentType" and "DataCustomQuery" properties added to "TRtcClientModule" component:
+
+  * property DataContentType:RtcString read FDataContentType write FDataContentType;
+    - By default, TRtcClientModule will be using Content Type "text/xml" for XML-RPC calls,
+      "application/json-rpc" for "fmt_JSONrpc1" and "fmt_JSONrpc2" calls and
+      "application/json" for other calls using the "fmt_JSON" format. In case
+      you need to access a 3rd-party API which requires a different HTTP Content-Type,
+      make sure to use this property and assign the Content-Type required by the API.
+
+  * property DataCustomQuery:RtcString read FDataCustomQuery write FDataCustomQuery;
+    - Some 3rd-party APIs require some sort of authentication in the Request "Query",
+      which has to be included with every request sent out to the Server. You can use 
+      this property to assign a custom String, which will be included in the "Query"
+      for every Request sent out using this "TRtcClientModule" component.
+
+11. Example Projects in the "QuickStart/RemoteFunctions" folder extended with options 
+    for dynamicaly changing "Data Format" and "Data Request Mode" parameters on the 
+    Client (TRtcClientModule) and the Server (TRtcServerModule), to show how each 
+    option works and provide a simple way for testing RTC Remote Functions with 
+    different combinations of Data Formats and Request Modes.
+
+12. "FromJSON" and "asJSON" methods on TRtcValue objects now work as before,
+    serializing and parsing RTC Value objects to and from plain "JSON", but ... 
+    you can now manually configure the JSON parser using global variables in 
+    the "rtcInfo.pas" unit if you want these methods to automatically recognize 
+    structures specific to "JSON-RPC 1.0" and/or "JSON-RPC 2.0" data formats:
+
+  * RTC_JSON_ParseMethodFunctions:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to check if 
+      JSON contains '{"method":"any-string" and store it as a RTC Function object. (default=FALSE)
+
+  * RTC_JSON_ParseRPC1:boolean=False;
+    - Set this to TRUE if you want to enable support for automatic recognition
+      of "JSON-RPC 1.0" objects (functions, errors and results) when using the
+      "FromJSON" method or "asJSON" properties with "TRtcValue" objects (default=FALSE).
+    - Also check "RTC_JSON_ParseRPC1Functions", "RTC_JSON_ParseRPC1Errors" and
+      "RTC_JSON_ParseRPC1Results" variables if you want to ENABLE "JSON-RPC 1.0" support
+      when using "FromJSON" and/or "asJSON" directly with TRtcValue objects (default=FALSE).
+
+  * RTC_JSON_ParseRPC2:boolean=False;
+    - Set this to TRUE if you want to enable support for automatic recognition
+      of "JSON-RPC 2.0" objects (functions, errors and results) when using the
+      "FromJSON" method or "asJSON" properties with "TRtcValue" objects (default=FALSE).
+    - Also check "RTC_JSON_ParseRPC2Functions", "RTC_JSON_ParseRPC2Errors" and
+      "RTC_JSON_ParseRPC2Results" variables if you want to ENABLE "JSON-RPC 2.0" support
+      when using "FromJSON" and/or "asJSON" directly with TRtcValue objects (default=FALSE).
+
+  * RTC_JSON_ParseRPC1Functions:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to
+      check if JSON contains '{"method":"any-string","params":' followed either by
+      '[', '{' or 'null' and store it as a RTC Function object. (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC1" should also be TRUE,
+      or nested remote function calls received in "JSON-RPC 1.0" format will NOT be recognized
+      by the "TRtcServerModule" and will be handled as plain records (passed as parameters).
+
+  * RTC_JSON_ParseRPC1Errors:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to check if 
+     JSON contains '{"error":{' or '{"result":null,"error":{' followed either by '"code":', 
+     '"message":', '"data":' or '"errors":' and store it as a RTC Exception object. (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC1" should also be TRUE, or nested 
+     "error" objects received in "JSON-RPC 1.0" format will be stored as plain records.
+
+  * RTC_JSON_ParseRPC1Results:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to
+      check if JSON contains '{"result":' - but NOT '{"result":null,"error":{' followed
+      by '"code"', '"message"', '"data"' or '"errors"' (which would make it an Exception object)
+      and store the contents behind "result" directly as a RTC Value object, instead of 
+     storing a RTC Record with a sub-record called "result". (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC1" should also be TRUE,
+      or nested "JSON-RPC 1.0" results received from the Server will be made accessible 
+      as plain records containing a "result" element (result data), "error" element
+      (in case of an error on the Server) and an "id" element (containing the ID sent).
+
+  * RTC_JSON_ParseRPC2Functions:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to check
+      if JSON contains '{"jsonrpc":"2.0","method":"any-string","params":' followed either
+      by '[', '{' or 'null' and store it as a RTC Function object. (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC2" should also be TRUE,
+      or nested remote function calls received in "JSON-RPC 2.0" format will NOT be recognized
+      by the "TRtcServerModule" component and will be handled as records (passed as parameters).
+
+  * RTC_JSON_ParseRPC2Errors:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" properties to check if
+      JSON contains '{"jsonrpc":"2.0","error":{' or '{"jsonrpc":"2.0","result":null,"error":{'
+      followed either by '"code":', '"message":', '"data":' or '"errors"' 
+      and store it as a RTC Exception object. (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC2" should also be TRUE,
+      or nested "error" objects received in "JSON-RPC 2.0" format will be stored as records
+      with elements named "jsonrpc", "error" and "id" instead of RTC Exception objects.
+
+  * RTC_JSON_ParseRPC2Results:boolean=False;
+    - Set this to TRUE if you want the "FromJSON" method and "asJSON" 
+       properties to check if JSON contains '{"jsonrpc":"2.0","result":' - but NOT
+      '{"jsonrpc":"2.0","result":null,"error":{' followed by '"code"', '"message"', 
+      '"data"' or '"errors"'(which would make it an Exception object) and store 
+      the contents behind "result" as a RTC Value object instead of a RTC Record 
+      with a sub-record called "result". (default=FALSE)
+    - In addition to this global variable, "RTC_JSON_ParseRPC2" should also be TRUE,
+      or nested "JSON-RPC 2.0" results received from the Server will be made accessible
+      as records containing a "jsonrpc" element ("2.0"), "result" element (result data),
+      "error" element (in case of an error) and an "id" element (containing the ID sent).
+
+---------------------------------------------------------
+* Changes in v7.106
+---------------------------------------------------------
+
+This update adds "JSON" support and new "RPC" and "REST" request modes
+for use with RTC Remote Functions (TRtcClientModule and TRtcServerModule)
+and further improves parsers and generators built into "TRtcValue" objects.
+
+***=====================
+* WARNING! Because the "DataFormats" property on "TRtcServerModule" has changed, 
+* if you have been using the XML-RPC format with the "TRtcServerModule" component, 
+* you will get an error when trying to open any Form or DataModule using the 
+* "TRtcServerModule" component. Make sure to check the "DataFormats" property
+* and enable all formats you want to support, or Delphi will disable all 
+* formats except the standard "fmt_RTC" format. 
+***======================
+
+1. "DataFormat" property on TRtcClientModule and "DataFormats" property on 
+   the TRtcServerModule component have been extended to provide support for 
+   using the "JSON-RPC 1.0", "JSON-RPC 2.0" and plain "JSON" data format.
+   
+   TRtcDataFormat =
+    ( { "RTC-RPC" format -> RTC objects in the Content body }
+      fmt_RTC,
+      { "XML-RPC" format -> XML-RPC objects in the Content body }
+      fmt_XMLRPC,
+      { "JSON-RPC 1.0" format -> JSON-RPC "1.0" objects in the Content body }
+      fmt_JSONrpc1,
+      { "JSON-RPC 2.0" format -> JSON-RPC "2.0" objects in the Content body }
+      fmt_JSONrpc2,
+      { Plain "JSON" format -> Parameters and Result in the Content Body using JSON format.
+        When used with DataReqMode="req_ContentBodyALL", "FunctionName" will be sent
+        as a parameter called "method" inside a record, with all paramers as elements. }
+      fmt_JSON);
+
+2. Added a new "DataReqMode" property to the TRtcClientModule component and 
+   the appropriate "DataReqModes" property to the TRtcServerModule component 
+   to allow the Client to choose the request mode and Server to enable all
+   the request modes it wants to support.
+   
+  TRtcDataReqMode =
+    ( { FunctionName and Parameters in the Content Body (default) }
+      req_contentBodyALL,
+      { FunctionName in the request 'FileName' (URI),
+        Parameters in the Content Body. }
+      req_contentBodyParams,
+      { FunctionName in the request 'FileName' (URI) directly followed by
+        all parameters (no '/' separator), URL-Encoded and serialized as
+        a single JSON object or a JSON array (stored in "params" array). }
+      req_directJSON,
+      { FunctionName in the Request 'FileName' (URI) with all Parameters
+        in the request Query (URI, after '?') as a single JSON object or array. }
+      req_queryJSON,
+      { FunctionName in the Request 'FileName' (URI) with each
+        parameter in the request Query (URI, after '?') as 'Name=JSON' pair
+        using UTF-8 and URL Encoding for 'Name' and 'JSON' values. }
+      req_queryNameJSON,
+      { FunctionName in the Request 'FileName' (URI) with each
+        parameter in the request Query (URI, after '?') as 'Name=Text' pairs
+        using UTF-8 and URL Encoding for 'Name' and 'Text' values. }
+      req_queryNameText,
+      { FunctionName in the request 'URI' (FileName / FilePath) with each parameter
+        separated by '/' and represented as JSON using UTF-8 and URL Encoding.
+        All parameters SHOULD be in the "params" array, starting from 0.
+        If NOT, all parameters will be serialized into a single JSON object
+        on the Client and deserialized back to named parameters on the Server. }
+      req_uriParamsJSON,
+      { FunctionName in the request 'URI' (FileName / FilePath) with each parameter
+        separated by '/' and stored as plain Text using UTF-8 and URL Encoding.
+        This "Request Mode" is NOT suitable for sending named parameters!
+        All parameters SHOULD BE in the "params" array, starting from 0.
+        If NOT, all parameters will be serialized into a single String on the Client
+        and received as a single String inside the "params" array on the Server. }
+      req_uriParamsText);
+
+3. "DataSessionField" property added to "TRtcClientModule" and "TRtcServerModule" 
+   components to allow using a custom field name to send and receive the Session ID.
+   By default, this property will be empty and field name "ID" will be used (as before).
+
+4. Starting with this RTC SDK version, "TRtcServerModule" will be checking for the 
+   Session ID in the Request "Query" (old) as well as the Request "Cookie" (new).
+
+5. "DataSessionCookie" property added to "TRtcClientModule" component (default=FALSE).
+   When set to TRUE, the Client will be sending its Session ID in a Request "Cookie"
+   instead of including the Session ID in the Reuqest "Query".
+
+   NOTE: If your Client has to communicate with RTC Servers compiled with an older 
+   RTC SDK version, this property has to be FALSE (default), because older RTC SDK 
+   versions only check for the Session "ID" in the Request Query.
+   
+---------------------------------------------------------
+* Changes in v7.105
+---------------------------------------------------------
+
+This update adds new methods for REST support and improves XML-RPC and JSON
+support with built-in parsers and generators included in RTC Value objects.
+
+***=======================================================================
+* WARNING! If you are using RTC Value objects directly to generate JSON-RPC 
+* or XML-RPC content, you will have to update your code to use the new  
+* "reqVer" property to assign the version number based on your format and 
+* the "reqID" property to assign the method call "ID" instead of directly 
+* adding request ":ID" in the "FunctionName" property for JSON-RPC. These
+* properties are new to "TRtcFunctionInfo" and "TRtcValueResult" classes. 
+* The "reqVer" property was introduced and the old format with a method ID 
+* injected directly into the FunctionName property has been abandoned, to
+* make using RTC Value objects independent of formats used during transfer.
+***=======================================================================
+
+By default, using "TRtcValue.FromJSON" now correctly recognizes remote 
+function objects received in "JSON-RPC 1.0" and JSON-RPC 2.0" formats
+and populates the "reqVer" and "reqID" properties based on parsed data.
+
+Also, when creating remote function objects, values assigned to "reqVer" 
+and "reqID" properties on the TRtcFunctionInfo instance will determine
+which JSON format should be used by "toJSON" and "asJSON" methods.
+  reqVer := 0; // -> all "REST" formats
+  reqVer := 1; // -> XML-RPC and JSON-RPC 1.0
+  reqVer := 2; // -> JSON-RPC 2.0
+  reqVer := 3; // like JSON-RPC 2.0 but ... 
+                  without including {"jsonrpc":"2.0"
+
+1. "TRtcValueObject" class extended with new serialization methods
+   "toXMLRESTRequest", "toXMLRESTRequestEx", "toXMLRESTResponse",
+   "toXMLRESTResponseEx", "to_JSON" and "to_JSONEx".
+
+2. "TRtcExceptionValue" class extended to support separate storage of an 
+   integer "asCode", Unicode String "asMessage" and TRtcValue object "asData".
+   In addition to the "asException" property, new "asErrorCode", "asErrorMessage" 
+   and "asErrorData" properties are now also available on all RTC Value objects
+   to provide separate read/write access to Error "Code", "Message" as 
+   "Data" - which can now be stored as part of the RTC Exception object.
+   "asException" property can still be used to read/write the Exception
+   String in the previously used format "#ErrorCode:ErrorMessage".
+   
+3. "TRtcValueResult" class introduced as an extension of the "TRtcValue" class
+   with additional "reqVer" and "reqID" properties, holding the request 
+   Version and request ID - both required for JSON-RPC 1.0 and 2.0 support.
+   
+4. "TRtcFunctionInfo" class extended with "reqID" and "reqVer" properties
+   (required for JSON-RPC support) and ... a "reqMethod" property and
+   "FromCodeREST", "FromXMLREST" and "FromJSONREST" methods (required for REST).
+   
+5. Default RTC format and the XML-RPC format extended with support for 
+   functions and parameters using the ":" character or without a name (empty string).
+
+6. Extended Unicode support in XML-RPC format to allow function names and parameter
+   names to use Unicode characters. Previously, only ANSI characters were allowed in 
+   function names and parameter names when using the XML-RPC format with RTC SDK.
+
+7. Extended JSON generator and parser included in RTC Value objects to correctly 
+   handle and distinguish between JSON-RPC 1.0, JSON-RPC 2.0 and JSON-REST formats.
+
+8. Fixed some bugs and improved the JSON parser for better error handling.
+
+9. "FromJSON" and "FromXMLrpc" methods fixed to avoid raising exceptions parsing
+   valid JSON and XML-RPC if whitespace is found after the last parsed character.
+   IOW, whitespace at the end is now allowed and will simply be ignored if found.
+
+10. "RTC_XMLRPCTest" Project in the "QuickStart/XMLRPCTest" folder updated to 
+   run more extensive tests of all supported formats (JSON, RTC and XML-RPC).
+
+---------------------------------------------------------
+* Changes in v7.104
+---------------------------------------------------------
+
+1. Fixed a bug in the "TRtcHttpClient" component which resulted in the "OnResponseDone" 
+   event and the last "OnDataReceived" event (with Response.Done=TRUE) NOT triggering 
+   on the Client if the Server was closing the connection after every request (HTTP/1.0)
+
+---------------------------------------------------------
+* Changes in v7.103
+---------------------------------------------------------
+
+This update extends RTC components with new methods and events to allow centralized 
+logging and monitoring of all content being received (Client and Server side), without 
+messing with the original content, while at the same time allowing transparent modifications. 
+New events have also been added to provide access to raw content data which wasn't 
+previously accessible when using TRtcClientModule and TRtcServerModule components.
+
+1. The "TRtcConnection" component and all of its descendants have been extended 
+   with a new "PeekEx" method, which can be used to access reading buffers 
+   containing raw content byte data received, without removing the content 
+   body from receiving buffers. "PeekEx" method can be used any number of 
+   times without breaking any code which requires access to that content, 
+   making it useful for content logging and monitoring, but ... the "PeekEx"
+   method may ONLY be use from inside "OnDataReiceved", "OnPeekRequest"
+   and "OnPeekResponse" events. It also HAS TO be used BEFORE any calls to
+   "Read" or "ReadEx" methods, because these methods clear reading buffers.
+
+2. The "TRtcConnection" component and all of its descendants have been extended 
+   with a new "PokeEx" method, which can be used to REPLACE the content currently
+   stored in reading buffers, making this new content accessible to anyone calling 
+   the next "PeekEx", "Read" or "ReadEx" method. "PokeEx" method may ONLY be use 
+   from inside "OnDataReiceved", "OnPeekRequest" and "OnPeekResponse" events.
+
+3. "TRtcHttpClient", "TRtcMessageClient", "TRtcDataClientLink" and "TRtcDualDataClientLink"
+   components have been extended with a new "OnPeekResponse" event. This event will be
+   called every time response content comes from Server through this component, BEFORE the
+   "OnDataReceived" event is triggered on the component assigned to handle the Response.
+   
+   You can use this event for centralized logging and monitoring of all response content
+   received through this component, but do NOT use Read or ReadEx methods here, because
+   they will clear receiving buffers, making it inaccessible by all other components!
+   To check response content data in this event, use the "PeekEx" method instead.
+
+4. "TRtcClientModule" component has been extended with a new "OnPeekResponse" event. 
+   This event will be called after a complete response has been received from the Server for THIS 
+   component and the content has been decrypted and decompressed by the component (ready for parsing),
+   but BEFORE the response content body has been processed and removed from receiving buffers.
+   
+   You can use this event for centralized logging and monitoring of complete responses
+   received, decompressed, decrypted (and later processed) by this components, but do
+   NOT use Read or ReadEx methods here, because they will immediately clear receiving buffers!
+   To access the response content body from this event, use the "PeekEx" method instead. 
+   
+5. "TRtcClientModule" component has been extended with a new "OnResultReady" event.
+   This event will be called when a Result has been received from a Server for a
+   remote function call sent using this component, after executing local functions
+   called by the Server directly (using the assigned "FunctionGroup") and BEFORE
+   calling the "OnReturn" event of the component assigned to process the Result.
+
+6. "TRtcHttpServer", "TRtcISAPIServer", "TRtcMessageServer", "TRtcDataServerLink" and 
+   "TRtcDualDataServerLink" components have been extended with a new "OnPeekRequest" event,
+   called when content comes from a Client for a Request accepted through this component,
+   BEFORE the "OnDataReceived" event on the component assigned to handle the Request.
+   You can use this event for centralized logging and monitoring of all request content
+   received through this component, but do NOT use Read or ReadEx methods here, because
+   they will clear receiving buffers, making it inaccessible by all other components!
+   To check request content data in this event, use the "PeekEx" method instead. 
+
+7. "TRtcServerModule" component has been extended with a new "OnPeekRequest" event,
+   called when a complete request has been received from the Client for THIS component,
+   after the request content has been decrypted, decompressed and prepared for parsing,
+   BEFORE the request content body has been processed and removed from receiving buffers.
+   
+   You can use this event for centralized logging and monitoring of all request
+   contents received (and later processed) by this components, but do NOT use
+   Read or ReadEx methods here, because they will immediately clear receiving buffers!
+   To access the request content body from this event, use the "PeekEx" method instead. 
+
+---------------------------------------------------------
+* Changes in v7.102
+---------------------------------------------------------
+
+This update adds 4 new methods to the "TRtcDataRequest" component to
+make it easy to prepare and send requests with no request content body 
+or small content body (enough to fit into Clients Memory) and removes
+the previous requirement to *always* implement the "OnBeginRequest" event.
+
+* procedure Write(const s:RtcString='');
+* procedure WriteEx(const s:RtcByteArray); 
+- If your request doesn't have any content body ("GET" request?),
+  or if the entire request content body fits into Client's Memory
+  without causing problems, you can use the Write or WriteEx method
+  while PREPARING the Request for posting - BEFORE you POST it.
+  If the OnBeginRequest event is implemented, anything you prepare
+  this way will be written after the OnBeginRequest event returns.
+  Using this method also allows you to skip implementing the
+  OnBeginRequest event entirely, allowing you to prepare the
+  entire Request including any content body before using POST. 
+
+* procedure PostMethod(FromInsideEvent:boolean=False; Sender:TRtcConnection=nil);
+- This "PostMethod" call replaces these 3 lines of code:
+    if Request.Method='' then Request.Method:='GET';
+    Write('');
+    Post(FromInsideEvent,Sender);
+
+* procedure PostMethod(const MyMethod:RtcString; FromInsideEvent:boolean=False; Sender:TRtcConnection=nil);
+- This "PostMethod" call replaces these 4 lines of code:
+    if MyMethod<>'' then Request.Method:=MyMethod
+    else if Request.Method='' then Request.Method:='GET';
+    Write('');
+    Post(FromInsideEvent,Sender);
+
+How does this work?
+
+In a nutshell, the content body you prepare by using either of the above mentioned methods 
+will be stored in the Request object posted to the Client connection component and will be 
+written out by the TRtcDataRequest component after (or in place of) the OnBeginRequest event.
+
+This way, you have the option to either skip implementing the OnBeginRequest event entirely,
+or implement the OnBeginRequest event to do something before the request is written out, but 
+without the previous (obligatory) call to "Write", "WriteEx" or "WriteHeader" from OnBeginRequest. 
+
+Just make sure to use the new "Write" or "WriteEx" methods on the "TRtcDataRequest" component 
+and NOT the "Write" procedure from the "System" unit (which writes to the console output) and
+NOT the "Write" and "WriteEx" methods on the "TRtcHttpCient" or "TRtcMessageClient" components
+(which write directly to the connection and should ONLY be used from inside RTC events).
+
+---------------------------------------------------------
+* Changes in v7.101
+---------------------------------------------------------
+
+Almost every component from the RTC SDK uses events with
+the "Sender:TRtcConnection" component as the 1st parameter.
+
+This parameter is very useful, because it gives you access 
+to the connection component which has triggered the event.
+
+Because "TRtcConnection" is the base class used by ALL connection 
+components available in the RTC SDK, including raw TCP/IP and UDP 
+components, only basic connection information was available directly 
+through the "Sender:TRtcConnection" component. To access the rest,
+a typecast to TRtcDataClient or TRtcDataServer was required - before.
+
+Starting with RTC SDK v7.101, explicit typecasts to TRtcDataClient
+and TRtcDataServer classes are no longer necessary, allowing you 
+to access all properties and most methods of TRtcDataClient and 
+TRtcDataServer components by using the "Sender" parameter directly.
+
+To read or change event assignments, you still have to use the actual 
+component directly, or make a hard typecasts to TRtcDataClient or
+TRtcDataServer, but ... since reading or changing RTC events from 
+inside other RTC events is not something you would normally do, 
+especially if your code is running in a Multi-Threaded environment, 
+this is more of a "safety feature" than an actual limitation.
+
+What does this mean for your code?
+
+For example, events that previously looked like ...
+---
+  with Sender as TRtcDataServer do
+    if Request.FileName='/$time' then
+      Accept;
+---
+  with TRtcDataServer(Sender) do
+    if Request.FileName='/$time' then
+      Accept;
+---
+  if TRtcDataServer(Sender).Request.FileName='/$time' then
+      TRtcDataServer(Sender).Accept;
+---
+... can NOW be implemented like this ...
+---
+  with Sender do
+    if Request.FileName='/$time' then
+      Accept;
+---
+  if Sender.Request.FileName='/$time' then
+      Sender.Accept;
+---
+As you can see from this short example,
+there is an improvement in code readability.
+
+The effect of this is even more visible if you do 
+NOT use "with" and have more code in your events.
+
+Declaring a local variable using the "absolute" statement
+was probably the best work-around for this problem, but because
+this does require declaring a local variable (1+ line of code)
+and variables require names, it did mean a bit more work and 
+chances of using different names in different places to access 
+the same "Sender:TRtcConnection" parameter were rather high, 
+especially if more than one person is working on that code, 
+which resulted in losing some of that readability again.
+
+Q1: What does this mean for your existing Applications using RTC SDK?
+
+A1: In a single word: Nothing. All your existing code using RTC SDK 
+    continues running just like it did before - no changes required.
+    Simply update the RTC SDK, rebuild your Project(s) and you're done.
+
+Q2: What does it mean for any NEW code you are going to write?
+
+A2: If you have already gotten used to explicit typecasts to TRtcDataClient 
+    and/or TRtcDataServer from inside RTC events and you like this approach, 
+    you are free to continue using this approach in any NEW code you write.
+   
+    But ... if you are new to RTC SDK, or if you like keeping your code
+    clean from any unnecessary "clutter", you can simply forget what you've 
+    already read and/or learned about explicit typecasts to TRtcDataClient 
+    and TRtcDataServer and use the "Sender" object directly in RTC events.
+
+Q3: Are there any "traps" luring in this new update?
+
+A3: Well, kind-of. Because "TRtcConnection" class now declares all properties 
+    and most methods from higher-level classes "TRtcClient", "TRtcServer", 
+    "TRtcDataClient" and "TRtcDataServer", you could end-up trying to use a 
+    Client-side property from a Server-side event, or a Server-side property 
+    in a Client-side event if you rely on automatic	code completion a lot, 
+    because you will now get suggestions for Client-and-Server-side properties 
+    and methods by the IDE, regardless of which side you are implementing, and
+    ... won't get a compiler Error or Warning if you choose the wrong thing.
+
+Q4: What if I do end up trying to access a Client-side-only method from 
+    my Server-side RTC event, or a Server-side-only method from my Client?
+
+A4: Properties with different names, but interchangable (similar) functionality
+    on both sides (like "ContentIn" and "ContentOut" properties on "Request" and 
+    "Response" objects) are accessing the same internal variables, so there is no
+    harm even if you do end up using the "Request.ContentOut" property instead 
+    of "Request.ContentIn" while checking for the request content received on the 
+    Server, or if you use "Response.Sending" insted of "Response.Receiving" to 
+    check if the Client is receiving a response from the Server. In such cases,
+    your code will be working as expected, despite of this obvious mix-up.
+
+    And ... if you try to access a method or property on the Client which is 
+    ONLY supported by the Server, or try to access a method/property on the 
+    Server which is ONLY supported by the Client, an Exception will be raised
+    at runtime, with an Error Message like "Method XYZ is not supported by ABC",
+    to make sure this mix-up does NOT remain hidden in your code unnoticed.
+
+Q5: What about memory consumption? Doesn't this new approach use more memory?
+
+A5: Because objects are still created only by the components that use them 
+    (as before), with only a hand-full of boolean and integer variables moved 
+    from higher-level to low-level class (to avoid using getters and setters 
+    for every single property), the increase in memory consumption is minimal.

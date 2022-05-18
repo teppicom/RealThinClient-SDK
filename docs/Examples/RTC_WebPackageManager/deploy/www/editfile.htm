@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><!-- InstanceBegin template="/Templates/tpl_admin.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Edit file</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tabsel" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tab" -->
+</head>
+
+<body onLoad="showMessage(<%message_visible%>)">
+<p class="h1">Administration Panel</p>
+
+<div id="message" style="display: none" class="msg">
+<div style="float: left; padding: 3px 10px; width: 100%;"><%message_text%></div>
+<div style="float: right; width:10"><a href="#" onClick="show_hide_obj('message');"><img src="close.gif" alt="Close" border="0"></a></div>
+</div>
+
+<div style="clear: both">
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tabsel">
+<div align="center"><a href="/?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab">
+<div align="center"><a href="/?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td><div align="right"><a href="/?cmd=logout&sid=<%sid%>" class="menu">Logout</a></div></td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" -->
+<strong>Package <%package_name%>: Edit file</strong><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody"><!-- InstanceBeginEditable name="BodyRegion" -->
+              <form action="/" method="post" enctype="multipart/form-data" onSubmit="xvalidateForm('description','','R');return document.MM_returnValue">
+                
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="editpack">
+                  
+                <tr>
+				  <td>File</td>
+                  <td width="90%" height="30">
+<input name="filename" id="filename" type="text" style="width: 100%; background: #CCCCCC" value="<%file_name%>" readonly="1">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td width="90%" height="30" >
+<input name="description" type="text" id="description" style="width: 100%" title="Description" value="<%name%>">
+                    </td>
+                </tr>
+                  
+                <tr>
+                    
+                  <td height="30" colspan="2">
+                      <div align="center">
+                      <input name="cmd" type="hidden" value="savefile">
+                      <input name="pack_id" type="hidden" value="<%pack_id%>">
+                      <input name="file_id" type="hidden" value="<%file_id%>">
+                      <input name="sid" type="hidden" value="<%sid%>">  
+                      <input type="submit" class="button" value="Submit">
+                        
+                      <input name="Cancel" type="button" class="button" id="Cancel" value="Cancel" onClick="document.location='/?cmd=packfiles&pack_id=<%pack_id%>&sid=<%sid%>'">
+                      </div></td>
+                </tr>
+                
+              </table>
+              </form>
+            <!-- InstanceEndEditable -->
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</div>
+</body>
+<!-- InstanceEnd --></html>

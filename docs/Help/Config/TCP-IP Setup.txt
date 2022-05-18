@@ -1,0 +1,114 @@
+IPEnableRouter 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Boolean
+Valid Range: 0 or 1 (False or True)
+Default: 0 (False)
+
+Description: Setting this parameter to 1 (True) causes the computer to route IP packets between the networks that it is connected to. 
+
+------------
+
+DefaultTTL 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Number of
+seconds/hops
+Valid Range: 1-255
+Default: 128 for Windows XP
+
+Description: This parameter specifies the default Time To Live (TTL) value that is set in the header of outgoing IP packets. 
+The TTL determines the maximum time that an IP packet can live in the network without reaching its destination. 
+It is effectively a limit on the number of routers an IP packet can pass through before it is discarded.
+
+------------
+
+ForwardBufferMemory 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Number of bytes
+Valid Range: network MTU - some reasonable
+value smaller than 0xFFFFFFFF 
+Default: 74240 (sufficient for fifty 1480-byte
+packets, rounded to a multiple of 256)
+
+Description: This parameter determines how much memory IP allocates to store packet data in the router packet queue. 
+When this buffer space is filled, the router starts to discard packets at random from its queue. 
+Packet queue data buffers are 256 bytes in length. Therefore, the value of this parameter must be a multiple of 256. 
+Multiple buffers are chained together for larger packets. The IP header for a packet is stored separately. 
+This parameter is ignored and no buffers are allocated if the IP router is not enabled. 
+
+------------
+
+NumForwardPackets 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD Number
+Valid Range: 1 - some reasonable value
+smaller than 0xFFFFFFFF Default: 50
+
+Description: This parameter determines the number of IP packet headers that are allocated for the router packet queue. 
+When all headers are in use, the router begins to discard packets at random from the queue. 
+This value should be at least as large as the ForwardBufferMemory value divided by the maximum IP data size 
+of the networks that are connected to the router. This value must be no larger than the ForwardBufferMemory value divided 
+by 256 because at least 256 bytes of forward buffer memory are used for each packet. The optimal number of forward packets 
+for a particular ForwardBufferMemory size depends on the type of traffic that is carried on the network and will be 
+somewhere between these two values. This parameter is ignored and no headers are allocated if the router is not enabled. 
+
+------------
+
+TcpMaxConnectRetransmissions 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Number
+Valid Range: 0 - 0xFFFFFFFF
+Default: 2
+
+Description: This parameter determines the number of times that TCP retransmits a connect request (SYN) before aborting the attempt. 
+The retransmission timeout is doubled with each successive retransmission in a particular connect attempt. 
+The initial timeout value is three seconds. 
+
+------------
+
+TcpMaxDataRetransmissions 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Number
+Valid Range: 0 - 0xFFFFFFFF
+Default: 5
+
+Description: This parameter controls the number of times that TCP retransmits an individual data segment (non-connect segment) 
+before it aborts the connection. The retransmission timeout is doubled with each successive retransmission on a connection. 
+It is reset when responses resume. The base timeout value is dynamically determined by the measured round-trip time on the connection. 
+
+------------
+
+TcpTimedWaitDelay 
+
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Time in seconds
+Valid Range: 30-300 (decimal)
+Default: 0xF0 (240 decimal)
+
+Description: This parameter determines the time that a connection stays in the TIME_WAIT state when it is closing. 
+While a connection is in the TIME_WAIT state, the socket pair cannot be re-used. This is also known as the "2MSL" state. 
+According to RFC, the value should be two times the maximum segment lifetime on the network. See RFC793 for more details.
+
+-------------
+
+TcpWindowSize 
+Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Value Type: REG_DWORD - Number of bytes
+Valid Range: 0 - 0xFFFF
+Default: The smaller of 0xFFFF
+         OR
+(The larger of four times the maximum TCP data size on the network
+         OR
+8192 rounded up to an even multiple of the network TCP data size.)
+The default is 8760 for Ethernet.
+
+Description: This parameter determines the maximum TCP receive window size of the computer. 
+The receive window specifies the number of bytes a sender can transmit without receiving an acknowledgment. 
+Generally, larger receive windows improve performance over high (delay * bandwidth) networks. 
+For highest efficiency, the receive window must be an even multiple of the TCP Maximum Segment Size (MSS).
+

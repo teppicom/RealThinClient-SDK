@@ -1,0 +1,142 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+******************************************************************
+*                                                                *
+* RealThinClient SDK v6.63 (2015.Q3), released August 31st 2015. *
+*                                                                *
+******************************************************************
+
+---------------------------------------------------------
+* Changes in v6.63 (2015.Q3)
+---------------------------------------------------------
+
+This version is fully compatible with all platforms supported by "RAD Studio 10 Seattle".
+
+1. "TRtcGateAccountManager" component exended with methods for enumerating 
+   through all "TRtcHttpGateClient" components linked to the Account Manager
+   (FirstClient, LastClient, NextClient, PrevClient and TotalClients).
+
+2. "PublicID" method added to the "TRtcGateAccountManager", so it can be used to uniquely 
+   identify a "Client" on all Gateways, without giving away any user-specific information.
+
+---------------------------------------------------------
+* Changes in v6.62
+---------------------------------------------------------
+
+1. "TRtcHttpGateClient" and "TRtcGateway" components extended to support sending a "ToGroupID" 
+   with the "SendBytes" method. In prior versions, the "GroupID" parameter in the "SendBytes"
+   method was ONLY used when sending data to our own User Group. Now, the "GroupID" parameter
+   can also be used when sending data to one User, in which case the "GroupID" parameter will
+   be available to the recipient in the new "ToGroupID" property on "Data:TRtcGateClientData".
+
+2. "GateChatClient2" Demo updated to use the new "SendBytes" method and "ToGroupID" parameter.
+
+---------------------------------------------------------
+* Changes in v6.61
+---------------------------------------------------------
+
+1. "TRtcHttpGateClient" component is now set as the "Owner" for all TRtcHttpClient components 
+   created internally, and the "TRtcHttpGateClient" component was updated to provide the 
+   "Sender:TRtcConnection" parameter in all its events. If the event was a result of a manual 
+   method call or a property change on the TRtcHttpGateClient component, in which case the 
+   "Sender" parameter was NIL in previous versions, a "dummy" TRtcHttpClient component with 
+   all properties at their default values will now be passed as the "Sender" parameter.
+
+   These modifications remove the previous necessary check if the "Sender" parameter is 
+   available inside events triggered by TRtcHttpGateClient (and related) components and 
+   simplifies re-using events by multiple TRtcHttpGateClient (and related) components.
+
+2. "OnReadyAfterReset" event added to "TRtcHttpGateClient" and related components,
+   triggering after the "OnStreamReset" and before the "OnReadyToSend" events.
+
+3. "MyAddr:RtcString" property added to the "TRtcHttpGateClient" component,
+   returning "our" complete User Address (MyUID @ GateAddr : GatePort) after login.
+
+4. "TRtcGateClientData" class updated to use properties instead of public class variables,
+   with all properties which may NOT be changed by the user now being read-only.
+
+5. "TRtcGateClientData" class extended with the "Client:TRtcHttpGateClient" property
+   pointing to the Client component where data arrived, and a "UserAddr:RtcString" property 
+   with the full Address of the User that sent the package (UserID @ GateAddr : GatePort).
+
+6. "TRtcGateAccountManager" component extended with all events from the "TRtcHttpGateClient" 
+   component (updated to trigger by all associated TRtcHttpGateClient components) and with
+   new "FindClient" methods for easy access to all "TRtcHttpGateClient" components using 
+   this Gate Account Manager, "promoting" the Gate Account Manager to a connection manager.
+
+---------------------------------------------------------
+* Changes in v6.60
+---------------------------------------------------------
+
+1. "TRtcGateway" component extended with a "Link" property, to allow a single TRtcGateway 
+   component to be connected to multiple TRtcHttpServer components and run on multiple Ports.
+
+2. "TRtcHttpGateway" component introduced as a simple replacement for a TRtcGateway 
+    component connected to one TRtcHttpServer component, providing a fully functional 
+    but very easy-to-configure HTTP(S) Gateway in a single component that even works 
+    from inside the Delphi IDE by setting the "Active" property to TRUE.
+
+3. "RtcSimpleGateway" Demo Project updated to use the new TRtcHttpGateway component 
+   instead of using a TRtcGateway component connected to a TRtcHttpServer component. 
+
+   PS. "GateChatServer" Demo Project still uses the TRtcGateway component connected 
+   to one TRtcHttpServer component, to show how these two components are used together.
+
+---------------------------------------------------------
+* Changes in v6.59
+---------------------------------------------------------
+
+1. "CheckGatewayStatus" method on the "TRtcGateway" component ("/check" URI)
+   extended to include the number of currently active Channels and Subscriptions.
+
+2. "RtcGateTestClient" updated to use the "FriendAdd" method before adding users 
+   to the receiver Group to fix the issue with data being sent out but not received.
+
+3. Fixed a bug in "GateChatClient" and "GateChatClient2" Demos causing the Client to 
+   "freeze" when a Chat room was open and one of the guests lost connection to the Gateway.
+
+4. "TRtcGateway" and "TRtcHttpGateClient" components improved with new automatic 
+   packet size calculation (request and response content lengths for streaming)
+   based on the current output buffer sizes on each side, while still making use
+   of "StreamBlockSizeOut" and "StreamBlockSizeIn" properties on the Client.
+
+   Now, if you set the "StreamBlockSizeOut" property to a very small (example: 4),
+   but there is data waiting in the output buffer when the request is being prepared
+   to be sent to the Gateway, the TRtcHttpGateClient component will use the current
+   buffer size for the current output stream request content length instead of the
+   value specified in the StreamBlockSizeOut property to maximize performance and
+   reduce the number of request/response trips required to send the buffer out.
+
+   The same way, when the response stream is being prepared on the Gateway and 
+   there is data already waiting in the output buffer for the client, instead of
+   blindly using the response size recommended by the Client in the "StreamBlockSizeIn"
+   property, the Gateway component sets the response content length to include
+   at least the current output buffer, plus one PING command (sent every 8 seconds)
+   in order to reduce the latency and maximize streaming performance to the Client.
+
+---------------------------------------------------------
+* Changes in v6.58
+---------------------------------------------------------
+
+1. "TRtcGateway" component improved to use the ISAAC random number generator.
+
+2. "TRtcGateAccountManager" component introduced for simple Gate Account Management.
+   "Public", "Private" and "Linked" Accounts are supported, each with their own Permissions.
+
+3. "TRtcHttpGateClient" component extended with the "AccountManager" property to link
+   the Gate Account Manager with a Client connection for online/offline User notifications.
+
+4. "GateChatClient2" Project added to Demos, using the GateAccountManager and a 
+   Public "Lobby" Account instead of Gateway-side Channels to keep track of online users.
+   This new Demo works with the "RtcSimpleGateway" Demo instead of "GateChatServer".
+
+---------------------------------------------------------
+* Changes in v6.57
+---------------------------------------------------------
+
+1. Reduced delay between reconnect attempts (max 25 seconds) in the "TRtcHttpGateClient" component
+   to avoid very long delays between reconnects in case the Gateway becomes unavailable for longer.
+
+2. There was a bug in the tRtcRSA class, which was causing a memory leak (1 x ERtcRSA, 1 x {Ansi}String)
+   when a new encryption handshake had to be made between a RTC Client and a RTC Server using RSA encryption. 
+   This has now been fixed.

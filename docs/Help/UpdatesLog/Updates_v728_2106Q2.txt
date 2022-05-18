@@ -1,0 +1,397 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+***************************************************************
+*                                                             *
+* RealThinClient SDK v7.28 (2016.Q2), released July 6th 2016. *
+*                                                             *
+***************************************************************
+
+---------------------------------------------------------
+* Changes in v7.28  (2016.Q2)
+---------------------------------------------------------
+
+1. Fixed a bug in the "TRtcHttpGateClient" component which could have resulted in the 
+   component to refuse making new LOGIN attempts after a LOGOUT and a failed LOGIN.
+
+2. Added optional logging for abnormal exists from "TRtcHttpGateClient" component methods.
+   To enable this logging, you can declare the "RTC_DEBUG" conditional define for your Project,
+   or set the global variable "LOG_GATECLIENT_EXITS" from the "rtcGateConst" unit to TRUE.
+
+---------------------------------------------------------
+* Changes in v7.27
+---------------------------------------------------------
+
+1. "PostGUIJob" procedure added to the rtcThrPool unit.
+
+2. Added a safety measure to ensure that a "Client" property on the "TRtcGateClientLink" component
+   and the "MultiClient" property on the "TRtcMultiGateClientLink" component can NOT be cleared
+   or modified while an event is being executed on the component, to avoid Access Violations.
+   Changing the "Client" or "MultiClient" property while the component is in use marks the property
+   for clearing. When the property has been cleared, the "AfterClientRemoved" event will be called.
+
+3. "AfterClientRemoved" event on the "TRtcGateClientLink" and "TRtcMultiGateClientLink" components
+   has been updated to always execute from the Main Thread, even if the "Client" or "MultiClient"
+   property has been removed from code executed in one of the background threads.
+
+4. "Background" property (used to decide if the "ResetStreams" method should be called from
+   a Background Thread or the Main Thread) has been removed from the "TRtcHttpGateClient" component.
+   If the "ResetStreams" method is called from the Main Thread, it will be executed immediately.
+   If called from a background thread, it will be executed in the Main (GUI) Thread, asynchronously.
+
+---------------------------------------------------------
+* Changes in v7.26
+---------------------------------------------------------
+
+1. Fixed wrong result from "Write_File" and "Write_FileEx" when creating a file with 0 bytes.
+
+2. "Write_File" and "Write_FileEx" functions extended with optional "Retries" and 
+   "RetryDelayMS" parameters, providing a simple way to retry writing to a file if it fails.
+
+3. Fixed problems with Gate Clients behind Routers and Proxies
+   being disconnected by the RTC Gateway when switching connections.
+
+4. All forced disconnects, which have previously been done automatically by the RTC Gateway
+   are now optional and can be configured using global variables from the "rtcGateConst" unit:
+
+  { Should Gateway force-close the old INPUT connection
+    when the INPUT stream is opening on a new connection? }
+  GATECONN_FORCECLOSE_OLDIN:boolean=False;
+
+  { Should Gateway force-close the old OUTPUT connection
+    when the OUTPUT stream is opening on a new connection? }
+  GATECONN_FORCECLOSE_OLDOUT:boolean=False;
+
+  { Should Gateway force-close the OUTPUT connection
+    after sending a "BAD" (status <> OK) Response to the Client? }
+  GATECONN_FORCECLOSE_BADOUT:boolean=False;
+
+  { Should Gateway force-close the last known INPUT connection
+    when the OUTPUT Stream is being reset? }
+  GATECONN_FORCECLOSE_LASTIN:boolean=False;
+
+  { Should Gateway force-close the last known OUTPUT connection
+    when the INPUT Stream is being reset? }
+  GATECONN_FORCECLOSE_LASTOUT:boolean=False;
+
+  { Should Gateway force-close the last known INPUT connection
+    when INPUT and OUTPUT Streams are being reset (logout after timeout)? }
+  GATECONN_FORCECLOSE_RESETIN:boolean=True;
+
+  { Should Gateway force-close the last known OUTPUT connection
+    when INPUT and OUTPUT Streams are being reset (logout after timeout)? }
+  GATECONN_FORCECLOSE_RESETOUT:boolean=True;
+
+  { Should Gateway force-close a connection when data arrives
+    on a Stream which was already marked as "closed"? }
+  GATECONN_FORCECLOSE_ONCLOSE:boolean=True;
+
+  { Should Gateway force-close a connection when an Error
+    happens after using the connection or processing connection data? }
+  GATECONN_FORCECLOSE_ONERROR:boolean=True;
+
+5. Added a Timeout for a forced disconnect of inactive connections for
+   RTC Gateway and Gate Client components to make sure that dead connections 
+   will be closed after a while, even if all forced disconnect options are disabled.
+
+6. "RtcGateTestClient" Demo extended to include a test of the new "TRtcGCThread" component,
+   which can be used for asynchronous background execution of all Gate Client events.
+   Also, the number of lines to be filled when auto-starting clients is now optional
+   and defaults to 4. If you want the whole screen to be filled, change it to 40.
+
+---------------------------------------------------------
+* Changes in v7.25
+---------------------------------------------------------
+
+1. Added two alternative "Call" methods to the "TRtcAbsGateClient" class,
+   which could be useful if you are implementing custom Gate Client components.
+
+2. Added a missing call to "BackThread.Post_AfterLoggedIn" in the 
+   "AfterLoggedIn" event handler for the "TRtcGateClientLink" component.
+
+---------------------------------------------------------
+* Changes in v7.24
+---------------------------------------------------------
+
+******************
+**** WARNING! ****
+***************************************************************************************
+*                                                                                     *
+* This update requires manually updating Projects which are using any "Gate Client"   *
+* or related component. If you are using "TRtcHttpGateClient", "TRtcGateClientLink",  *
+* "TRtcGateAccountManager", "TRtcHttpMultiGateClient" or "TRtcMultiGateClientLink"    *
+* components in one of your Projects, you will need to open your Project's Forms and  *
+* Data Modules to manually fix all your events and code using these components.       *
+*                                                                                     *
+***************************************************************************************
+
+HINT: The "Sender:TRtcConnection" parameter has been removed from all Gate Client 
+events, which means that there is no "Sender.inMainThread" or "Sender.Sync()" 
+to synchronize your event code with the Main Thread. Instead, you can either
+move all of your event code to the "GUI" event if you want your whole event
+synchronized with the Main Thread, or ... move code parts which have to be
+executed from the Main (GUI) Thread into the "GUI" event and set "WantGUI:=TRUE"
+from the standard (background) event to have the "GUI" event executed in the 
+Main Thread AFTER your standard (background thread event) finishes execution.
+
+Continue reading for more details about changes in this update ...
+
+1. To simplify writing events for Gate Client and related components, 
+   all events on Gate Client and related components have been redesigned:
+
+1.1. Instead of providing the "Sender:TRtcConnection" parameter and
+     the "Obj:TObject" parameter (Multi-Client events), all Gate Client
+     and related component events now get a "Client:TRtcHttpGateClient" 
+     parameter, pointing to the component where the event originated.
+
+1.2. Additionally, "OnDataReceived" and "OnInfoReceived" events now get a 
+     "Data:TRtcGateClientData" parameter with all the Data/Info received,
+     while other events get a "State:TRtcGateClientStateInfo" parameter.
+   
+1.3. Since all events which need access to "Data" will now get the "Data"
+     object as a parameter, the "Data:TRtcGateClientData" property has
+     been removed from "TRtcHttpGateClient" and "TRtcGateClientLink" 
+     components to avoid wrong or accidental "Data" property use.
+
+2. "TRtcGCThread" component was added to the component palette, providing one 
+   more option for writing code which should be executed in a separate thread,
+   either by assigning the component to the (new) "BackThread" property 
+   on any Gate Client (and related) component, or by manually posting events
+   for asynchronous execution in the Background Thread by using "Post" methods.
+
+3. To provide a simple way for executing code from the Main (GUI) Thread
+   for any Gate Client and the new "TRtcGCThread" component, a new set of 
+   events with a "GUI" suffix was added to all the relevant components:
+
+3.1. To control when the "GUI" event should be executed, a new "WantGUI" 
+     parameter was added to all events triggered from a backgrdoung thread. 
+
+     If you want part of your code executed from the backgrdound thread, but 
+     need another part called from the Main (GUI) Thread, you simply set 
+     "WantGUI:=True" inside the event executed from the background thread
+     and the "GUI" event will be executed immediately afterwards, synchronized
+     with the backgrdound thread where it was marked for execution.
+
+3.2. For any event which should be executed from the Main (GUI) Thread entirely,
+     without the need to execute part of the code in a backgrdound thread, just
+     leave the standard (background) event unassigned and implement the "GUI" event.
+
+4. "TRtcGateClientData" and "TRtcGateClientStateInfo" classes, used by "Data" 
+    and "State" parameters on all Gate Client and related events have been
+    extended with "GateAddr", "GatePort", "MyUID" and "MyAddr" properties 
+    to make sure the correct information will remain available to events
+    executed in background threads asynchronously, even if the Client
+    component posting the events has been modified or destroyed.
+
+5. "Client:TRtcHttpGateClient" property was removed from the "TRtcGateClientData" 
+   class used by "Data" parameters, to make sure that all properties available 
+   on the "Data" object are safe to be used from any thread, asynchronously.
+
+6. Timeouts on RTC Gateway and Gate Client component timeouts, which are defined 
+   globally in the "rtcGateConst.pas" unit, have been reduced to speed up the 
+   clean-up process on the Gateway in case a Client permanently loses connection
+   and to make Gate Clients reconnect faster in case of a temporary connection loss.
+
+7. RTC Gate Client Demos have been updated.
+
+---------------------------------------------------------
+* Changes in v7.23
+---------------------------------------------------------
+
+1. To eliminate the need for manual Group ID allocation and deallocation when using the 
+   "TRtcGateClientLink" component, "MyGroupID" property was added to the "TRtcAbsGateClientLink" 
+   component (and descendants) with the same automatic Group ID allocation previously 
+   added to the "TRtcAbsMultiGateClientLink" component (and descendants). 
+
+   "MyGroupID" property on the "TRtcAbsGateClientLink" component will be automatically 
+   allocating a new Group ID when a "TRtcHttpGateClient" component is assigned to the 
+   "Client" property and deallocating the Group ID when the "Client" property is removed.
+
+2. To keep Group ID management across multiple inter-linked "TRtcHttpGateClient" components 
+   centralized, Group ID Management on the "TRtcHttpGateClient" component (previously done 
+   by using the "Groups" property) has been moved to the (new) "SharedGroups" property,
+   which is now also available on the "TRtcGateAccountManager" component.
+  
+   If the "TRtcHttpGateClient" component was created by a "TRtcHttpMultiGateClient" component 
+   or ... if the "TRtcHttpMultiGateClient" or "TRtcGateAccountManager" component is manually 
+   assigned to the "AccountManager" property of the "TRtcHttpGateClient" component, the 
+   "SharedGroups" property on the "TRtcHttpGateClient" component will be linked to the same 
+   property on the assigned "TRtcGateAccountManager" / "TRtcHttpMultiGateClient" component.
+
+   WARNING! If you were manually allocating and deallocating Group IDs, you will either
+   need to change your code to use the new "SharedGroups" property instead of the "Groups"
+   property for Group ID allocation and deallocation, or ... if you are using the
+   "TRtcGateClientLink" or "TRtcMultiGateClientLink" component with a single GroupID
+   per component, use the new "MyGroupID" property instead.
+
+3. To make events on the "TRtcGateAccountManager" component complatible with 
+   events on "TRtcHttpMultiGateClient" components and to make writing events for handling 
+   multiple Gate Clients easier, all events on the "TRtcGateAccountManager" component 
+   have been extended with the "Obj:TObject" parameter pointing to the "TRtcHttpGateClient" 
+   component triggering each event, identical to events on "TRtcHttpMultiGateClient" components.
+  
+   To access the "TRtcHttpGateClient" component triggering events on a TRtcGateAccountManager
+   component, now you can declare a local "var Client:TRtcHttpGateClient absolute Obj;" for
+   each event to get direct access to the Client component triggering the event.
+
+   WARNING! This change requires updating Projects with events implemented on 
+   the "TRtcGateAccountManager" component. To update your Projects, you will 
+   have to open all Forms and Data Modules using the TRtcGateAccountManager
+   component and update your events to include the "Obj:TObject" parameter.
+
+4. "OnLogIn" events on all Gate-Client-related components renamed to "OnLoggedIn".
+   
+   WARNING! This change requires updating Projects using the "OnLogIn" event.
+   To update your Projects to continue working as before, you will need to
+   manually open all Forms and Data Modules and assign the event you have
+   implemented for the "OnLogIn" event to the new "OnLoggedIn" event.
+
+5. "AfterClientAssigned" and "AfterClientRemoved" events added to
+   "TRtcGateClientLink" and "TRtcMultiGateClientLink" components, providing
+   notifications when the "Client" or "MultiClient" property is assigned or removed.
+
+6. "OnDataFilter" and "OnInfoFilter" events added to "TRtcHttpGateClient", 
+   "TRtcHttpMultiGateClient", "TRtcGateClientLink" and "TRtcMultiGateClientLink" components,
+   providing an additional way to access data/info received from the Gateway and decide if 
+   the "OnDataReceived"/"OnInfoReceived" event should be called for this component, or not.
+
+   To keep components functionality compatible with previous component versions,
+   the implementation of "OnDataFilter" and "OnInfoFilter" events is optional.
+   In case the "OnDataFilter" event is NOT implemented, but the "OnDataReceived" event 
+   is implemented, the "OnDataReceived" event will be called for ALL data received.
+   Also, if the "OnInfoFilter" event is NOT implemented, but the "OnInfoReceived" event 
+   is implemented, the "OnInfoReceived" evet will be called for ALL info received.
+
+7. To simplify the management of User Groups and communication within a Group when working 
+   with a single Gateway, "TRtcHttpGateClient" component was extended with the following methods:
+
+    function AddUserToMyGroup(const GroupID,UserID:TGateUID):boolean;
+    function RemoveUserFromMyGroup(const GroupID,UserID:TGateUID):boolean;
+    function DisbandMyGroup(const GroupID:TGateUID):boolean;
+
+    function IsUserInMyGroup(const GroupID,UserID:TGateUID):boolean;
+    function UsersInMyGroup(const GroupID:TGateUID):integer;
+
+    function SendToMyGroup(const GroupID:TGateUID; const CallID:word; const data:RtcByteArray):boolean; overload;
+    function SendToMyGroup(const GroupID:TGateUID; const CallID:word; const data:RtcString):boolean; overload;
+    function SendToMyGroup(const GroupID:TGateUID; const CallID:word):boolean; overload;
+    function LeaveUsersGroup(const OwnerID:TGateUID; const GroupID:TGateUID):boolean;
+
+8. To simplify the process of separating Gate Client functionality into components or modules,
+   all the necessary methods required to manage User Groups and communicate through the Gateway 
+   have been added to the "TRtcAbsGateClientLink" component (and descendants):
+
+    function UserInfo(const UserID:TGateUID):RtcString;
+    function PingUser(const UserID:TGateUID):boolean;
+
+    function VerifyUser(const UserID:TGateUID):boolean;
+    function UserNotVerified(const UserID:TGateUID):boolean;
+    function UserAllowed(const UserID:TGateUID; const action:word):boolean;
+
+    function AddUserToGroup(const UserID:TGateUID):boolean;
+    function IsUserInGroup(const UserID:TGateUID):boolean;
+    function RemoveUserFromGroup(const UserID:TGateUID):boolean;
+
+    function UsersInGroup:integer;
+    function DisbandGroup:boolean;
+
+    function SendToGroup(CallID:word; const data:RtcByteArray):boolean; overload;
+    function SendToGroup(CallID:word; const data:RtcString):boolean; overload;
+    function SendToGroup(CallID:word):boolean; overload;
+
+    function SendBytes(const UserID:TGateUID; GroupID:TGateUID; CallID:word; const data:RtcByteArray):boolean; overload;
+    function SendBytes(const UserID:TGateUID; GroupID:TGateUID; CallID:word; const data:RtcString):boolean; overload;
+    function SendBytes(const UserID:TGateUID; GroupID:TGateUID; CallID:word):boolean; overload;
+
+    function AddFriend(const UserID:TGateUID):boolean;
+    function RemoveFriend(const UserID:TGateUID):boolean;
+    function LeaveUsersGroup(const OwnerID:TGateUID; const GroupID:TGateUID):boolean;
+
+    function Ready:boolean;
+    function MyUID:TGateUID;
+
+9. Added a global variable "MAX_INTERNAL_CALL_SIZE" in the "rtcGateCli" unit to
+   define the maximum allowed size for internal calls between Gate Clients and reduce 
+   the potential risk of malicious Clients flooding other Clients Memory by sending 
+   random data (up to 16MB per call) using Call IDs reserved for internal communication.
+
+   By default, MAX_INTERNA_CALL_SIZE = 128000 (128 KB), which is large enough for data 
+   sent by internal component calls, while being low enough to keep Memory usage low
+   even if a malicious Client decides to use one of internal Call IDs to send trash.
+
+---------------------------------------------------------
+* Changes in v7.22
+---------------------------------------------------------
+
+1. Fixed a bug in the HTTP Header parser responsible for handling HTTP Cookies,
+   which was splitting every parameter inside a Cookie into a separate Cookie.
+
+   WARNING! This bug was affecting the behavior on all Clients, Routers and Load Balancers, 
+   but it could also have effected some Servers while preparing a response or parsing a request.
+
+   In case your Project was relying on the "Cookie" property to return ONLY the Cookie Value 
+   without parameters, you should update your Project to remove Cookie parameters manually, or ... 
+   (as a cheap alternative) - you can have your HTTP Header parser continue splitting Cookie 
+   parameters into separate Cookies by using the "rtcInfo" unit and changing the global variable
+   "RTC_HTTP_COOKIE_DELIMITER" to ';' (it now defaults to #13) at the start of your Application.
+
+---------------------------------------------------------
+* Changes in v7.21
+---------------------------------------------------------
+
+1. To provide more control and make quick job processing more transparent,
+   the "TRtcQuickJob" component was extended with the following methods:
+
+    function JobsInQueue:integer;
+    function JobRunning:boolean;
+    function JobsTotal:integer;
+
+---------------------------------------------------------
+* Changes in v7.20
+---------------------------------------------------------
+
+1. To simplify writing Gate Clients which communicate with a Group of Clients through one or more Gateways, 
+   all the necessary methods required to manage and communicate with a Group of Users on multiple Gateways 
+   have been added to the "TRtcAbsMultiGateClientLink" component (and descendants):
+
+    function UserInfo(const UserAddr:RtcString):RtcString;
+    function PingUser(const UserAddr:RtcString):boolean;
+
+    function VerifyUser(const UserAddr:RtcString):boolean;
+    function UserNotVerified(const UserAddr:RtcString):boolean;
+    function UserAllowed(const UserAddr:RtcString; const action:word):boolean;
+
+    function AddUserToGroup(const UserAddr:RtcString):boolean;
+    function IsUserInGroup(const UserAddr:RtcString):boolean;
+    function RemoveUserFromGroup(const UserAddr:RtcString):boolean;
+    function UsersInGroup:integer;
+    function DisbandGroup:boolean;
+
+    function SendToGroup(CallID:word; const data:RtcByteArray):boolean; overload;
+    function SendToGroup(CallID:word; const data:RtcString):boolean; overload;
+    function SendToGroup(CallID:word):boolean; overload;
+
+    function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word; const data:RtcByteArray):boolean; overload;
+    function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word; const data:RtcString):boolean; overload;
+    function SendBytes(const UserAddr:RtcString; GroupID:TGateUID; CallID:word):boolean; overload;
+
+    function AddFriend(const UserAddr:RtcString):boolean;
+    function LeaveUsersGroup(const OwnerAddr:RtcString; GroupID:TGateUID):boolean;
+
+2. "TRtcGateAccountManager" and "TRtcHttpMultiGateClient" components extended with the "FindMyUserAddr" method.
+
+3. "TRtcHttpMultiGateClient" component extended with two additional "SendToMyGroup" method overrides.
+
+
+---------------------------------------------------------
+* Changes in v7.19
+---------------------------------------------------------
+
+1. Improved performance of the "MULTIPART/FORM-DATA" parser in "Request.Params" property,
+   when a temporary file is used to store the content before and during the parsing process.
+
+2. "Request.Params.IsFile[]" property was NOT working correctly (always returning FALSE) 
+   if it was the first property to be used after the last call to "AddText", because
+   the content added with the "AddText" method was NOT automatically parsed (as needed).
+   This has now been fixed. Using the "Request.Params.IsFile[]" property now automatically 
+   executes the content parser if it has NOT been executed after the last "AddText" call.
+

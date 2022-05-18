@@ -1,0 +1,349 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*********************************************************************
+*                                                                   *
+* RealThinClient SDK v6.04 (2012.Q3), released September 18th 2012. *
+*                                                                   *
+*********************************************************************
+
+Starting with RTC SDK v6.0, all functions, procedures, methods and properties which have been using the 
+"AnsiString" type in v5.x and older, will be using the "RtcString" type - mapping to the "String" type 
+by default. This means that all "AnsiString" type declarations should be replaced with (Unicode)String 
+if your Projects are compiled with Delphi 2009 and later, because String=UnicodeString in Delphi 2009+
+
+You can still use the "old-style" Read, Write, Read_File, Write_File methods/functions with binary content 
+by changing all your "AnsiString" type declarations to "RtcString", but keep in mind that "RtcString" could 
+be a WideString or UnicodeString as well as AnsiString, so you should NOT use direct memory read/write 
+operations on "RtcString" variables (like "Move"), unless you check for SizeOf(RtcChar) to know the 
+characters in the String has the size you expect.
+
+If your code is too dependant on the AnsiString type and you do NOT have the time nor the will to make 
+all changes necessary to get your code working without the "AnsiString" type, there is also a simple 
+"PANIC BUTTON" option: Declare the "FORCE_ANSI_STRING" compiler directive. By adding "FORCE_ANSI_STRING" 
+to compiler defines and rebuilding the RTC SDK, the "RtcString" type will be mapped to the "AnsiString" type. 
+This way, all the RTC SDK functions, procedures, methods and properties which have been using the "AnsiString" 
+type in prior RTC SDK versions, will continue using the "AnsiString" type in the latest RTC SDK version. 
+With a few minor exceptions to the rule, this should be enough to get Projects using RTC SDK v5.x and older 
+to compile using the latest RTC SDK version, without making any changes in your code.
+
+Using the "FORCE_ANSI_STRING" compiler directive is a "QUICK AND DIRTY" solution, which is NOW made available 
+to simplify "the move forward", but it will be removed in one of the upcoming releases. If you want to make 
+your code really compatible with the RTC SDK v6.0 and later, you have to make sure that your code does NOT 
+use the AnsiString type ANYWHERE. 
+
+Unless you are using direct memory operations on AnsiString variables, porting existing Projects to work with 
+the RTC SDK v6.0 should be pretty simple, because all the functions, procedures, properties and methods which 
+have been working with the AnsiString type before, will continue working in the same manner with the 
+RtcString/String type in RTC SDK v6.0. 
+
+Any code which requires a type consisting of a sequence of bytes, the new "RtcByteArray" type should be used 
+instead of "AnsiString". The RTC SDK v6.0 was extended with A LOT of new ways for working with the RtcByteArray 
+type, adding new functions like ReadEx, WriteEx, Read_FileEx, Write_FileEx, ZCompress_Ex, ZDecompress_Ex, 
+Utf8EncodeEx, Utf8DecodeEx, Mime_EncodeEx, Mine_DecodeEx, CryptEx, DecryptEx, toCodeEx, RtcStringToBytes, 
+RtcBytesToString and more. See below for a complete list ...
+
+---------------------------------------------------------
+* Changes in v6.04 (2012.Q3)
+---------------------------------------------------------
+
+1) Fixed the "RtcPBytesZeroToString" function ("rtcInfo.pas" unit).
+
+   This function is used for external API calls and by the TRtcISAPIServer component.
+
+2) TRtcISAPIServer component improved to allow sending large files by using the "OnDataSent" event.
+
+---------------------------------------------------------
+* Changes in v6.03
+---------------------------------------------------------
+
+1) Fixed the "RtcStringToPBytesZero" function ("rtcInfo.pas" unit) to work correctly with empty strings.
+
+   This function is used for external API calls and in the "TRtcMemDataSet" component.
+
+---------------------------------------------------------
+* Changes in v6.02
+---------------------------------------------------------
+
+1) Integrated functionality from the "TRtcParseEx" class ("Demos/Rtc_WebForum/rtcParseEx.pas" unit) 
+   into the "TRtcParse" class ("Lib/rtcParse.pas" unit) and deleted the "rtcParseEx.pas" unit.
+
+   If you were using the "TRtcParseEx" class and the "rtcParseEx" unit,
+   simply change your code to use the "TRtcParse" class and the "rtcParse" unit instead.
+
+2) Updated the "RTC_WebForum" Demo to use the "TRtcParse" class instead of "TRtcParseEx".
+
+3) Fixed "FORCE_WIDE_STRING" compatibility with FreePascal for Windows.
+
+---------------------------------------------------------
+* Changes in v6.01
+---------------------------------------------------------
+
+1) Fixed a problem with the "TRtcMemDataSet" component which was causing "ft_String" fields 
+   to be trimmed after the 1st character when using Delphi 2009 and later (Unicode).
+
+2) Extended RtcString <-> RtcByteArray functions with 3 new parameters:
+
+   * Use the global variable "RTC_STRING_FIXMODE" to define (once, directly after program start)
+     how you want to handle conversions between RtcString and RtcByteArray data:
+
+      rtcStr_NoFIX = Do NOT modify data when converting between RtcString and RtcByteArray
+
+      rtcStr_FixDown (default) = Replace Unicode characters above #255 with ANSI (Win-1252) 
+                                 when converting RtcString to RtcByteArray
+
+      rtcStr_FixUpDown = rtcStr_FixDown + Replace ANSI (Win-1252) characters with Unicode 
+                         when converting RtcByteArray to RtcString
+
+   * Set the global variable "RTC_STRING_CHECK" to TRUE (default=FALSE; rtcFastStrings.pas unit)
+     to enable strict control on all conversions between RtcString and RtcByteArray. When set to TRUE, 
+     all RtcString assignments and convertions which would result in data loss will throw an exception.
+
+   * Set the global variable "RTC_INVALID_CHAR" to the code you want to use for Unicode characters
+     which do not match any characters from the default ANSI (Win-1252) codepage (default = 63 / '?' ).
+
+3) New functions for ANSI/Unicode conversions added to the "rtcFastStrings" unit:
+
+    // Convert Unicode character code to ANSI (Win-1252) character code
+    function RtcUnicodeToAnsiChar(Chr:Word):Byte;
+    // Convert ANSI (Win-1252) character code to Unicode character code
+    function RtcAnsiToUnicodeChar(Chr:Byte):Word;
+
+    // Convert Unicode String to ANSI (Win-1252) String
+    function RtcUnicodeToAnsiString(const Source:RtcString):RtcString;
+    // Convert ANSI (Win-1252) String to Unicode String
+    function RtcAnsiToUnicodeString(const Source:RtcString):RtcString;
+
+4) New functions for checking validity of RtcString data added to the "rtcInfo" unit:
+
+    // Returns TRUE if "Source" can safely be used with RtcStringTo* functions (no data loss)
+    function isRtcStringOK(const Source:RtcString):boolean;
+
+    // If "Source" contains Unicode characters and "RTC_STRING_CHECK" = TRUE, raise an Exception
+    procedure RtcStringCheck(const Source:RtcString);
+
+    
+---------------------------------------------------------
+* Changes in v6.0
+---------------------------------------------------------
+
+1) RtcString, RtcChar, RtcWideString and RtcWideChar types introduced.
+
+   "AnsiString" type used in prior RTC SDK versions is now replaced with the "RtcString" type.
+   "WideString" and "UString" types from prior versions have been replaced with "RtcWideString".
+
+ * The "RtcString" type should be used ONLY for data with byte-sized (8-bit) characters.
+   For example: ASCII, ANSI and other pre-encoded (UTF-8, UTF-16, etc) Text.
+
+   Regardless of the actual String type to which "RtcString" will be mapped to,
+   all the functions, methods and properties in the RTC SDK working with the "RtcString"
+   type will ALWAYS see the "RtcString" type as a string of byte-sized (8-bit) characters.
+
+   For example, even if the "RtcString" type is mapped to a (Unicode) String type (default for D2009+),
+   where each character consists of 16 bits (2 bytes), only the lower 8 bits (1 byte) will be used.
+ 
+ * The "RtcWideString" type should be used ONLY for human-readable Text (Unicode).
+   RTC SDK functions, properties and methods working with the "RtcWideString" type will
+   automatically perform conversions required for keeping the Unicode content "in tact".
+   
+2) "FORCE_ANSI_STRING" and "FORCE_WIDE_STRING" compiler directives introduced.
+
+    By default, the "RtcString" type will be mapped to the "String" type, and "RtcWideString" type
+    will be mapped to Wide/Unicode String (WideString on FPC and Delphi 6-2007, "String" on D2009+).
+
+    If your existing code depends on the "AnsiString" type when compiled with Delphi 2009 and later,
+    or if you want to use the "WideString" type with Delphi 6-2007 and FPC instead of (Ansi)String,
+    you can *force* the RTC SDK to change the mapping of the "RtcString" type ...
+ 
+    You can declare the "FORCE_ANSI_STRING" compiler directive if you want the
+    "RtcString" type to be mapped to the "AnsiString" type instead of "String".
+
+    Or ...
+
+    You can declare the "FORCE_WIDE_STRING" compiler directive if you want the
+    "RtcString" type to be mapped to the "WideString" type instead of "String".
+
+    If both compiler directives ("FORCE_ANSI_STRING" and "FORCE_WIDE_STRING") are declared,
+    "FORCE_ANSI_STRING" compiler directive will be used ("FORCE_WIDE_STRING" will be ignored.
+
+    NOTE: "RTC_noWideUString" compiler directive has been removed (it will have no effect, even if declared).
+
+3) "RtcByteArray" type (array of byte) and methods for working with byte arrays added.
+
+  *** TRtcConnection and descendant classes like TRtcHttpServer and TRtcHttpClient extended with:
+
+      function ReadEx:RtcByteArray; // Read raw byte data received
+      procedure WriteEx(const s:RtcByteArray); // Send raw byte data
+
+  *** TRtcCrypt class extended with:
+
+      procedure CryptEx(var s:RtcByteArray); // Encrypt data inside byte array
+      procedure DeCryptEx(var s:RtcByteArray); // Decrypt data inside byte array
+      property KeyEx:RtcByteArray; // Set a byte array as a new Encryption Key
+
+  *** rtcCrypt.pas unit now has two new procedures:
+
+      procedure CryptEx(var s:RtcByteArray; const key:RtcByteArray); // Encrypt byte array
+      procedure DeCryptEx(var s:RtcByteArray; const key:RtcByteArray); // Decrypt byte array
+
+  *** TRtcRouterContentBody class extended with:
+
+      property BodyEx:RtcByteArray; // Access to the Content Body as a byte array
+
+  *** TRtcHugeString class extended with:
+
+      procedure AddEx(const s:array of byte; len:Integer=-1); // Add a byte array to the String
+      function GetEx:RtcByteArray; // Get the String as a byte array
+ 
+  *** TRtcHugeByteArray class added, with the same functionality as TRtcHugeString, but using byte arrays internally
+
+  *** TRtcByteArrayStream class added, implementing a TStream class using a RtcByteArray for storage
+
+  *** TRtcValue objects extended with methods returning serialized objects in a RtcByteArray:
+
+      function toCodeEx:RtcByteArray;
+      function toXMLrpcEx:RtcByteArray;
+      function toXMLrpcRequestEx:RtcByteArray;
+      function toXMLrpcResponseEx:RtcByteArray;
+      function toJSONEx:RtcByteArray;
+
+  *** A new "rtc_ByteArray" type added for use with RTC Value objects (Remote Functions),
+      providing an easy way for transfering byte arrays between RTC Clients and Servers.
+
+      When used with JSON and XML-RPC, RtcByteArray will be sent with Base64 encoding (like a ByteStream).
+
+      "TRtcByteArray" class implemented, adding native "RtcByteArray" support to RTC Value objects
+      "asByteArray" property and "newByteArray(InitialSize:Integer)" methods added to all TRtcValue objects
+
+  *** rtcInfo.pas unit extended with new procedures and functions using the RtcByteArray type:
+
+      function Read_FileEx(const fname:RtcWideString; Loc,Size:int64; AccessMode:TRtcFileAccessMode=rtc_ShareDenyNone):RtcByteArray; overload;
+      function Read_FileEx(const fname:RtcWideString; AccessMode:TRtcFileAccessMode=rtc_ShareDenyNone):RtcByteArray; overload;
+
+      function Write_FileEx(const fname:RtcWideString; const Data:RtcByteArray; Loc:int64; AccessMode:TRtcFileAccessMode=rtc_ShareExclusive):boolean; overload;
+      function Write_FileEx(const fname:RtcWideString; const Data:RtcByteArray; AccessMode:TRtcFileAccessMode=rtc_ShareExclusive):boolean; overload;
+
+      function Mime_EncodeEx(const s: RtcByteArray; toJSON:boolean=False): RtcByteArray;
+      function Mime_DecodeEx(const s: RtcByteArray): RtcByteArray;
+
+      procedure AddBytes(var Dest:RtcByteArray; const Plus:RtcByteArray; loc:Integer=0; len:Integer=-1);
+      procedure DelBytes(var Dest:RTcByteArray; Len:Integer);
+
+      function RtcBytesZeroToString(const Source:RtcByteArray; loc:Integer=0; len:Integer=-1):RtcString;
+      function RtcStringToBytesZero(const Source:RtcString; loc:Integer=1; len:Integer=-1):RtcByteArray;
+
+      function RtcBytesToString(const Source:RtcByteArray; loc:Integer=0; len:Integer=-1):RtcString;
+      function RtcStringToBytes(const Source:RtcString; loc:Integer=1; len:Integer=-1):RtcByteArray;
+
+      function RtcPBytesZeroToString(Source:Pointer):RtcString;
+
+      function RtcBytesToWideString(const Source:RtcByteArray; loc:Integer=0; len:Integer=-1):RtcWideString;
+      function RtcWideStringToBytes(const Source:RtcWideString; loc:Integer=1; len:Integer=-1):RtcByteArray;
+
+      function Utf8EncodeEx(const Source: RtcWideString; SourceOffset:Integer=1; SourceLength:Integer=-1):RtcByteArray;
+      function Utf8DecodeEx(const Source: RtcByteArray; SourceOffset:Integer=0; SourceLength:Integer=-1):RtcWideString;
+
+      function PosEx(const c:RtcString; const s:RtcByteArray; at:integer=1):integer; overload;
+      function PosEx(const c,s:RtcByteArray; at:integer=0):integer; overload;
+
+      function isXMLString(const s:RtcByteArray):boolean; overload;
+
+  *** rtcZLib.pas unit extended with two new functions working with RtcByteArray:
+
+      function ZCompress_Ex(const inBuffer: RtcByteArray; level: TZCompressionLevel):RtcByteArray; overload;
+      function ZDecompress_Ex(const inBuffer: RtcByteArray; inSize:integer=0):RtcByteArray; overload;
+
+4) Some functions and methods have been declared as deprecated, renamed or removed.
+
+  *** "sLocalPort", "sLocalAddr", "sPeerPort", "sPeerAddr", "sServerPort" and "sServerAddr" methods in the
+      "TRtcConnection" class (and all descendants like TRtcHttpClient and TRtcHttpServer) are now marked
+      as "deprecated", because their only purpose is to perform an explicit typecast to String for properties
+      with returning an AnsiString. But now that AnsiString has been replaced with RtcString, which maps to 
+      the "String" type by default, these functions have become obsolete and you should simply use the 
+      original functions: LocalPort, LocalAddr, PeerPort, PeerAddr, ServerPort and ServerAddr.
+
+  *** "Utf8ToAnsi" function has been removed, use "Utf8Encode" instead
+
+  *** "AnsiToUtf8" function has been removed, use "Utf8Decode" instead
+
+  *** Old "Utf8EncodeEx" and "Utf8DecodeEx" functions are now called "Utf8Encode" and "Utf8Decode".
+      New "Utf8EncodeEx" and "Utf8DecodeEx" functions are now using RtcByteArray in place of AnsiString
+
+  *** "ZCompress_Str" and "ZDecompress_Str" functions are now marked as "deprecated" and will ONLY be available 
+      if the "RtcString" type maps to the "AnsiString" type. For better forward compabitility, you should use
+      the new "ZCompress_Ex" and "ZDecompress_Ex" functions instead. For String to ByteArray conversion, 
+      you can use "Utf8EncodeEx", "Utf8DecodeEx", "RtcStringToBytes" and "RtcBytesToString" functions.
+
+  *** "PosEx2" function has been renamed to "PosEx"
+
+  *** "Scan_File" function now expects a RtcByteArray as the "search_string" parameter instead of "AnsiString".
+      If searching for a String, use "RtcStringToBytes" or "Utf8EncodeEx" function (depending on String data).
+
+5) Low-level socket access code has been redesigned to natively work with the RtcByteArray type instead of 
+   AnsiString, making the low-level implementation independent of available String types and reflecting the 
+   fact that TCP/IP and UDP sockets are always working with binary data at the lowest level.
+
+   All methods, functions and procedures which have been using the "AnsiString" type before, are now using 
+   the "RtcString" type. In order to keep all these methods, functions and procedures backwards compatible
+   with "AnsiString" implementations used in older RTC SDK versions, the "RtcString" type will be handled
+   by the RTC SDK as a binary collection of 8-bit characters (similar to the RawByteString type).
+
+   This way, all the functions which have been using the "AnsiString" type, will work the same by using
+   the "RtcString" type, which means that all the code which was using functions like Read/Write, 
+   Read_File/Write_File and Utf8Encode/Utf8Decode to read and write "binary" data will continue working,
+   because 1 character inside a "RtcString" will be seen as 1 byte, regardless of the actual RtcChar size.
+
+6) "TRtcCryptPlugin" interface changed to work with RtcByteArray instead of AnsiString
+
+7) StreamSec Tools 2.x encryption plugin updated to work with the new TRtcCryptPlugin interface
+
+8) Fixed compatibility with FreePascal for Windows
+
+9) Fixed JSON ByteStream and ByteArray generator code.
+
+10) Changed parameters for RtcPBytesZeroToString from (Source:Pointer) to (var Source).
+
+11) Added RtcPBytesToString and RtcStringToPBytes functions/procedures (rtcInfo.pas unit):
+
+  * function RtcPBytesToString(var Source; Len:Cardinal):RtcString; overload;
+  * procedure RtcStringToPBytes(Source:RtcString; var Dest; Len:Cardinal); overload;
+  * procedure RtcStringToPBytes(Source:RtcString; var Dest; Loc, Len:Cardinal); overload;
+
+12) Projects compiled with FreePascal/Lazarus for Windows and Linux
+   no longer require the "zlib1.dll" file (using zlibpas instead)
+
+13) Number conversion functions updated to use "FormatSettings" with FPC
+
+14) FireMonkey iOS Projects updated
+
+15) ISAPI and PHP Data Providers updated
+
+16) Lazarus package "rtcsdk_fpc.lpk" updated & Lazarus Demos tested
+   with FPC 2.6.0 using Lazarus 1.0 RC1 on Windows and Mac OSX
+
+17) "TRtcMemDataSet" and "TRtcDataSetMonitor" components moved to a new "rtcSDK_DBA.dpk" package.
+
+   If you are using "TRtcMemDataSet" or "TRtcDataSetMonitor" components, you will first need to 
+   completely UNINSTALL the old "rtcSDK.dpk" package, then close Delphi, delete any "rtcSDK.BPL" 
+   files you can find on your local drives, then start again Delphi, build and install the new 
+   "rtcSDK.dpk" package and then build and install the new "rtcSDK_DBA.dpk" package.
+
+18) Project Groups moved to the "root" folder and Projects reorganized:
+
+   Demos_VCL       -> Demos using the VCL and the rtcSDK.dpk
+   Demos_VCL_DBA   -> Demos using the VCL with the rtcSDK.dpk and rtcSDK_DBA.dpk
+
+   Demos_FMX       -> Demos using FMX (Win,OSX,iOS) with the rtcSDK.dpk 
+   Demos_FMX_DBA   -> Demos using FMX (Win,OSX,iOS) with the rtcSDK.dpk and rtcSDK_DBA.dpk
+
+   Examples_QuickStart_VCL  -> Short "QuickStart" examples using the VCL with the rtcSDK.dpk
+
+19) Project Groups including all available Packagas added to the "root" folder:
+ 
+   Packages_Main        -> contains all RTC SDK packages: rtcSDK, rtcSDK_DBA, rtcSDK_RAW.
+ 
+   Packages_ThirdParty  -> contains Third-Party plugin packages: rtcSDK_SSec, NexusDB_RTC.
+
+20) "rtcSDK_X.dpk" package removed, please use packages provided in the "Packages_Main" Group instead.
+
+21) "Readme.txt" file updated to reflect the above changes.
+

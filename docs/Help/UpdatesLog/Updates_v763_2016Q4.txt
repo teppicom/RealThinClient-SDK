@@ -1,0 +1,195 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*******************************************************************
+*                                                                 *
+* RealThinClient SDK v7.63 (2016.Q4), released November 8th 2016. *
+*                                                                 *
+*******************************************************************
+
+---------------------------------------------------------
+* Changes in v7.63 (2016.Q4)
+---------------------------------------------------------
+
+1. To simplify debugging and customer support in case of Network problems,
+   in addition to the Error Code (which was already included in Error Messages),
+   the "E.Message" parameter in all "Error" events triggered by RTC connection 
+   components using Socket-based connection providers (useProxy & useWinHTTP = False) 
+   now ALSO includes a short Error Description (previously missing on iOS, OSX and 
+   Android platforms), destination Address, Port Number and IP Version (v4 / v6).
+
+---------------------------------------------------------
+* Changes in v7.62
+---------------------------------------------------------
+
+1. Because of a bug in the low-level POSIX Sockets layer used by RTC, there was a
+   chance of Memory Overwrites and Access Violations when working with "IPv6" Clients 
+   and Servers on "iOS", "OSX" and "Android" platforms. This should now be fixed.
+
+2. "GateIP6" properties on RTC Gateway and Gate Client components renamed to "GateIPV" 
+   and "ServerIP6" properties on all RTC connection components renamed to "ServerIPV" 
+   and updated to support the following "IP version selection" modes:
+    - rtc_IPv4 (default) = preffer IPv4, then try OS-Default IP version, then IPv6
+    - rtc_IPvOS4         = preffer OS-default IP version, then try IPv4, then IPv6
+    - rtc_IPv6           = preffer IPv6, then try OS-default IP version, then IPv4
+    - rtc_IPvOS6         = preffer OS-default IP version, then try IPv6, then IPv4
+
+3. RTC Demos updated to use "ServerIPV" and "GateIPV" properties.
+
+4. Closing a Client connection when using one of the socket-based APIs was triggering 
+   the "ConnectFail" event instead of triggering "ConnectLost" and/or "Disconnect" events.
+   This has now been fixed.
+
+---------------------------------------------------------
+* Changes in v7.61
+---------------------------------------------------------
+
+1. Improved support for "IPv6-Only" Networks.
+
+   With the "RTC SDK v7.59" update, "ServerIP6" and "GateIP6" 
+   properties were added to improve support for "IPv6" Networks.
+   
+   Now, the same properties SHOULD also enable "IPv6-Only" support.
+   
+   There are now two modes in which RTC Client and Server components 
+   can operate when mapping Network Addresses before opening connections.
+   
+   In the default mode (when "ServerIP6" and "GateIP6" = FALSE),
+   RTC components will first request an "IPv4" Address. If that
+   request fails, another request will be made for an "IPv6" 
+   Address using "AI_V4MAPPED + AI_ADDRCONFIG" flags, which
+   SHOULD return an IPv6-Address or IPv4-mapped-IPv6-Address.
+   
+   In the other mode (when "ServerIP6" and "GateIP6" = TRUE),
+   RTC components will first request an IPv6 Address. If that
+   request fails, meaning that an IPv6 Address does NOT exist
+   for the requested resource, another request will be made for 
+   "ANY" Address, using the "AI_V4MAPPED+AI_ADDRCONFIG" flags.
+
+   For static IPv4 Addresses and "Named Resources" which ONLY 
+   have an IPv4 Address but do NOT have an IPv6 Address, Systems 
+   with a configured IPv4 Address SHOULD return an IPv4 Address, 
+   while IPv6-Only Systems (without an IPv4 Address configured),
+   SHOULD return an IPv4-mapped-IPv6-Address.
+   
+   Note: The ability to synthesize IPv6 addresses was added to 
+   "getaddrinfo" in iOS 9.2 and OS X 10.11.2. However, leveraging 
+   it does not break compatibility with older system versions. 
+
+---------------------------------------------------------
+* Changes in v7.60
+---------------------------------------------------------
+
+1. "JSON", "XML-RPC" and "RTC Code" parsers built into RTC Value Objects have been extended 
+   with a new "MaxDepth" parameter and a default "RTC_PARSERS_MAXDEPTH" value (=1000) as a 
+   "safety measure" - to avoid "Stack Overflow" errors if the parser is fed with invalid data.
+   Example: Arrays, Records, DataSets or Function calls more than 1000 "layers" deep.
+
+2. "QuickStart/XMLRPCTest" Example Project extended with a comprehensive JSON Test 
+   containing a total of 369 JSON test files, separated into "FAIL" and "PASS" folders, 
+   with buttons for running each test series fully automated and display the result. 
+   
+   Most of these JSON Test files were created by Nicolas Seriot (http://seriot.ch) and were
+   used for testing a number of other JSON parsers. You can read about it in his article 
+   "Parsing JSON is a Minefield", which can be found here:
+     ->  http://seriot.ch/parsing_json.html   
+   
+   NOTE: If you run these tests, you will notice that some JSON files from the "FAIL" folder
+   will "PASS" when using the JSON parser included with TRtcValue objects. This is because 
+   the JSON parser in the RTC SDK is as "forgiving" as possible. At the same time, you will
+   notice that some JSON test files used for testing built-in UTF decoding which "should" 
+   PASS will FAIL (raise an exception) if you feed their raw content directly to parser.
+   This is because JSON parser in RTC Value Objects does NOT automatically decode the content.
+   If you want to parse content previously encoded using UTF-8, UTF-16 or UTF-32, you should 
+   decode it into a Delphi Unicode String before feeding that content into the RTC parser.
+   
+---------------------------------------------------------
+* Changes in v7.59
+---------------------------------------------------------
+
+1. Added "ServerIP6" property to RTC Client and Server components; improving "IPv6" support.
+
+   If you set this property to TRUE on any RTC Client or Server component, that component 
+   will be "preffering" IPv6 Network Addresses instead of the (old) IPv4 Network Addresses.
+   
+   In short, when mapping a Named Network resource (like a Domain Name) to IP Address, while prior 
+   RTC implementations have been preffering the IPv4 Network Address space, which means that RTC 
+   components would FIRST try to map any Named Network resource to an IPv4 Address and ONLY if there 
+   was no IPv4 Address available for that resource, the IPv6 Address space would be checked. 
+   
+   By setting the "ServerIP6" property to TRUE, you can now turn the table around and have 
+   RTC components check IPv6 Address FIRST, and ... ONLY if no IPv6 Address is available, check 
+   IPv4 Addresses. This makes your Application more "IPv6-friendly", but less "IPv4-friendly".
+
+   For example, a "TRtcHttpServer" component with ServerAddr='' and ServerPort='80'
+   using ServerIP6=False (default) will be listening for connections from IPv4 Addresses on Port 80, 
+   while using ServerIP6=TRUE will be listening for connections from IPv6 Addresses on Port 80 instead.
+   
+   Following the same logic, a "TRtcHttpClient" component with ServerAddr='localhost' and ServerPort='80'
+   using ServerIP6=False (default) will be connecting to a Server on 'localhost' listening for IPv4 Clients on Port 80, 
+   while using ServerIP6=TRUE will be connecting to a Server on 'localhost' listening for IPv6 Clients on Port 80 instead.
+   
+   To have a Server Application listening for connections from IPv6 *and* IPv4 Clients, you need 
+   two "TRtcHttpServer" components. One with "ServerIP6=FALSE" and one with "ServerIP6=TRUE", linked 
+   together with a "TRtcDualDataServerLink" component, which can then be attached to all your other components 
+   (like "TRtcServerModule", "TRtcDataProvider" and "TRtcGateway") using their "Link" property instead of "Server".
+
+2. "GateIP6" property added to "TRtcHttpGateway", "TRtcHttpGateClient" and "TRtcHttpMultiGateClient" components,
+   mapping directly to the new "ServerIP6" property on "TRtcHttpServer" and "TRtcHttpClient" components.
+     
+3. A number of RTC Demos have been extended to use the new "ServerIP6" and "GateIP6" properties.
+
+---------------------------------------------------------
+* Changes in v7.58
+---------------------------------------------------------
+
+1. RTC Timer Threads closing procedure updated to wait only ONCE up to 10 seconds
+   for both RTC Timer Threads to terminate before continuing with the shut-down procedure.
+
+2. "RTC_DEBUG" logging extended to include information about closing RTC Timer Threads.
+
+3. "RTC_DEBUG" logging extended to include all RTC units "finalization" sections.
+
+---------------------------------------------------------
+* Changes in v7.57
+---------------------------------------------------------
+
+1. "RTC_WINET_SECURITY_FLAGS" global variable and "WINET_SECURITY_FLAG_*" global constants 
+   added to the "rtcWInetHttpCliProv" unit to allow custom security flags to be set for use 
+   with HTTPS Clients utilizing the "WinInet API" on Windows. 
+   
+   The WinInet API is used with TRtcHttpClient, TRtcHttpGateClient and TRtcHttpMultiGateClient components 
+   on Windows if you set "useSSL=TRUE", but leave "useWinHTTP=FALSE" and "CryptPlugin=nil" (unassigned).
+
+2. "RTC_WINHTTP_SECURITY_FLAGS" global variable and "WINHTTP_SECURITY_FLAG_*" global constants 
+   added to the "rtcWinHttpCliProv" unit to allow custom security flags to be set for use with 
+   HTTPS Clients utilizing the "WinHTTP API" on Windows. 
+   
+   The WinHTTP API is used with TRtcHttpClient, TRtcHttpGateClient and TRtcHttpMultiGateClient components 
+   on Windows if you set "useSSL=TRUE" and "useWinHTTP=TRUE", but leave "CryptPlugin=nil" (unassigned).
+   
+---------------------------------------------------------
+* Changes in v7.56
+---------------------------------------------------------
+
+1. Fixed "GateFileName" property on "TRtcGateway" and "TRtcHttpGateway" components,
+   which is required to make the RTC Gateway accessible on a different URI than "/".
+
+---------------------------------------------------------
+* Changes in v7.55
+---------------------------------------------------------
+
+1. Destroying a "TRtcMessageServer" component previously used by a 
+   "TRtcMessageClient" component ("Server" property) resulted in an 
+   Access Violation while destroying the "TRtcMessageClient" component,
+   because the "Server" property was NOT updated in the connection provider.
+   This has now been fixed.
+   
+---------------------------------------------------------
+* Changes in v7.54
+---------------------------------------------------------
+
+1. Fixed "TRtcMessageClient" component destructor.
+
+2. Cancelling a request by using the "CancelRequests" method, or by using the 
+   "Execute" method with a Timeout didn't always trigger the "OnResponseAborted" event.
+   This should now be fixed.

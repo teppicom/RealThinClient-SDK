@@ -1,0 +1,18 @@
+<tr class="items" bgColor="#FFFFFF" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <td class="items" style="padding-left:15px"><%section_name%></td>
+  <td width="60" class="items"><div align="center"><%vis_level%></div></td>
+  <td width="60" class="items"><div align="center"><%access_level%></div></td>
+  <td width="60" class="items"><div align="center"><%topics_count%></div></td>
+  <td width="60" class="items"><div align="center"><%posts_count%></div></td>
+  <td width="90" class="items"><div align="center">
+    <a href="?cmd=movesection&section_id=<%section_id%>&place=<%place_above%>&sid=<%sid%>" class="little">
+      <img src="up_arrow.png" alt="Move up" title="Move up" width="16" height="16" border="0"></a>
+    <a href="?cmd=movesection&section_id=<%section_id%>&place=<%place_below%>&sid=<%sid%>" class="little">
+      <img src="down_arrow.png" alt="Move down" title="Move down" width="16" height="16" border="0"></a>
+    <a href="?cmd=editsection&section_id=<%section_id%>&sid=<%sid%>" class="little">
+      <img src="b_edit.png" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+    <a href="?cmd=delsection&section_id=<%section_id%>&sid=<%sid%>" class="little" onClick="return xconfdel();">
+      <img src="b_drop.png" alt="Remove" title="Remove" width="16" height="16" border="0"></a>
+    </div>
+  </td>
+</tr>

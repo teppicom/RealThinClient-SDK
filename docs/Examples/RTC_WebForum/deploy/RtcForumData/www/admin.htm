@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpl_admin.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Administration panel</title>
+<!-- InstanceEndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="pack.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" src="pack.js"></script>
+
+<!-- InstanceParam name="sections_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="packages_tab_class" type="text" value="tab" -->
+<!-- InstanceParam name="users_tab_class" type="text" value="tab" -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body onLoad="showMessage(<%message_visible%>)">
+<div id=headarea><%header_area%></div>
+<div id=messagearea style="display: none">
+  <div id=msgbutton><a href="#" onClick="show_hide_obj('messagearea');"><img src="close.gif" alt="Close" title="Close" border="0"></a></div>
+  <div id=msgtext><%message_text%></div>
+</div>
+<div id=bodyarea style="clear: both">
+<div id=adminarea>
+<p class="page_header">Administration Panel</p>
+<table width="685" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showsections&sid=<%sid%>" class="menu">Sections</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab" onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showpacks&sid=<%sid%>" class="menu">Packages</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="90" class="tab"  onMouseOver="this.bgColor='#D2E9FF';" onMouseOut="this.bgColor='#FFFFFF';">
+<div align="center"><a href="?cmd=showusers&sid=<%sid%>" class="menu">Users</a></div></td>
+                <td width="10">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="10">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td bgcolor="#99CCFF" class="trcaption">
+<div align="center" class="head"><!-- InstanceBeginEditable name="CaptionRegion" --><!-- InstanceEndEditable --></div></td>
+        </tr>
+        <tr>
+          <td class="tdbody"><!-- InstanceBeginEditable name="BodyRegion" --><!-- InstanceEndEditable -->
+</td>
+        </tr>
+      </table></td>
+  </tr>
+</table></div>
+  </div>
+</body>
+<!-- InstanceEnd --></html>

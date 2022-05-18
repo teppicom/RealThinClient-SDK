@@ -1,0 +1,687 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************
+*                                                      *
+* RealThinClient SDK v3.83 (2010.Q2), April 12th 2010. *
+*                                                      *
+********************************************************
+
+---------------------------------------------------------
+* Build 383
+---------------------------------------------------------
+
+1) Minor update to *minimize* the possibility of AVs during shutdown, even
+   if connections were NOT closed before the application was terminated.
+
+   To *eliminate* AVs during shutdown, you should *always* close RTC connections *before* terminating 
+   your RTC applications. Otherwise, an active RTC connection object *could* continue being used from 
+   a background thread during shutdown, from where an event could be triggered which could try using
+   objects that have already been destroyed during finalization, which would (as expected) raise an AV.
+
+
+---------------------------------------------------------
+* Build 382
+---------------------------------------------------------
+
+1) HTTP/S Header value names and Query parameter names were being 
+   automatically converted to UPPERCASE. This has now been fixed.
+
+
+---------------------------------------------------------
+* Build 381
+---------------------------------------------------------
+
+1) Added "public" directive in one class inside rtcPlugins.pas unit.
+
+
+---------------------------------------------------------
+* Build 380
+---------------------------------------------------------
+
+1) Minor performance optimizations.
+
+
+---------------------------------------------------------
+* Build 379
+---------------------------------------------------------
+
+1) Added native support for the Cardinal (LongWord) data type to RTC Remote Functions and Scripting Engine.
+
+   "TRtcCardinalValue" is the class used for storing and handing Cardinal values,
+   "rtc_Cardinal" is the new type received from "isType" and
+   "asCardinal" is the property used to get and set Cardinal values.
+
+2) AppClient demo extended to include the new Cardinal data type in the flood test.
+
+3) "Windows" unit added to the uses clause of the "rtcParser" unit when compiled for Windows.
+
+
+---------------------------------------------------------
+* Build 378
+---------------------------------------------------------
+
+1) Example Database Pool class implementation is now available in the "Demos\DataProviders\rtcIBODBPool.pas" unit.
+
+   Please note that this unit is NOT used by the RealThinClient SDK nor any RTC SDK Demos and was added only 
+   as a simple example which you can use as a starting point for writing your own Database Connection Pool.
+
+   The unit was written by Gerhard Knapp, who is a long-time RTC SDK user and the implementation is specific 
+   to IBO components, so you will NOT be able to compile it if you do NOT have IBO components installed. 
+   Chances are also that you will NOT be able to compile it even if you have the latest IBO components 
+   installed, because the unit will NOT be actively maintained to continue working with future IBO versions.
+
+2) Moved the "rtcDBTypes.pas" unit from "Lib" to "Demos\DataProviders" folder to avoid confusion.
+
+   Just like the new "rtcIBODBPool.pas" unit, the "rtcDBTypes.pas" unit is NOT used by the RealThinClient SDK.
+
+   The unit includes two example functions which show you how data *could* be copied from a TRtcDataSet to 
+   a TDataSet and back, but it is ONLY a very simplified example which will most likely not work with all 
+   TDataSet components and might not be able to handle all data types used by your TDataSet component.
+
+   If you want to copy data from a TDataSet to a TRtcDataSet and back, you *should* write
+your own
+   functions for that purpose or directly use TRtcDataSet value objects with RTC remote functions.
+
+   Do NOT use the "rtcDBTypes" unit directly from your projects, as it is ONLY an example (a demo).
+
+
+---------------------------------------------------------
+* Build 377
+---------------------------------------------------------
+
+1) Added "public" directive to classes where the public section was implicit.
+
+   For example, this code:
+
+     type
+       TMyRtcClass = class(TObject)
+         myvar:boolean;
+         end;
+
+   was changed to this:
+
+     type
+       TMyRtcClass = class(Tobject)
+       public // <- added
+         myvar:boolean;
+         end;
+
+   This does NOT change the functionality, but it does guarantee the code will
+   compile with the latest Delphi compiler update and all unofficial fixes.
+
+
+---------------------------------------------------------
+* Build 376
+---------------------------------------------------------
+
+1) Connection status checks added to Read and Write methods on the TRtcConnection component to
+   prevent exceptions if a connection was terminated (reset by peer) while executing a RTC event.
+
+
+---------------------------------------------------------
+* Build 375
+---------------------------------------------------------
+
+1) AppClient demo was missing code required to wait for connections to
+   close before components are being destroyed, which has sometimes caused
+   the components to be destroyed while still in use.
+
+2) Clean shutdown code added to the AppClient demo's OnCloseQuery event,
+   allowing the AppClient demo to be closed even if a flood test is running.
+
+3) TRtcConnection component updated to stop reconnecting after a Disconnect 
+   call if AutoConnect is FALSE, even when the old HTTP/1.0 protocol is used.
+
+
+---------------------------------------------------------
+* Build 374
+---------------------------------------------------------
+
+1) New constructor for TRtcCryptClient and TRtcCryptServer classes.
+
+2) All classes declared as "= class" changed to "= class(TObject)"
+
+3) RTC_EXTDEBUG compiler directive added for extended Session destructor debugging.
+
+
+---------------------------------------------------------
+* Build 373
+---------------------------------------------------------
+
+1) RTC Thread Pool shutdown update.
+
+
+---------------------------------------------------------
+* Build 372
+---------------------------------------------------------
+
+1) Extended RTC_DEBUG logging in the "DoneSessions" procedure.
+
+2) TRtcCrypt class constructor and destructor updated.
+
+3) AppServer demo updated.
+
+
+---------------------------------------------------------
+* Build 371
+---------------------------------------------------------
+
+1) "RtcDataSetToDelphi" function from the "rtcDBTypes.pas" unit fixed.
+
+
+---------------------------------------------------------
+* Build 370
+---------------------------------------------------------
+
+1) A few minor performance optimizations.
+
+2) Updated some comments.
+
+
+---------------------------------------------------------
+* Build 369
+---------------------------------------------------------
+
+1) A number of performance optimizations.
+
+2) "rtcTrashcan.pas" unit removed from all RTC SDK units uses clauses and
+   all RTC SDK units finalization sections which have been relying on the 
+   RTC garbage collector were updated to work without the garbage collector.
+
+
+---------------------------------------------------------
+* Build 368
+---------------------------------------------------------
+
+1) ".SOCK.log" file, which will be generated when LOG_SOCKET_ERRORS is TRUE and
+   the async WinSock connection provider is being used, has now been extended
+   to also include the peer (remote) address and port number, where available.
+
+2) "LOG_COMMON_SOCKET_ERRORS" global variable added as an extension to "LOG_SOCKET_ERRORS".
+
+  Common socket errors are errors which are expected to happen if your network
+  is under heavy load, or if your clients are accessing your server over the internet.
+  Logging these errors could result in your "SOCK.log" file to grow rapidly and is
+  recommended ONLY if your Clients are running from inside LAN and you want to 
+  test if your Network can handle the load without a single connection getting 
+  aborted, or connection attempts timing out of being refused by the server.
+
+  By default, "LOG_COMMON_SOCKET_ERRORS" will be FALSE even if the RTC_DEBUG 
+  compiler directive is declared. When "LOG_COMMON_SOCKET_ERRORS" is FALSE,
+  "Connection aborted" messages filtered out for the "FD_CLOSE" event and
+  "Connection refused" messages filtered out for the "FD_CONNECT" event in
+  the ".SOCK.log" file to reduce log file size and make it easier to spot 
+  problems instead of having a LOG file cluttered with very common entries.
+
+
+---------------------------------------------------------
+* Build 367
+---------------------------------------------------------
+
+1) Fixed memory leaks generated by calling "TRtcHttpServer.Listen" after
+   an exception was raised from the last "TRtcHttpServer.Listen" call.
+
+   For example, trying to Listen on a Port which is already in use
+   would raise an exception. Changing the Port number and using Listen
+   again would result in pointers to objects created in the 1st Listen
+   call to be overwritten by new objects of the same type instead of
+   the old objects being destroyed first. This has now been fixed.
+
+
+---------------------------------------------------------
+* Build 366
+---------------------------------------------------------
+
+1) Notification methods implemented on all RTC components.
+
+   In prior RTC SDK versions, it was a very bad idea to remove a component
+   from a Form or DataModule at design-time if it was being referenced by
+   another RTC component, because that would have generated Access Violations
+   when Delphi would try to save the Form or DataModule afterwards because the
+   old component reference would remain in all components referencing it.
+
+   This has now been fixed, so it is now safe to simply remove a component
+   from a Form or DataModule even if it was referenced by another component,
+   because all components will now be notified about other component removals
+   and will be removing their references to the component(s) being removed.
+
+
+---------------------------------------------------------
+* Build 365
+---------------------------------------------------------
+
+1) The OnDataSent event was NOT being triggered on the TRtcDataRequest component
+   when using the asynchronous (non-blocking) WinSock connection provider and 
+   the request was being sent out in several steps (not in one Write operation).
+
+   This has now been fixed.
+
+
+---------------------------------------------------------
+* Build 364
+---------------------------------------------------------
+
+1) "Uses" clauses of all RTC SDK units cleaned up to list only required units.
+
+    Please note that this update does NOT change the RTC SDK functionality.
+
+    Depending on the order some units are listed in your projects, it *could*
+    affect the order in which RTC units are being initialized and finalized.
+    In very rare cases, it could also result in some units to NOT be compiled
+    into your projects EXE file and thus slightly reduce the size of the EXE.
+
+
+---------------------------------------------------------
+* Build 363
+---------------------------------------------------------
+
+1) A few optional AnsiString methods which could be used as alternatives to the standard 
+   String methods for accessing elements inside a TRtcRecord, TRtcDataSet and TRtcFunctionInfo
+   were left without implementation in prior RTC SDK versions (like "TRtcRecord._Extract").
+   This has now been fixed.
+
+2) "Updates.txt" file has grown a bit large, so it was now split into V1, V2 and V3 files,
+   each holding the list of updates released within a single RTC SDK major version cycle.
+
+
+---------------------------------------------------------
+* Build 362
+---------------------------------------------------------
+
+1) Fixed XML-RPC support.
+
+
+---------------------------------------------------------
+* Build 361
+---------------------------------------------------------
+
+1) Exception logging added to destructors for all RealThinClient SDK classes.
+   Should any exception be raised from a destructor of any RTC object and
+   the LOG_AV_ERRORS global variable was TRUE or RTC_DEBUG compiler directive
+   was declared, class name and exception message will be logged to the "ERROR" 
+   log file and the exception will be re-raised (no exception hiding, only logging!).
+
+2) Where possible, all "FREE" method calls have been replaced with "FreeAndNIL"
+   to ensure that pointers to objects which should have been freed will be cleared,
+   even if there was an exception in the object destructor (making the object unusable).
+
+3) Added exception logging for most operations on RTC Value objects.
+   Because not every exception raised from a RTC value object is an error,
+   these exceptions will be logged to a separate "INFO" log file. To enable 
+   logging of RTC value object exceptions, set the LOG_INFO_ERRORS global
+   variable from the rtcInfo unit to TRUE, or declare the RTC_DEBUG directive.
+
+
+---------------------------------------------------------
+* Build 360
+---------------------------------------------------------
+
+1) RTC SDK Help file was missing the Search feature. This has now been fixed.
+   (Thanks to "agSoft" for reporting this issue)
+
+2) AppClient demo extended to allow changing of all parameters used in
+   a flood test while the test is running. Now, a test does NOT need to 
+   be stopped anymore to have a different test setting for the next loop.
+   Every time a loop is over, all parameters will updated for the next one.
+
+
+---------------------------------------------------------
+* Build 359
+---------------------------------------------------------
+
+1) Fixed all TPersistent descendant classes, as well as classes
+   using these TPersistent descendants in their published properties.
+
+   In prior RTC SDK version, some properties were NOT editable at design-time.
+   For example, TRtcHttpClient was not storing changes made to UserLogin at design-time.
+   
+
+---------------------------------------------------------
+* Build 358
+---------------------------------------------------------
+
+1) "isConnecting" method added to the TRtcClient component and all its 
+   descendants (TRtcDataClient, TRtcHttpClient, TRtcMessageClient, etc)
+
+   "isConnecting" will return TRUE if the connection is (A) currently connected, 
+   or (B) preparing to connect, or (C) preparing to reconnect or (D) reconnecting.
+
+2) "isIdle" method of the TRtcDataClient component fixed.
+
+    "isIdle" will now also take in account the current connection status and 
+    return TRUE if all requests have been sent or if "isConnecting" is FALSE.
+
+3) "DoWaitForCompletion" method on the TRtcDataClient component fixed.
+
+   "DoWaitForCompletion" is called by WaitForCompletion and WaitForCompletionEx methods 
+   on TRtcDataClient and TRtcClientModule components, as well as the Execute method on
+   the TRtcClientModule component (used for easy blocking remote function calls) and
+   should wait for a complete response to be received from the Server, a timeout to 
+   be exceeded (if specified), or an "irrepairable" connection error to happen. 
+
+   In prior RTC SDK versions, WaitForCompletion would wait until the request queue
+   was empty because all responses have been received or the request queue was cleared.
+   And now, "WaitForCompletion" will also stop waiting for a response from the Server 
+   if "isConnecting" returns FALSE, because that would also mean that there is no chance 
+   any request left in the request queue will be sent, so there is no point in waiting.
+
+
+---------------------------------------------------------
+* Build 357
+---------------------------------------------------------
+
+1) OnResultError event was added to the TRtcClientModule component, which will be triggered in 
+   case any unhandled exceptions get out of the OnResult event called after receiving the Result.
+
+   If this event triggers, it means that your own code has raised an exception. You will get the 
+   TRtcConnection object, Data and Result objects (TRtcValue) as well as the actual Exception raised.
+
+   In prior RTC SDK versions, such exceptions would result in the OnResponseError event being 
+   triggered, but that event is meant to be used only for capturing bad responses from the Server.
+
+2) Added debug logging for the TRtcClientModule component. To enable it, declare the RTC_DEBUG compiler 
+   directive or set the LOG_CLIENTMODULE_ERRORS global variable to TRUE (declared in "rtcCliModule" unit).
+
+
+---------------------------------------------------------
+* Build 356
+---------------------------------------------------------
+
+1) Fixed automatic reconnect implementation to make it possible to stop further reconnect attempts
+   by using the Disconnect method. The problem in prior RTC SDK versions was that calling Disconnect 
+   would have no effect if "ReconnectOn.ConnectFail" was TRUE and the Client was unable to Connect.
+
+   Calling Disconnect before would only speed up the next reconnect attempt, but it would not have 
+   stopped further connection attempts. This has now been fixed and Disconnect can now safely be
+   used to cancel the current and any further Connect attempts - until calling Connect again.
+
+
+---------------------------------------------------------
+* Build 355
+---------------------------------------------------------
+
+1) More Multi-Threaded Client and Server Socket improvements.
+
+2) App_Client and App_Server demos updated.
+
+
+---------------------------------------------------------
+* Build 354
+---------------------------------------------------------
+
+1) Improved exception handling for Client and Server Sockets in MultiThreaded mode.
+
+2) Fixed a possible deadlock in Session cleanup (DoneSessions) used on Server shutdown.
+
+
+---------------------------------------------------------
+* Build 353
+---------------------------------------------------------
+
+1) Built-in RTC Encryption used with RTC remote functions and implemented on the
+   TRtcClientModule and TRtcServerModule components has been optimized and extended 
+   with support for fast encryption RESET (re-initialization without a full "handshake").
+
+   Setting up a NEW encryption tunnel requires four (4) random keys to be exchanged by 
+   the client and the server, for which two independent requests need to be sent from
+   the client and two responses received from the Server (encryption setup handshake)
+   before any user data can be sent or received. This takes time and consumes bandwidth,
+   which means that setting up a new tunnel every time a connection is lost increases  
+   traffic and further reduces performance, sometimes even causing data to never be sent.
+
+   With any prior RTC SDK version, the Client has assumed everyting to be fine as long as
+   the Server did NOT report a problem while trying to decrypt received data, the new 
+   implementation will also assume the encryption tunnel is out-of-sync if a complete 
+   request was sent from the Client but a full response was NOT receive from the Server.
+
+   Also, if the encryption handshake was already completed before
+ instead of starting
+   a completely new encryption handshake and creating a new encryption tunnel, the Client 
+   will now request the encryption tunnel to be "RESET" while sending the next remote call
+   and will start encrypting its data as if the encryption handshake was just completed.
+
+   That way, the Server will know if somewhing went wrong in the last request and will
+   be able to silently reset its encryption state variables and start decrypting and 
+   encrypting data without getting into a situation where decryption would stop working
+   because the encryption channel was out-of-sync (caused by a connection loss). 
+   As a result, the number of requests which would need to be resent on networks 
+   with frequent connection loss (high packet loss) is reduced to a minimu.
+
+   If the "onEncryptWrongKey" event triggers when the Client and the Server 
+   are both compiled using this new RTC SDK version, the problem is either that:
+   (A) Client is trying to use a different SecureKey than the Server, or 
+   (B) Server was restarted after a successful encryption handshake was made, or 
+   (C) Client's Session has expired on the Server (too short Session Life time?).
+
+
+**********************************************************************
+* IMPORTANT:
+*
+* To avoid negative side-effects using encryption in a network with old and new Clients,
+* make sure to recompile and update the RTC Server first, before updating any RTC Clients.
+*
+* RTC Server compiled with the NEW RTC SDK version will continue working with Clients
+* compiled with the OLD RTC SDK version, because it only adds support for "RESET".
+* But ... RTC Client compiled with the NEW RTC SDK version will NOT work right with
+* RTC Servers compiled with the OLD RTC SDK version, since the OLD Server does NOT
+* implement the new "RESET" flag and will generate a "wrong encryption" response
+* if a Client resets its encryption channel and requests the Server to do the same.
+* The new RTC Client will try to cure this problem by sending a new "RESET", which 
+* will again result in "wrong encryption" and will be repeated 3 times, after 
+* which the Client would give up and ask for a new encryption handshake.
+*
+* Since this would happen only after 3 (three) unsuccessful "RESET" requests,
+* while the OLD Client will immediately start a new handshake on "wrong encryption",
+* a NEW RTC client will be working slower with the OLD Server than an OLD Client.
+*
+***********************************************************************
+
+---------------------------------------------------------
+* Build 352
+---------------------------------------------------------
+
+1) There was a bug in the Async WinSock implementation which became visible only
+   when a very high number of frequent connects and disconnects were happening 
+   and the connection was running in multi-threaded mode. The problem was that a 
+   socket object could have been destroyed from one thread (because of a disconnect)
+   while it was being accessed from another thread (processing a WinSock message).
+
+   This has now been fixed, so that a socket object can not be destroyed by one 
+   thread until it has been released from any other threads which might be using it.
+
+2) There was another issue spotted in the Client-side HTTP/1.0 protocol implementation,
+   where a Client could enter into a state where a connection would be closed after
+   a successful response was received, but a new connection would not be opened unless 
+   the AutoConnect property was set to TRUE, even if "ReconnectOn" properties were set 
+   to keep a connection to the Server active and reconnect after each disconnect.
+
+   This has now been fixed. Connections will now be closed after each response by the 
+   Client using HTTP/1.0  the same way they are closed by the Server. This ensures that 
+   properties set for "ReconnectOn" will apply to HTTP/1.0 just like they do for HTTP/1.1
+
+---------------------------------------------------------
+* Build 351
+---------------------------------------------------------
+
+1) Problems using the blocking client Socket provider with the old HTTP/1.0 protocol
+   have been fixed, and the support for using the old HTTP/1.0 protocol was improved.
+
+   NOTE: Because the old HTTP/1.0 protocol requires a connection to be closed after
+   every single request/response, using the HTTP/1.0 protocol is NOT recommended
+   and was implemented only for extreme cases where your client has to work with
+   some very old Web Servers which do not support the new HTTP/1.1 protocol.
+
+
+---------------------------------------------------------
+* Build 350
+---------------------------------------------------------
+
+1) Async Socket close and release handling improved. Instead of posting a message
+   to the socket window handle to have the socket object released at a later point
+   in time, socket will be market for release and destroyed when existing the event
+   which has market the socket for release (usually the "FD_CLOSE" message handler).
+
+2) TRtcHttpServer fixed to correctly return a HTTP/1.0 response for HTTP/1.0 requests.
+
+   In prior RTC SDK versions, a RTC Server would always send its resposes using the 
+   new HTTP/1.1 protocol, even for requests received using the old HTTP/1.0 protocol.
+   This could have caused problems with HTTP Clients which only understand HTTP/1.0 
+   and expect to receive the text "HTTP/1.0" at the beginning of each response header.
+
+3) RtcHttpClient component and all HTTP client connection providers have been 
+   extended to also make it possible to send requests using the old HTTP/1.0 protocol
+   in addition to the standard RTC implementation, which was always using HTTP/1.1
+
+   To force a single request to be sent out using HTTP/1.0, set Request.Close:=TRUE
+   for the request which you want to sent out using the old HTTP/1.0 protocol.
+
+   To force ALL requests to be sent out using HTTP/1.0, use the new "ForceOldHttp10"
+   property, which is now available on the TRtcHttpClient component (see below).
+
+4) FixupRequest property available on the TRtcHttpClient component has been extended
+   with a new "ForceOldHttp10" property, which you can set to TRUE if your client has
+   to work with very Web Servers using the old HTTP/1.0 protocol.
+
+   If your client needs to work with some very old Server(s) which ONLY understand the
+   old HTTP/1.0 protocol and can NOT work with the new HTTP/1.1 protocol, you can either
+   manually set the Request.Close property for every request to TRUE, or ... set
+   FixupRequest.ForceOldHttp10:=TRUE to have every request sent out using HTTP/1.0.
+
+   Setting ForceOldHttp10 to TRUE will force every request to be sent using HTTP/1.0,
+   which means that a connection will be open before every request, one request will
+   be sent out and a single response will be received before the Server closes the
+   connection. The client will have to open a new connection if it wants to send
+   out another request to the same Server. This will make your client work a lot
+   slower, but will also make working with very old Web Servers a lot easier.
+
+5) AppClient and File_Client demos extended to allow testing the use of the 
+   newly added support for use of the old HTTP/1.0 in addition to HTTP/1.1
+
+6) ClientUpload example in the QuickStart folder updated.
+
+---------------------------------------------------------
+* Build 349
+---------------------------------------------------------
+
+1) Rewritten the Low-level asynchronous (non-blocking) WinSock API access layer.
+
+   After almost four years of NOT touching the low-level async WinSock connection 
+   provider used by the TRtcHttpServer and TRtcHttpCient components in non-blocking 
+   mode (default), it was time to re-visit that old unit and do some polishing.
+
+   As a result, I've spent the past two weeks writing and testing a completely
+   new implementation which strictly follows Microsoft recommendations (MSDN).
+
+   And to minimize memory requirements for stand-alone RTC Servers, the new version
+   is using RTC Huge Strings as in/out data buffers (just like the new blocking 
+   WinSock API implementation), which reduces memory needs up to 64 KB per physical
+   connection, while at the same time keeping the performance at the same level.
+
+   The new implementation also provides detailed debug logging information,
+   which now includes every event which could result in a conenction loss.
+
+   To enable full RTC SDK debug logging in your project(s), you can simply 
+   declare the RTC_DEBUG compiler directive in your project and *rebuild* it.
+
+  *** !!! IMPORTANT !!! *********************************************************
+  *
+  *  This is the first RealThinClient SDK version which does NOT use third-party
+  *  code for low-level socket access, but uses its own implementation which is
+  *  optimized and designed specifically for use with the RealThinClient SDK.
+  *
+  *  Just like RTC SDK 3.46 - 3.48, this version was extensively stress-tested.
+  *
+  *  But, since even the smallest bug in the new implemenation using the async
+  *  WinSock API could have rather bad effects on all stand-alone RTC Servers,
+  *  despite the fact that the new code is clean, straight-forward and quite easy
+  *  to understand and debug, and despite the fact that I have invested a lot of 
+  *  time and effort to make sure the code is bug-free, I would understand it if
+  *  someone who has mission-critical applications might decide to NOT use this
+  *  new low-level async WinSock API access unit and would rather stick to the
+  *  old and time-proven version, even if it does need more memory and has some
+  *  problems under extreme load which have been eliminated in the new version.
+  *
+  *  So ... if you are NOT ready to start using the new low-level async WinSock
+  *  access implementation, you will be able to find the old implementation from
+  *  the RTC SDK version 3.48 in the "Lib/old" folder. To use the old code, all
+  *  you need to do is copy the file "rtcWinSocket.pas" unit from the "Lib/old"
+  *  folder over the file with the same name in the "Lib" folder. That's all.
+  *
+  *  Both units (the old and the new "rtcWinSocket.pas" version) implement the 
+  *  TRtcWinSocket class which extends the TRtcSocketBase class and implements 
+  *  all the methods used by higher-level RTC SDK connection providers. This is
+  *  why these two units are inter-changeable (use which ever you like better).
+  *
+  *********************************************************************************
+
+2) OnResponseDone event on the TRtcHttpServer component was not always triggering.
+   This has been fixed and the OnResponseDone event will trigger for every response.
+
+   The OnResponseDone event has only one purpose: traffic monitoring.
+
+
+---------------------------------------------------------
+* Build 348
+---------------------------------------------------------
+
+1) Third-party Encryption plugin interface has been optimized and the 
+   SSL encryption plugin for StreamSec Tools II (v2.1.9.240+) was updated.
+
+   The new TRtcCryptPlugin interface greatly improves communication between the 
+   RTC SDK and the encryption plugin components (higher security and performance).
+
+   *****************************************************************************
+   * This and later RTC SDK versions will ONLY work with third-party encryption 
+   * plugins (SSL) which have been updated to use the NEW RTC CryptPlugin interface.
+   * Trying to compile older encryption plugin components will fail at compile time.
+   **********************************************************************************
+
+2) RTC Windows Handle Pool has been extended to allow using a fixed size pool of windows handles 
+   instead of always using a single window handle. Since each handle is limited to 10.000 messages,
+   using a single windows handle could get problematic when working with a few thousand connections.
+
+   By default, the pool would be creating 5 handles for single-threaded use and 5 handles for 
+   multi-threaded use, but since the window handle pool for multi-threaded use is created 
+   on first use, the number of window handles for use in multi-threaded mode can be set at
+   runtime by using the new RTC_THREAD_WINDOW_HANDLES global variable (rtcHWNDPool.pas unit)
+
+
+   before the first call to Listen or Connect.
+
+   The new windows handle pool will also use its own windows class and use a registration 
+   procedure to register which procedure should be called for which message ranges,
+   instead of registering different windos classes to be able to process messages 
+   from different implementations using the pool (async WinSock API and Timers).
+
+3) WinInet and WinHTTP API connection providers have been updated to reuse HTTP/S request 
+   handles where possible, minimizing the number of unwanted re-connects when using SSL.
+
+4) Response logging done by the App_Server has been extended (more info) and a new Timeouts
+   checkbox was added to allow simple enabling/disabling of RTC Timeouts (set on app start).
+
+5) App_Client demo has been extended to create a log file during its "Flood Test", 
+   which is very similar to the log files being generated by the App_Server demo,
+   with the difference that clients will count only correct and complete results
+   while the Server counts all responses prepared for sending, even if they should
+   not reach the client or if they were part of the encryption handshake.
+
+6) Debug logging of RTC SDK events has now been organized into separate files,
+   each file grouping a specific type of an event. This makes it easier to spot
+   possible errors simply by checking which log files were created, without having 
+   to scan the whole log file to see if there are errors or only hints and warning.
+
+   To enable full debug logging of the RTC SDK, you now only have to declare the  
+   RTC_DEBUG compiler directive for your project. This will enable general logging
+   for RTC SDK unit initialization and finalization, as well as logging of all  
+   "events of interest" by setting all "LOG_..." variables to TRUE by default.
+
+   NOTE: All log files created by logging inside the RTC SDK are informational
+   and are used for debugging the RTC SDK, but the majority of them are expected
+   to happen (like SOCK errors, for example) and do not necessarily have to be 
+   an indication of a problem or a bug in the RTC SDK, with the exception of
+   log entries which end up in the log file ending with "ERROR.log", 
+   where all exceptions will be logged which should never happen.
+
+   If you only want to enable logging of critical errors and do not need nor want
+   to log things like connection losses or timeout events, instead of declaring
+   the RTC_DEBUG compiler directive, you should set LOG_AV_ERRORS:=TRUE;

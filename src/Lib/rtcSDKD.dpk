@@ -1,0 +1,57 @@
+package rtcSDKD;
+
+{$R *.res}
+{$R 'rtcConn.dcr'}
+{$R 'rtcHttpSrv.dcr'}
+{$R 'rtcDataSrv.dcr'}
+{$R 'rtcHttpCli.dcr'}
+{$R 'rtcDataCli.dcr'}
+{$R 'rtcSrvModule.dcr'}
+{$R 'rtcCliModule.dcr'}
+{$R 'rtcFunction.dcr'}
+{$R 'rtcISAPISrv.dcr'}
+{$R 'rtcPlugins.dcr'}
+{$R 'rtcScript.dcr'}
+{$R 'rtcDataRoute.dcr'}
+{$R 'rtcLoadBalance.dcr'}
+{$R 'rtcLink.dcr'}
+{$R 'rtcThrJobs.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'RealThinClient SDK 9.5 (design)'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+{$DEFINE DEBUG}
+
+requires
+  rtl,
+  rtcSDK,
+  designide;
+
+contains
+  rtcRegister in 'rtcRegister.pas',
+  rtcISAPISrv in 'rtcISAPISrv.pas',
+  rtcISAPIApp in 'rtcISAPIApp.pas',
+  rtcISAPISrvProv in 'rtcISAPISrvProv.pas',
+  rtcEditors in 'rtcEditors.pas';
+
+end.

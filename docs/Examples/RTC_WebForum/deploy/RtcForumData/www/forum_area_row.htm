@@ -1,0 +1,16 @@
+<tr class="section_row" bgColor="#FFFFFF" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <td width="20" height="30">
+			<%if:new_posts%>
+				<img src="new_some.gif" alt="New Posts" title="New Posts" width="20" height="20" style="float:left; padding-right:5px" border="0"/>
+			<%elseif:new_posts%>
+  			<img src="1x1px.gif" width="20" height="30" border="0"/>
+			<%endif:new_posts%>
+	</td>
+  <td>
+	  <a class="section_row" href="?cmd=viewsection&section_id=<%section_id%>&sid=<%sid%>">
+			<%section_name%>
+		</a>
+	</td>
+  <td width="10%" nowrap align="center" class="bg2"><%if:topics_exists%><%posts_count%> posts<br>in <%topics_count%> topics<%elseif:topics_exists%>empty<%endif:topics_exists%></td>
+  <td width="20%" class="smalltext"><%if:topics_exists%><%last_post_timestamp%><br><%if:last_topic_exist%>in <a class="smalltext" href="?cmd=viewtopic&section_id=<%section_id%>&topic_id=<%last_post_topic_id%>&sid=<%sid%>"><%last_post_topic_subject%></a><%elseif:last_topic_exist%>(topic was deleted)<%endif:last_topic_exist%><%endif:topics_exists%></td>
+</tr>

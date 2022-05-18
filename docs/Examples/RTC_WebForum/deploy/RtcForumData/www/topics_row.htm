@@ -1,0 +1,37 @@
+<tr class="list_row" bgColor="#FFFFFF" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <td width="20" height="25" align="center">
+		<%if:view%>
+			<%if:new_posts%>
+				<img src="new_post.gif" alt="New posts" width="16" height="16" border="0" style="float:left;" title="New posts">
+			<%elseif:new_posts%>
+			  <img src="1x1px.gif" width="20" height="25" border="0"/>
+			<%endif:new_posts%>
+		<%elseif:view%>
+		  &nbsp;
+		<%endif:view%>	</td>
+	<td width="50%" class="bg2">
+  <%if:view%>
+		<a class="list_row" href="?cmd=viewtopic&topic_id=<%topic_id%>&section_id=<%section_id%>&sid=<%sid%>"><%topic_subject%></a>
+  <%elseif:view%><form method="post" enctype="multipart/form-data" onsubmit="xvalidateForm('topic_subject','','R');return document.MM_returnValue">
+			<textarea name="topic_subject" rows="2" wrap="virtual" id="topic_subject" style="width: 100%" title="Topic Title"><%topic_subject%></textarea>
+			<input type="submit" class="button" value="Submit"/>
+			<input type="button" value="Cancel" class="button" onclick="document.location='?cmd=viewsection&section_id=<%section_id%>&sid=<%sid%>'"/>
+			<input name="cmd" type="hidden" value="savetopic"/>
+			<input name="topic_id" type="hidden" value="<%topic_id%>"/>
+			<input name="section_id" type="hidden" value="<%section_id%>"/>
+			<input name="reply_id" type="hidden" value="<%reply_id%>"/>
+			<input name="sid" type="hidden" value="<%sid%>"/>
+		</form>
+			<script language="JavaScript" type="text/JavaScript">
+				xfindObj('topic_subject').focus();
+			</script>
+		<%endif:view%>
+	</td>
+	<td width="20%" align="center"><%topic_user_creator%></td>
+	<td width="40" align="center" class="bg2"><%topic_replies_cnt%></td>
+	<td width="20%" nowrap class="smalltext"><%topic_last_post_timestamp%><br>by <%topic_last_post_user%></td>
+  <%if:moderator_access%><td width="55" align="center">
+    <a href="?cmd=viewsection&section_id=<%section_id%>&ed_topic_id=<%topic_id%>&sid=<%sid%>"><img src="b_edit.png" alt="Edit" title="Edit" width="16" height="16" border="0"></a>&nbsp;
+	  <a href="?cmd=deltopic&section_id=<%section_id%>&topic_id=<%topic_id%>&sid=<%sid%>" onClick="return xconfdel();"><img src="b_drop.png" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+  </td><%endif:moderator_access%>
+</tr>

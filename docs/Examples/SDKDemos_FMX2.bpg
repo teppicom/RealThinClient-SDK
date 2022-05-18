@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = fmx2File_Client.exe \
+           fmx2AppClient.exe \
+           fmx2AppServer.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+fmx2File_Client.exe: File_Client\fmx2File_Client.dpr
+  $(DCC)
+
+fmx2AppClient.exe: App_Client\fmx2AppClient.dpr
+  $(DCC)
+
+fmx2AppServer.exe: App_Server\fmx2AppServer.dpr
+  $(DCC)

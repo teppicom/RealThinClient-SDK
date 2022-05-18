@@ -1,0 +1,259 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+******************************************************
+*                                                    *
+* RealThinClient SDK v4.21 (2011.Q2) June 13th 2011. *
+*                                                    *
+******************************************************
+
+---------------------------------------------------------
+* Changes in v4.21
+---------------------------------------------------------
+
+1) "ObjectLinks" property on TRtcClientModule and TRtcServerModule components extended
+   with options for automatic Object Manager creation without using a single line of code.
+
+2) Minor updates to some Demos.
+
+---------------------------------------------------------
+* Changes in v4.20 - BETA
+---------------------------------------------------------
+
+1) Fixed a memory leak in the "TRtcRemoteObjectManager" when Objects managed
+   by the Object Manager are being destroyed from Object Manager's destructor.
+   
+2) "FreeObjects" method added to "TRtcObjectManager" class, which can be used to Free
+   ALL objects managed by the Object Manager, without destroying the Object Manager.
+   
+3) "TRtcClientModule" component extended with a new property called "AutoSessionsPing",
+   which implements automated Session PING-ing by activating a Timer when there is an
+   active Session, which will make sure that a remote "PING" call is sent to the Server
+   if there were no other remote calls made in the past "AutoSessionsPing" seconds,
+   in order to keep the Server informed that the Client is "alive" and keeping
+   Clients Session on the Server alive - without writing a single line of code.
+
+   Each PING call is made by injecting a remote function call and you have the
+   option to decide how that remote function call will look like if you implement
+   the "OnPing" event on the "TRtcClientModule". Results received after a "PING"
+   call will be received in the "OnPingResult" event. And if the remote PING call
+   was aborted (for what ever reason), the "OnPingAborted" event will be triggered.
+
+   "OnPing", "OnPingResult" and "OnPingAborted" events are optional (do NOT have to
+   be implemented). If they are NOT implemented, a simple NULL value will be sent
+   to the Server for each "PING" call and NULL will be returned as a Result.
+
+4) "TRtcServerModule" and "TRtcClientModule" components extended to have the Client-side
+   Session closed automatically if a Session is closed manually on the Server-side.
+
+5) TRtcServerModule's "ActivateObjectManager" method updated to automatically create
+   a new Session if called with "xCreate=True" and no Session was active.
+
+6) Behavior of the "ObjectLinks" property with "ol_Auto" setting fixed.
+
+---------------------------------------------------------
+* Changes in v4.19 - BETA
+---------------------------------------------------------
+
+1) "CheckType" method added to RTC Value Objects in addition to the "isType" property.
+
+   The "isType" property always returns the *exact* type of data stored inside
+   a RTC Value Object, but some types are NOT supported by all transfer formats
+   in which case one type might be recognized as a similar type on the receiver side.
+   To avoid manually checking for all compatible types, the "CheckType" method
+   was added, which receives a type as parameter and returns TRUE if the Value
+   stored inside the RTC Value Object can be accessed using that type (parameter).
+
+   For example, using "CheckType(rtc_OID)" on a TRtcValue instance will return
+   TRUE if the Value stored in the TRtcValue instance can be read using "asOID".
+   Because only the RTC Format supports all data types natively, but XML and other
+   formats do NOT, using the new "CheckType" method makes it easy to check if the
+   Value received is compatible with the value expected, even if they are NOT of
+   the exact same type (without having to manually check all compatible types).
+
+---------------------------------------------------------
+* Changes in v4.18 - BETA
+---------------------------------------------------------
+
+1) "FindObject" and "FindOID" methods added to TRtcObjectManager,
+   TRtcCustomObjectLink and TRtcLinkedModule components/classes.
+
+2) "rtc_LinkedObject" type renamed to "rtc_OID" and "asOID" properties
+   added to all RTC Value Objects in addition to "asLinkedObject".
+   
+   The main advantage of "asOID" over "asLinkedObject" is that "asOID"
+   does NOT require an Object Manager to be set for the current thread,
+   while "asLinkedObject" relies on the "GetRtcObjectManager" function
+   to find the current thread's Object Manager and uses "FindOID" and/or
+   "FindObject" to convert TObject instances to Object IDs and vice-versa.
+
+3) "Manager:TRtcObjectManager" property added to "TRtcObjectCall" class to
+   eliminate the need for using the "GetRtcObjectManager" function from events
+   and methods which have been triggered/executed by an Object Manager.
+
+4) "TRtcObjectLink" constructor extended with a mandatory "xManager:TRtcObjectManager"
+   parameter to make it possible to create Linked Objects even if there is no default
+   Object Manager set - provided the component being created knows its Object Manager.
+
+5) "TRtcDirectObjectManager" class removed (use "TRtcLocalObjectManager" class instead).
+
+---------------------------------------------------------
+* Changes in v4.17 - BETA
+---------------------------------------------------------
+
+1) Fixed the "WaitForCompletion" method for non-Windows platforms (FPC).
+
+---------------------------------------------------------
+* Changes in v4.16 - BETA
+---------------------------------------------------------
+
+1) "TRtcClientModule" and "TRtcServerModule" components updated to allow the creation
+   of "RTC Linked Objects" on the Server, on the Client or on both sides (if necessary).
+   
+   * TRtcClientModule changes:
+     - replaced the "AutoLinkObjects" property (true/false; default=false)
+       with a new "ObjectLinks" property (ol_Disabled/ol_Manual/ol_Auto; default=ol_Disabled)
+     - made the "RemoveObjectManager" method public
+     - made the "GetObjectManager" method public
+     - added a new public method "ActivateObjectManager"
+
+   * TRtcServerModule changes:
+     - replaced the "AutoLinkObjects" property (true/false; default=false)
+       with a new "ObjectLinks" property (ol_Disabled/ol_Manual/ol_Auto; default=ol_Disabled)
+
+  For more information on the purpose and meaning behind these changes, please check the
+  explanation of these new properties and methods in the Help file or directly in source code.
+
+---------------------------------------------------------
+* Changes in v4.15 - BETA
+---------------------------------------------------------
+
+1) More "fine-tuning" to simplify the use of "RTC Linked Objects" methods and events.
+
+2) Fixed a memory leak in the TRtcClientModule when using "Linked Objects"
+   (caused by the Object Manager not being destroyed with TRtcClientModule).
+
+---------------------------------------------------------
+* Changes in v4.14 - BETA
+---------------------------------------------------------
+
+1) Introducing a new "TRtcLinkedModule" component (find it in the "rtcLink.pas" unit),
+   which can be dropped on a TDataModule, TForm or TFrame to make it a "RTC Linked Object".
+
+   This new component makes the process of writing linked Data Modules and Forms easy,
+   because it gives you all the methods you need to communicate with the remote side
+   and provides you with all the events you need to process received data, without having
+   to implement your own custom classes. Just drop the component inside the container which
+   you want to be able to control remotely, implement provided events using the Delphi IDE
+   and use provided methods to communicate with your "counterpart" on the other side,
+   without dropping any other component from the RTC SDK on the Form or Data Module.
+
+   For Data Modules and Forms which you want to create in code, the "RemoteClass" property
+   has to be correctly set or the remote instance won't be created. The correct value is,
+   obviously, the "xClassName" value which you will be checking for in the "OnObjectCreate"
+   event on the remote side to create the remote instance, or ... the "xClassName" for
+   which you have registered a global RTC Linked Object Constructor on the remote side
+   (see "RegisterRtcObjectConstructor" and "UnregisterRtcObjectConstructor" in "rtcInfo.pas").
+
+2) Introducing a new "TRtcCustomObjectLink" class (see "rtcLink.pas" unit),
+   which simplifies the process of writing custom "RTC Linked Object" classes by
+   providing the same easy-to-use interface as the "TRtcLinkedModule" component.
+   
+3) A number of changes were made to the general definition of "RTC Linked Objects"
+   (calling conventions, constructors, properties and event definitions) to
+   further simplify the process of writing custom "RTC Linked Object" classes.
+
+---------------------------------------------------------
+* Changes in v4.13 - BETA
+---------------------------------------------------------
+
+1) Added a new "OnObjectCreate" event to "TRtcClientModule" and "TRtcServerModule"
+   components, which can be used for creating Linked Objects which don't have a
+   registered RTC Object Constructor, or to prevent the creation of Objects if the
+   user sending the request doesn't have sufficient rights to create such objects.
+
+2) Extended RTC Object Constructor definition with a new "Sender:TObject" parameter.
+   When used with TRtcClientModule and TRtcServerModule components, this parameter will
+   hold the TRtcConnection component which has received the "construction request".
+
+---------------------------------------------------------
+* Changes in v4.12 - BETA
+---------------------------------------------------------
+
+1) Fixed some bugs in the new "RTC Linked Object" feature.
+
+2) Added two new events to "TRtcClientModule" and "TRtcServerModule" components
+   for monitoring traffig generated by the new "RTC Linked Objects" feature:
+
+  property OnObjectDataIn:TRtcFunctionPrepareEvent;
+
+    - This event is triggered when data is received from a remote "Object Manager".
+      The main purpose of this event is to allow you to *monitor* all received "Linked Objects"
+      packages without changing anything, but it could also be used to modify received data
+      before it is forwarded to the local "Object Manager" for processing/execution.
+      @param(Sender - NIL, or the connection component through which data was received)
+      @param(Data - Data received from the remote "Object Manager".
+             Unless you know exactly what you are doing and understand the format which
+             local and remote "Object Manager" instances are using for communication,
+             it is highly recommended that you do NOT make ANY changes to this instance.
+             This is the instance that will be passed over to our "Object Manager" later)
+
+  property OnObjectDataOut:TRtcFunctionPrepareEvent;
+
+    - This event is triggered *before* we send data prepared by our "Object Manager".
+      The main purpose of this event is to allow you to *monitor* all "Linked Objects"
+      packages before they are sent out, but it could also be used to modify prepared data.
+      @param(Sender - NIL if using the default connection; "Sender" parameter for the Call method)
+      @param(Data - Data prepared by our local "Object Manager" for sending to remote "Object Manager".
+             Unless you know exactly what you are doing and understand the format which
+             local and remote "Object Manager" instances are using for communication,
+             it is highly recommended that you do NOT make ANY changes to this instance.
+             This is the instance that will be sent over to remote "Object Manager")
+
+---------------------------------------------------------
+* Changes in v4.11 - BETA
+---------------------------------------------------------
+
+1) "ConsolAppCli" Project added to the "Tools\UnitTesting" folder for
+   testing the use of RTC Client components inside Console applications.
+   (Use together with "AppServer" from the "Demos\AppServer" folder)
+
+2) NexusDB Transport Plugin updated.
+   
+3) Introducing a new "Linked Objects" feature (BETA, work-in-progress):
+
+   - "TRtcClientModule" and "TRtcServerModule" components have been extended
+     with a new "AutoLinkObjects" property, which (when set to TRUE)
+     should make sure that any "Linked Objects" created from remote
+     functions on the Server will get created on the Client and let
+     these two "Linked Objects" keep each other "synchronized".
+
+   - RTC Value types have been extended with a new "rtc_LinkedObject" type
+     (along with a new set of "asLinkedObject" properties), which can be
+     used to send and receive refferences to "RTC Linked Objects".
+
+   - "TRtcObjectLink", "TRtcObjectManager" and a few other descendants
+     of the above two classes have been added ("rtcInfo.pas"/"rtcLinks.pas" units)
+     to make the process of implementing "Linked Object" classes as easy
+     as possible, while keeping the actual class implementations
+     100% independent of communication channels and protocols.
+
+---------------------------------------------------------
+* Changes in v4.10
+---------------------------------------------------------
+
+1) Introducing two new Generic search classes:
+
+   "rtcSrcList.pas"
+   - tRtcSearchList<itemType,infoType>=class(TObject);
+   
+   "rtcSrcTree.pas"
+   - tRtcSearchTree<itemType,infoType>=class(TObject);
+
+   NOTE: These classes are NOT directly used by the RTC SDK. To use them
+   you will need Delphi 2009 or later (Generics were introduced in D2009).
+
+---------------------------------------------------------
+* Changes in v4.09
+---------------------------------------------------------
+
+1) Experimental support for compiling 64bit Windows applications with FPC/Lazarus.

@@ -1,0 +1,148 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+*********************************************************************
+*                                                                   *
+* RealThinClient SDK v8.28 (2017.Q3), released September 15th 2017. *
+*                                                                   *
+*********************************************************************
+
+---------------------------------------------------------
+* Changes in v8.28 (2017.Q3)
+---------------------------------------------------------
+
+1. Fixed JSON parser (TRtcValue Objects) to correctly handle Numbers with whitespace.
+
+---------------------------------------------------------
+* Changes in v8.27
+---------------------------------------------------------
+
+1. Updated "rtcSTMTPlugin.pas" and "rtcSSecPlugin.pas" units from the "LibPlugins" 
+   folder, to improve thread safety when using StreamSec components with the RTC SDK
+   in Multi-Threaded mode (as recommended by Henrick Hellström from StreamSec).
+
+---------------------------------------------------------
+* Changes in v8.26
+---------------------------------------------------------
+
+1. Optimized "Function_Exists" and "Call_Execute" methods on the 
+   "TRtcFunctionGroup" component to find Functions much faster when
+   hundreds and more Functions are linked to the same FunctionGroup.
+   
+   To achieve this, sorted lists of all assigned TRtcFunction components
+   (search-able by FunctionName) are maintained by each TRtcFunctionGroup 
+   component and used when a Function has to be checked and/or executed,
+   instead of sequentially enumerating through all assigned TRtcFunction
+   components until the right component was found (as was before).
+   
+2. "TRtcFunctionGroup" component extended with a "StatusCheck" property,
+   showing the number of linked Functions and associated FunctionGroups.
+
+3. Fixed ">>" and "<<" commands in RTC Scripting, which previously swapped places: 
+   "<<" was doing SHR (instead of SHL), ">>" was doing SHL (instead of SHR).
+
+4. Updated the Scripting Quick Example ("QuickStart/rtcScript" folder) 
+   to measure the time it takes to execute each section of the Script
+   and display times of longer running sections with a short description.
+   
+---------------------------------------------------------
+* Changes in v8.25
+---------------------------------------------------------
+
+1. Minor updates to the "Readme.txt" file.
+
+---------------------------------------------------------
+* Changes in v8.24
+---------------------------------------------------------
+
+1. Fixed a problem with the "OnPeekRequest" event NOT triggering on
+   "TRtcHttpServer", "TRtcISAPIServer" and "TRtcMessageServer" components.
+
+---------------------------------------------------------
+* Changes in v8.23
+---------------------------------------------------------
+
+1. "TRtcFunctionGroup" component extended with a new "ExecuteError" event.
+   This event will be called if a call to a Function assigned to the FunctionGroup
+   raised an Exception and left the Exception unhandled (no try/except block).
+   You can use this event to monitor function calls which raise Exceptions and/or
+   implement a custom Exception handler for these functions. To handle Exceptions,
+   set "Handled:=TRUE" from within this event and update the Result object as needed.
+   If an Exception is handled within this event (Handled=TRUE), the Result object
+   will be returned, instead of the Exception that was raised by the function.
+
+---------------------------------------------------------
+* Changes in v8.22
+---------------------------------------------------------
+
+1. Fixed a possible Access Violation when destroying a TRtcHttpClient component 
+   with an active connection using automatic reconnects ("ReconnectOn" property).
+
+---------------------------------------------------------
+* Changes in v8.21
+---------------------------------------------------------
+
+1. "TRtcScriptEngine" class extended with a new "AutoCollapseArrays" property.
+   When set to TRUE (default), assignments and other operations inside the 
+   RTC Script automatically collapse all Arrays containing a single element
+   to return the actual element, instead of returning the entire Array.
+   When set to FALSE, this feature will be disabled, making it possible for 
+   variables accepting results from functions returning Arrays with a single 
+   element to store the actual Array, instead of the element from the array.
+  
+---------------------------------------------------------
+* Changes in v8.20
+---------------------------------------------------------
+
+1. "TRtcFunctionInfo" class extended with a new "Local:TRtcInfo" property,
+   which can be used for storing any data or local objects required 
+   locally (user code) to process a Result received from the Server.
+
+---------------------------------------------------------
+* Changes in v8.19
+---------------------------------------------------------
+
+1. A DEBUG LOG file was always created at a default location if the 
+   RTC_DEBUG compiler define was declared, even if a custom unit was 
+   created to change all LOG file parameters. This has now been fixed.
+
+---------------------------------------------------------
+* Changes in v8.18
+---------------------------------------------------------
+
+1. Fixed handling of Responses with Status Codes 1xx, 204 and 304.
+   These are special HTTP Status codes used with Responses which SHOULD
+   NEVER HAVE a Content Body, even if a CONTENT-LENGTH header is set.
+   
+---------------------------------------------------------
+* Changes in v8.17
+---------------------------------------------------------
+
+1. Fixed a regression bug that was causing Access Violations inside
+   RTC Threads after destroying a multi-threaded TRtcHttpServer component 
+   with open connections without using the "StopListenNow" method to 
+   stop the Server listener and wait for all connections to close.
+   
+   NOTE: It is still recommended to use "StopListenNow" before destroying 
+   a multi-threaded "TRtcHttpServer" component, to ensure that jobs running 
+   in the background can finish and all connections can close gracefully.
+   
+---------------------------------------------------------
+* Changes in v8.16
+---------------------------------------------------------
+
+1. Updated the "JSON" parser to recognize and correctly parse 
+   "JSON-RPC 2.0" method calls and Exception objects even if 
+   "jsonrpc" is NOT the 1st element in the root JSON record.
+   
+---------------------------------------------------------
+* Changes in v8.15
+---------------------------------------------------------
+
+1. Fixed "JSON-RPC 2.0" parser to recognize remote function calls
+   received from PHP (using "json_encode"), where "id" is the 2nd
+   element in a JSON record (directly following "jsonrpc":"2.0").
+   Previously, the "JSON-RPC 2.0" parser was only recognizing remote
+   function calls if the 2nd element was either "method" or "params".
+  
+2. Updated the Exception object parser for "JSON" to accept and parse
+   more non-standard object structures instead of raising exceptions.

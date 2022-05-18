@@ -1,0 +1,396 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************************
+*                                                                  *
+* RealThinClient SDK v5.04 (2011.Q4), released November 11th 2011. *
+*                                                                  *
+********************************************************************
+
+RealThinClient SDK v5.0 was the first release with official support for developing 
+Mac OSX and iOS Applications using Delphi XE2 and the new FireMonkey platform.
+
+---------------------------------------------------------
+* Changes in v5.04+ (2011.Q4)
+---------------------------------------------------------
+
+1) "rtcSDK_C" package updated to work with C++Builder 2009 and later.
+
+---------------------------------------------------------
+* Changes in v5.04 (2011.Q4)
+---------------------------------------------------------
+
+1) There was a problem with "WaitForCompletion" and "Execute" methods in FireMonkey Applications. 
+   This has been fixed. To make "WaitForCompletion" and "Execute" methods work with FireMonkey:
+     - use the "rtcFMX.GUI" unit in your Windows and Mac OSX FireMonkey Projects
+     - use the "rtcFMX_GUI" unit in your iOS FireMonkey Projects
+
+   There is no rule to where the unit should be used, as long as it is compiled into the executable.
+
+2) "rtcVCL_GUI" unit added, so the same feature added to FireMonkey can be used with the VCL.
+   When using the rtcVCL_GUI unit, a single "TTimer" component will be used for synchronizing all
+   calls from background threads with the Main Thread instead of using the "TThread.Synchronize" method.
+
+---------------------------------------------------------
+* Changes in v5.03 (2011.Q4)
+---------------------------------------------------------
+
+1) "ERtcSockException" class devided into:
+
+   * "ERtcSocketError" -> used for normal socket errors and handled silently 
+                          by the RTC SDK, based on the "EAbort" class to avoid raising alarms.
+                          This exception is used by the RTC SDK to break out of nested method calls
+                          and push the error down to the caller, without getting "loud" about it.
+                          These errors are expected and will be handled silently by the RTC SDK,
+                          triggering all the required events on RTC components to notify the developer.
+
+   * "ERtcFatalSockException" -> used for fatal exceptions, which can NOT be handled by the RTC SDK
+                                 and need to raise alarms to notify the developer about a serious problem,
+                                 like for example the innability to load WinSock when it was required. 
+
+   This only affects user experience while debugging from within the IDE,
+   it does NOT affect the way socket errors are being handled by the RTC SDK.
+
+---------------------------------------------------------
+* Changes in v5.02 (2011.Q4)
+---------------------------------------------------------
+
+1) Socket implementations for all platforms (Win32, Win64, OSX and iOS) were updated to use the "OnConnectError" event and
+   the "ReconnectOn.ConnectError" property instead of the "OnConnectFail" event and the "ReconnectOn.ConnectFail" property
+   if there was a problem connecting to the Server and the last socket API call has returned an error code. Socket error code 
+   and description are forwarded to the "OnConnectError" event (E.Message parameter), so they can be used in debugging
+   or to display a more informative error message to the user when a connection can not be established.
+
+2) Descriptions for socket errors on the iOS platform fixed.
+
+3) Delphi 6 compatibility fixed.
+
+---------------------------------------------------------
+* Changes in v5.01 (2011.Q4)
+---------------------------------------------------------
+
+1) There was a bug in the AutoConnect feature of the TRtcHttpClient component, which resulted in a temporary Request object 
+   to be freed twice if there was an exception raised from the Connect method (for example, when using an invalid Server Address)
+   but the "OnConnectError" event was left undefined by the component user. This has now been fixed.
+   - Now, Temporary Request Objects will ONLY be freed once, even in case of an unexpected exception
+   - The "Connect" method will NOT be raising exceptions if there is a problem connecting to the provided Server Address,
+     but ONLY if there is an unexpected condition (property not correctly set or components not correctly linked).
+     In case of a Connect Error, any exceptions raised will be caught and handled internally, triggering the "OnConnectError" event.
+
+---------------------------------------------------------
+* Changes in v5.0 (2011.Q4)
+---------------------------------------------------------
+
+1) Instructions for making the RTC SDK accessible from XCode (for iOS development) added to the "Readme.txt" file.
+
+2) "FireMonkey_Projects.bpg" Group file split into "FMX_Projects.bpg" and "iOS_Projects.bpg"
+ 
+    "FMX_Projects.bpg" Group contains Projects which can be compiled for Win32, Win64 and Mac OSX platforms
+    "iOS_Projects.bpg" Group contains Projects which can be compiled for the iOS platform
+
+3) "Delphi_Projects.bpg" Group file renamed to "VCL_Projects.bpg"
+
+---------------------------------------------------------
+* Changes in v4.62 (RC6 for v5.0)
+---------------------------------------------------------
+
+1) Added "rtcFMX_GUI" and "rtcFMX.GUI" units to the RTC SDK "Lib" folder.
+
+   The new "rtcFMX_GUI" unit should be used in all RTC iOS Applications which have a GUI (Graphical User Interface), 
+   because it implements a method for synchronizing background RTC threads with the Main thread by using a FMX TTimer, 
+   which is at least 20 times faster than using the default FPC implementation (it synchronizes only once every second).
+   
+   The new "rtcFMX.GUI" does the same as "rtcFMX_GUI", but works with FireMonkey for Mac OSX and Windows.
+   It is NOT necessary to use the "rtcFMX.GUI" unit for Windows and MacOSX applications because FireMonkey 
+   on these platforms handle Thread Synchronization immediately (and not with a one second delay like FPC),
+   but the unit is provided for testing and performance comparisons between platforms.
+
+2) FireMonkey Demos for iOS updated to use the "rtcFMX_GUI" unit (this addition visibly improves performance),
+   FireMonkey Demos for Mac OSX and Windows updated to use the "rtcFMX.GUI" unit (for testing purposes).
+   
+---------------------------------------------------------
+* Changes in v4.61 (RC5 for v5.0)
+---------------------------------------------------------
+
+1) Fixed abnormal App termination on iOS after a connection loss (caused by unhandled "Broken Pipe" signals).
+
+---------------------------------------------------------
+* Changes in v4.60 (RC4 for v5.0)
+---------------------------------------------------------
+
+1) Fixed problems with RTC Encryption on iOS.
+
+---------------------------------------------------------
+* Changes in v4.59 (RC3 for v5.0)
+---------------------------------------------------------
+
+1) "LoadFromStream" method added to the "TRtcParse" class in the "rtcParse" unit.
+
+---------------------------------------------------------
+* Changes in v4.58 (RC2 for v5.0)
+---------------------------------------------------------
+
+1) Fixed memory alignment problems with fast strings and the pointer pool when compiled for Win64.
+
+---------------------------------------------------------
+* Changes in v4.57 (RC1 for v5.0)
+---------------------------------------------------------
+
+1) New compiler directive: "RTC_useWindowsTimers"
+
+   Now, you can decide which rtcTimer implementation you want to use on Windows.
+
+   By default, the new cross-platform rtcTimer (creates 2 background threads) is used,
+   utilizing the "Synchronize" method when Timer events need to be executed inside
+   the Main thread. This is the recommended setting and works for all platforms.
+
+   But ... if you prefer the OLD implementation which uses Windows Timers when
+   compiled for Windows (for example, because it does NOT create ANY background threads),
+   you can now declare the "RTC_useWindowsTimers" compiler directive for each Project
+   where you want to use the OLD Windows Timer implementation, or ... you can declare 
+   it directly inside the "rtcDefs.inc" file ("Lib" folder) in case you want to use 
+   the OLD Windows Timer implementation with ALL your Windows Projects.
+
+   NOTE: "RTC_useWindowsTimers" compiler directive has no effect on non-Windows platforms.
+   When compiling the RTC SDK for any other platform (like Mac OSX and iOS), the new 
+   cross-platform rtcTimer version working with 2 background threads will be used,
+   even if the "RTC_useWindowsTimers" compiler directive is declared.
+
+---------------------------------------------------------
+* Changes in v4.56
+---------------------------------------------------------
+
+1) Fixed a bug in TRtcClientModule which was causing RTC Encryption to 
+   get "out of sync" if a connection dropped but AutoRepost was NOT used.
+
+2) Fixed a memory alignment problem with sorted lists and binary search trees.
+
+3) RTC Thread Pooling mechanism optimized and "TRtcThread" class cleaned up:
+  - "Pause" and "Resume" methods removed from all components using them
+  - "PostJob" method updated to accept a "TObject" instead of an untyped var
+  - "Work" method changed to "RunJob", parameters moved to local variables
+  - "Kill" method changed to "KillJob", parameters moved to local variables
+  - all components and classes using RTC Thread Pooling mechanism updated
+
+4) Added finalization to the "rtcTimer" unit for a clean application shutdown.
+
+---------------------------------------------------------
+* Changes in v4.55
+---------------------------------------------------------
+
+1) "DelphiDataSetToRtc" function updated to use TDataSet's "Fields" property instead 
+   of "FieldDefs" in order to copy calculated and lookup fields when "OnlyDataFields=False".
+   
+   Field order will now also be preserved, while Data Fields which have manually been removed 
+   from the DataSet (using the Field Editor in the IDE, for example) will NOT be copied.
+
+---------------------------------------------------------
+* Changes in v4.54
+---------------------------------------------------------
+
+1) "DelphiDataSetToRtc" function extended with a "OnlyDataFields" parameter (default=True),
+   so it can be used for copying ONLY data fields (default) or ALL fields from a DataSet.
+
+   Naturally, anyone has complex requirements can simply copy that complete function and 
+   write their own version in their own unit, since it is NOT used by the RTC SDK. 
+   It is just a simple utility function provided for your own convenience.
+
+2) "TRtcResult" component extended with a new "PreparingCall" event, which (if assigned)
+   will be called with the "Data" parameter before a remote call is prepared for sending.
+   
+   Using the "PreparingCall" event, you can modify all remote call parameters before the
+   call is sent to the Server, or ... you can completely skip any remote call before it
+   is sent to the Server by setting "Data.isNull:=True;" from the "PreparingCall" event.
+
+3) Master/Detail Database Access Client examples (MasterDetailClient + MasterDetailClient2)
+   updated to use the new "PreparingCall" event on the "TRtcResult" component for skipping
+   remote calls after moving away from rows. This way, performance while scrolling through
+   a master dataset is improved, without using the old and risky implementation which 
+   was skipping all requests as long as there were no "submit" request in the queue. 
+
+---------------------------------------------------------
+* Changes in v4.53
+---------------------------------------------------------
+
+1) "Ping" events on the TRtcClientModule component are now executed from a background 
+   thread when AutoSyncEvents=False and the connection component is MultiThreaded.
+
+2) There was a bug in the low-level async WinSock API layer, which could have resulted 
+   in a connection component to stop reconnecting after a failed connect attempt,
+   leaving the connection component in an undefined state. This has now been fixed.
+
+3) "RTCWebServer" Demo did to compile "out-of-the-box" on Delphi 2005 - 2010,
+   because of a missing search path to PHP Data Provider units. This has now been fixed.
+
+---------------------------------------------------------
+* Changes in v4.51 & v4.52
+---------------------------------------------------------
+
+1) Problems in the Low-level Asynchronous WinSock implementation, which resulted in 
+   higher than usual UDP datagram loss and TCP/IP connection loss, have now been fixed.
+
+---------------------------------------------------------
+* Changes in v4.50
+---------------------------------------------------------
+
+1) Introducing a new, cross-platform implementation of the "TRtcTimer" class.
+
+   While the original "TRtcTimer" class implementation was using Windows Handles and Timers
+   running in the Main Thread, the new implementation used two background threads and Events,
+   one thread for Timers executing in the Main Thread and another thread for Timers running
+   in threads handled by the RTC Thread Pool. This ensures that background Timers will always
+   be executed for Multi-Threaded connections, even if the main thread is being blocked.
+
+   NOTE: When running on iOS, because FireMonkey handles synchronization between background 
+   threads and the main thread in 1 second intervals, when TRtcTimer is used in single threaded 
+   mode (TRtcHttpClient.MultiThreaded=False), it has a precision of max 1 second. On all other
+   platforms (Win32, Win64, Mac OSX), TRtcTimer precision is set to 50 ms (20 times per second).
+
+2) "RtcDataSetRowsToDelphi", "DelphiDataSetToRtc" and "DelphiRowToRtc" procedures
+   from the "rtcDB.pas" unit updated to support TBCD and TSQLTimeStamp fields.
+
+---------------------------------------------------------
+* Changes in v4.49
+---------------------------------------------------------
+
+1) "TRtcTimer" class update to use 64bit parameters when compiled for 64bit Windows.
+
+---------------------------------------------------------
+* Changes in v4.48
+---------------------------------------------------------
+
+1) "TRtcMemDataSet" component ("rtcDB.pas" unit) is now also available for iOS.
+
+   To avoid FPC compile errors when using the "TRtcMemDataSet" component, you will need
+   to manually change the "uses" clauses in your Units to use the "DB" unit and NOT "Data.DB".
+
+   You won't be able to directly link fields from a "TRtcMemDataSet" component to visual 
+   FireMonkey components (like you can with FireMonkey OSX Apps), because FireMonkey for iOS
+   does NOT have Live Bindings support (yet), but ... you can use the "TRtcMemDataSet" 
+   component directly in code and implement the "OnDataChange" event to monitor and extract 
+   changes for sending to the RTC Server, just like you can for Windows and OSX Applications.
+   This way, your RTC Server can handle changes received from iOS Clients the same way it
+   handles changes received from Windows or Max OSX Clients (see "TRtcDataSetChanges" class).
+
+---------------------------------------------------------
+* Changes in v4.47
+---------------------------------------------------------
+
+1) C++Builder package (rtcSDK_C.bpk & rtcSDK_C.cpp) updated.
+
+---------------------------------------------------------
+* Changes in v4.46
+---------------------------------------------------------
+
+1) "FishFactServer2" and "BDEDemoServer" Projects fixed to support all field types.
+
+---------------------------------------------------------
+* Changes in v4.45
+---------------------------------------------------------
+
+1) "rtcDB.pas" unit fixed to compile with FPC.
+
+2) "iosTestClient" Project updated to use only required units.
+
+---------------------------------------------------------
+* Changes in v4.44
+---------------------------------------------------------
+
+1) "DelphiDataSetToRTC" function updated to skip TGraphicField Header information, 
+    so that Graphic fields can be used on Clients independently of a Server-side Database.
+
+2) "FishFactClient", "FishFactClient2" and "fmxFishFactClient" Projects from the 
+   "DB_Access" folder extended to allow uploading new images to the "Graphic" field.
+
+---------------------------------------------------------
+* Changes in v4.43
+---------------------------------------------------------
+
+1) "iOSTestClient" Project extended to keep the received DataSet in a separate variable
+   and allow scrolling through DataSet rows using First, Next, Prior and Last buttons
+   while displaying the image stored inside the selected row.
+
+---------------------------------------------------------
+* Changes in v4.42
+---------------------------------------------------------
+
+1) Fixed Logging functions for non-Windows platforms ("rtcLog.pas" unit).
+
+2) "TRtcQuickJob" component added. This new component can be used to quickly implement background 
+   jobs, without having to manually create threads and without having to worry about too many threads.
+
+   Simply implement the "OnExecute" event, set the "AccessGUI" property to TRUE if the event has
+   to access any GUI elements and you can call the OnExecute event from anywhere by using the 
+   "Post" method, which is available on the "TRtcQuickJob" component. 
+
+3) "PostQuickJob" procedure added, which can be used to quickly implement jobs by using events
+   instead of the "TRtcQuickJob" component. This is an alternative to the "TRtcQuickJob" component.
+
+---------------------------------------------------------
+* Changes in v4.41
+---------------------------------------------------------
+
+1) New FireMonkey versions of the "App_Server" Demo Project:
+
+   - "Demos\App_Server\fmxAppServer.dpr" (MacOSX + Win32 + Win64)
+   - "Demos\App_Server\iosAppServer.dpr" (iOS + Win32)
+
+---------------------------------------------------------
+* Changes in v4.40
+---------------------------------------------------------
+
+1) New FireMonkey versions of the "File_Client" Demo Project:
+
+   - "Demos\File_Client\fmxFile_Client.dpr" (MacOSX + Win32 + Win64)
+   - "Demos\File_Client\iosFile_Client.dpr" (iOS + Win32)
+
+2) New FireMonkey versions of the "App_Client" Demo Project:
+
+   - "Demos\App_Client\fmxAppClient.dpr" (MacOSX + Win32 + Win64)
+   - "Demos\App_Client\iosAppClient.dpr" (iOS + Win32)
+
+3) New Project Group "FireMonkey_Projects.bpg" added to the "Demos" folder,
+   containing all RTC Demo Projects for the new FireMonkey platform.
+
+4) New batch file "_makeXCodeProjects.cmd" added to the "Demos" folder, using which
+   you can create "XCode" files for ALL "iOS" Projects available in the "Demos" folder.
+
+---------------------------------------------------------
+* Changes in v4.39
+---------------------------------------------------------
+
+1) Compatibility update for the XCode 4 debugger running on the iOS device.
+
+---------------------------------------------------------
+* Changes in v4.38
+---------------------------------------------------------
+
+1) "TRtcMemDataSet" component extended to support more field types.
+
+---------------------------------------------------------
+* Changes in v4.37
+---------------------------------------------------------
+
+1) "MasterDetailClient2" project added to the "Demos\DB_Access" folder.
+
+  This Project shows how to write a RTC Client using DB-aware components with
+  3rd-party in-memory DataSets (like TClientDataSet) in Master/Detail relations.
+ 
+  It is designed to work together with the "BDEDemoServer" Project for remote 
+  access the the "DBDEMOS" Database and uses asynchronous communication with 
+  TClientDataSet (in-memory DataSet) and TRtcDataSetMonitor (monitor changes) components.
+
+---------------------------------------------------------
+* Changes in v4.36
+---------------------------------------------------------
+
+1) Improved Client side request handling to allow preparing and posting a new 
+   remote function call from inside the "OnReturn" event in single-threaded as
+   well as multi-threaded mode, without using the "FromInsideEvent" parameter.
+
+2) "MasterDetailClient" project added to the "Demos\DB_Access" folder.
+
+  This Project shows how to write a RTC Client using DB-aware components with
+  DataSets in Master/Detail relations. This Client is designed to work together
+  with the "BDEDemoServer" Project for remote access the the "DBDEMOS" Database.
+ 
+  This project uses asynchronous communication and the TRtcMemDataSet component.

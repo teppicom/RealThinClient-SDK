@@ -1,0 +1,15 @@
+<tr class="items" onMouseOver="this.bgColor='#F0F0F0';" onmouseout="this.bgColor='#FFFFFF';">
+  <form method="post" enctype="application/x-www-form-urlencoded" name="editaccess_pack<%pack_id%>" id="editaccess_pack<%pack_id%>" onSubmit="return xValidateDate(this.expiredate);">
+  <td class="items" style="padding-left:15px"><%package_name%></td>
+  <td class="itemsgreen"><div align="center"><input name="grant" type="checkbox" <%grant_checked%>></div></td>
+  <td class="items"><div align="center"><input id="expiredate" name="expiredate" type="text" class="expiredate" value="<%expiredate%>" maxlength="10"></div></td>
+  <td class="items" width="50">
+      <div align="right"><a href="/?cmd=editaccess&user=<%user%>&pack_id=<%pack_id%>&sid=<%sid%>"><img src="b_edit.png" alt="Edit" width="16" height="16" border="0"></a>&nbsp;
+      <input name="save" type="image" src="b_save.png" alt="Save changes" width="16" height="16" border="0">
+    </div></td>
+  <input name="cmd" type="hidden" value="saveaccess">
+  <input name="pack_id" type="hidden" value="<%pack_id%>">
+  <input name="user" type="hidden" value="<%user%>">
+  <input name="sid" type="hidden" value="<%sid%>">
+  </form>
+</tr>

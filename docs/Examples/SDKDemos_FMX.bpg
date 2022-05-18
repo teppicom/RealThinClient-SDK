@@ -1,0 +1,38 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = fmxFile_Client.exe \
+           fmxAppClient.exe \
+           fmxAppServer.exe \
+           iosFile_Client.exe \
+           iosAppClient.exe \
+           iosAppServer.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+fmxFile_Client.exe: File_Client\fmxFile_Client.dpr
+  $(DCC)
+
+fmxAppClient.exe: App_Client\fmxAppClient.dpr
+  $(DCC)
+
+fmxAppServer.exe: App_Server\fmxAppServer.dpr
+  $(DCC)
+
+iosFile_Client.exe: File_Client\iosFile_Client.dpr
+  $(DCC)
+
+iosAppClient.exe: App_Client\iosAppClient.dpr
+  $(DCC)
+
+iosAppServer.exe: App_Server\iosAppServer.dpr
+  $(DCC)

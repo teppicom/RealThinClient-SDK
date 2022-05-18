@@ -1,0 +1,113 @@
+You can find information on updating the RTC SDK components in the "Readme.txt" file.
+
+********************************************************
+*                                                      *
+* RealThinClient SDK v4.00 (2010.Q3), August 4th 2010. *
+*                                                      *
+********************************************************
+
+Here is a complete list of changes since v3.83 (2010.Q2):
+
+1) Fixed a compatibility problem with FPC/Lazarus on MacOSX ("rtcConn.pas" unit).
+
+2) "PostEvent" method added to the "TRtcConnection" component, which can be used for 
+   posting a job to a connection component to call the provided "TRtcNotifyEvent" with 
+   the connection component as a "Sender" parameter from within the thread associated 
+   with the connection component.
+
+3) Added properties and methods to allow manually controlled reading from socket-based connections.
+   For more info, check the new "ManualRead" property on "TRtcClientResponse" and "TRtcServerRequest" 
+   classes and the "AfterManualRead" method added to the "TRtcConnection" (base connection) component.
+
+4) Improved HTTP/1.0 and "Connection: close" support.
+
+5) Minor update of the File_Client demo to discard reading buffers when 
+   downloading files without using the option to store the contents into a file
+   and display only the contents of the first received data block in memo.
+
+6) Minor formatting improvements in the HELP file.
+
+7) "RTC_LOG_DATETIMEFORMAT" global variable added to the "rtcLog.pas" unit, allowing you to specify the
+   string used to format the Data/Time output in LOG files created by using "Log" and "XLog" functions.
+   
+8) Default Data/Time format for RTC LOG files extended to include milliseconds: 'yyyy-mm-dd hh:nn:ss.zzz; ';
+
+9) Minor Server-side socket-based connection provider improvements.
+
+10) RTC Value Objects used for RTC Remote Functions and RTC Scripting extended to support all 
+    Delphi Database Field types available in all Delphi versions up to Delphi 2010.
+
+11) "rtcDBTypes.pas" unit extended with support for newly added Database Field types.
+
+12) RTC Logging ("rtcLog.pas" unit) extended with support for optional buffered (in-memory) logging, 
+    which makes it possible to use RTC Logging in scenarios where Performance is an important factor 
+    and writing every log entry directly to a file would generate too high performance penalty.
+
+   Functions added in the "rtcLog.pas" unit: 
+
+     - StartLogBuffers(MaxSize:longint);
+     - DumpLogBuffers;
+     - StopLogBuffers;
+
+   When using RTC Log Buffers, all Log and XLog calls will store Log entries to in-memory buffers 
+   instead of directly writing every log entry to a file. All Log and XLog calls will be buffered 
+   to memory until total buffered log size exceeds specified maximum log buffer size in 
+   "StartLogBuffers" or until you call DumpLogBuffers or StopLogBuffers.
+
+   StartLogBuffers will start using buffers for logging and set maximum buffer size (bytes).
+   If log buffers were already enabled, StartLogBuffers will dump current log buffers to 
+   files and set new maximum buffer size.
+
+   DumpLogBuffers will dump current log buffers to files.
+
+   StopLogBuffers will dump current log buffers to files and disable buffers for logging.
+
+13) AppClient and AppServer demos extended with "API Timouets" and "RTC Timeouts" checkboxes.
+
+14) There was a bug in the "Mime_Decode" function because of which data received using the 
+    rtc_ByteStream data type with the XML-RPC format was not always correctly decoded 
+    (sometimes the last few bytes were missing). This has now been fixed.
+
+15) Added "RTC_LOG_THREADID" global variable to the "rtcLog.pas" unit. When RTC_LOG_THREADID 
+   is set to TRUE (default=FALSE), each call to the Log() or XLog() function will add the 
+   current Thread ID before Date and Time to every Log entry.
+
+16) Using "Request.Skip" after data was already sent through a Client connection could have 
+   resulted in the next Request from the Request Queue to be posted before the connection 
+   was Reset (by closing the old and opening a new connection), which would raise the 
+   exception "Last header intercepted with new header, before data sent out.". 
+   This has now been fixed.
+
+17) Added all "mem*.pas" units to the DPK file.
+
+18) There was a bug in "Utf8Decode" and "Utf8DecodeEx" functions (used in RTC remote functions) 
+    which could have resulted in 1 byte of memory to get overwritten. This has now been fixed.
+
+19) Improved handling of exceptions inside "mem*" object constructors.
+
+20) "DoWaitForCompletion" with "AllowMessageProcessing=False" and "Timeout=0" 
+    was using a 100ms timeout instead of infinite. This has now been fixed.
+
+21) "Cookie" properties on TRtcRequest and TRtcResponse classes were not being updated 
+    correctly after a new "HeaderText" was assigned. This has now been fixed.
+
+22) Fixed XML-RPC type name for data/time fields.
+
+23) "rtc2DBTypes.pas" unit added to the "Lib" folder with new (future-proof)
+   implementations of RTC_DB2FIELD_TYPE and RTC_FIELD2DB_TYPE functions.
+
+24) "rtcDBTypes.pas" unit in the "Demos/DataProvider" folder updated to use the 
+   new RTC_DB2FIELD_TYPE and RTC_FIELD2DB_TYPE functions from the "rtc2DBTypes.pas" unit.
+
+25) "DelphiDataSetToRtc" function in the "rtcDBTypes.pas" unit updated to support TBlobField types.
+
+26) "TRtcDataRouter" and "TRtcLoadBalancer" components added to the component palette.
+    These new components allow you to easily route requests from your Server to one or more 
+    other Servers and make it easy to write HTTP(S) Routers, Proxy Servers and Load Balancers.
+
+27) "Router", "Router2", "LoadBalancer", "LoadBalancer2" and "LoadBalancer3" projects added 
+    to the Demos folder, showing you how to use the "TRtcDataRouter" and "TRtcLoadBalancer" 
+    components to write a HTTP(S) Router or Load Balancer.
+
+28) "RouterCheck" project added to the "Tools" folder. This small tool can be
+    used to check "RTC Router" and "RTC Load Balancer" log files for consistency.

@@ -1,0 +1,32 @@
+object Form1: TForm1
+  Left = 281
+  Height = 300
+  Top = 195
+  Width = 400
+  Caption = 'Form1'
+  ClientHeight = 300
+  ClientWidth = 400
+  OnCreate = Form1Create
+  LCLVersion = '0.9.28.2'
+  object Label1: TLabel
+    Left = 16
+    Height = 16
+    Top = 8
+    Width = 268
+    Caption = 'Point your WebBrowser at http://localhost:81/time'
+    ParentColor = False
+  end
+  object RtcHttpServer1: TRtcHttpServer
+    MultiThreaded = True
+    ServerPort = '81'
+    left = 32
+    top = 40
+  end
+  object RtcDataProvider1: TRtcDataProvider
+    Server = RtcHttpServer1
+    OnCheckRequest = RtcDataProvider1CheckRequest
+    OnDataReceived = RtcDataProvider1DataReceived
+    left = 32
+    top = 96
+  end
+end

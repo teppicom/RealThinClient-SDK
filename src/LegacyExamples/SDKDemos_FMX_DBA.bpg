@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = fmxFishFactClient.exe \
+           iosTestClient.exe \
+           iosTestClient2.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+fmxFishFactClient.exe: DB_Access\fmxFishFactClient.dpr
+  $(DCC)
+
+iosTestClient.exe: DB_Access\iosTestClient.dpr
+  $(DCC)
+
+iosTestClient2.exe: DB_Access\iosTestClient2.dpr
+  $(DCC)

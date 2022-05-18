@@ -1,0 +1,181 @@
+object GCMainForm: TGCMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 400
+  ClientWidth = 400
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  OnCreate = FormCreate
+  OnCloseQuery = FormCloseQuery
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object eClients: TLabel
+    Anchors = [akLeft, akTop, akRight]
+    Position.X = 120.000000000000000000
+    Size.Width = 169.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'eClients'
+  end
+  object ePackets: TLabel
+    Anchors = [akLeft, akTop, akRight]
+    Position.X = 120.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 169.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'ePackets'
+  end
+  object eStatus: TLabel
+    Anchors = [akLeft, akTop, akRight]
+    StyledSettings = [Family, Size]
+    Position.X = 8.000000000000000000
+    Position.Y = 104.000000000000000000
+    Size.Width = 281.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
+    TextSettings.FontColor = claNavy
+    Text = 'eStatus'
+  end
+  object eSpeed: TLabel
+    Anchors = [akLeft, akTop, akRight]
+    StyledSettings = [Family, Size]
+    Position.X = 8.000000000000000000
+    Position.Y = 80.000000000000000000
+    Size.Width = 281.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
+    TextSettings.FontColor = claNavy
+    Text = 'eSpeed'
+  end
+  object btnDec: TButton
+    Size.Width = 57.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'Less'
+    OnClick = btnDecClick
+  end
+  object btnInc: TButton
+    Position.X = 56.000000000000000000
+    Size.Width = 57.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    Text = 'More'
+    OnClick = btnIncClick
+  end
+  object ePaintBox: TPaintBox
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Position.Y = 136.000000000000000000
+    Size.Width = 400.000000000000000000
+    Size.Height = 264.000000000000000000
+    Size.PlatformDefault = False
+    OnPaint = ePaintBoxPaint
+    OnResize = ePaintBoxResize
+  end
+  object btnGo: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 344.000000000000000000
+    Size.Width = 56.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'GO'
+    OnClick = btnGoClick
+  end
+  object btnRun: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 344.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 56.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'Send'
+    OnClick = btnRunClick
+  end
+  object btnPack: TButton
+    Position.Y = 40.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = ' ePack'
+    OnClick = btnPackClick
+  end
+  object btnInOut: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 288.000000000000000000
+    Size.Width = 57.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    Text = 'IXO'
+    OnClick = btnInOutClick
+  end
+  object btnReset: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 288.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 57.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Text = 'RST'
+    OnClick = btnResetClick
+  end
+  object eError: TLabel
+    Anchors = [akTop, akRight]
+    StyledSettings = [Family, Size]
+    Opacity = 0.750000000000000000
+    Position.X = 232.000000000000000000
+    Position.Y = 72.000000000000000000
+    Size.Width = 49.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
+    TextSettings.FontColor = claCrimson
+    TextSettings.HorzAlign = Trailing
+    Text = 'eErr'
+  end
+  object btnAPIs: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 232.000000000000000000
+    Size.Width = 57.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 9
+    Text = 'MIX'
+    OnClick = btnAPIsClick
+  end
+  object MainGC: TRtcHttpGateClient
+    GateAddr = 'localhost'
+    GatePort = '80'
+    GateFileName = '/'
+    BeforeLogIn = MainGCBeforeLogIn
+    AfterLoggedIn = MainGCAfterLoggedIn
+    AfterLoginFail = MainGCAfterLoginFail
+    AfterLogOut = MainGCAfterLogOut
+    OnDataFilter = MainGCDataFilter
+    OnDataReceived = MainGCDataReceived
+    OnReadyAfterReset = MainGCReadyAfterReset
+    OnReadyToSend = MainGCReadyToSend
+    OnStreamReset = MainGCStreamReset
+    OnDataReceivedGUI = MainGCDataReceivedGUI
+    Left = 104
+    Top = 184
+  end
+  object GCJob: TRtcQuickJob
+    ForceThread = True
+    Serialized = True
+    OnExecute = QuickJobExecute
+    Left = 176
+    Top = 184
+  end
+end

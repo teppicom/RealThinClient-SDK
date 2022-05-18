@@ -4,8 +4,12 @@ program RTCWebServer;
 {$include rtcDeploy.inc}
 
 uses
-  FastMM4,
-  FastMove,
+{$IFDEF RtcDeploy}
+  {$IFNDEF IDE_2006up}
+    FastMM4,
+    FastMove,
+  {$ENDIF}
+{$ENDIF}
   rtcLog,
   SysUtils,
   rtcTypes,

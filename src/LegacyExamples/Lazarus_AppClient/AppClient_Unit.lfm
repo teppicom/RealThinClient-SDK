@@ -1,0 +1,721 @@
+object Form1: TForm1
+  Left = 256
+  Height = 493
+  Top = 146
+  Width = 326
+  ActiveControl = PageControl1
+  Caption = 'RTC Remote App Client (FPC/Lazarus)'
+  ClientHeight = 493
+  ClientWidth = 326
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '0.9.31'
+  object myPanel: TPanel
+    Left = 0
+    Height = 182
+    Top = 311
+    Width = 326
+    Align = alClient
+    BorderWidth = 5
+    ClientHeight = 182
+    ClientWidth = 326
+    TabOrder = 0
+    object myBox: TPaintBox
+      Left = 6
+      Height = 170
+      Top = 6
+      Width = 314
+      Align = alClient
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 311
+    Top = 0
+    Width = 326
+    Align = alTop
+    BorderWidth = 4
+    ClientHeight = 311
+    ClientWidth = 326
+    TabOrder = 1
+    object PageControl1: TPageControl
+      Left = 5
+      Height = 301
+      Top = 5
+      Width = 316
+      ActivePage = TabSheet1
+      Align = alClient
+      TabIndex = 0
+      TabOrder = 0
+      object TabSheet1: TTabSheet
+        Caption = 'Setup'
+        ClientHeight = 275
+        ClientWidth = 308
+        object Label11: TLabel
+          Left = 4
+          Height = 14
+          Top = 83
+          Width = 67
+          Caption = 'Module Name'
+          ParentColor = False
+        end
+        object Label12: TLabel
+          Left = 4
+          Height = 14
+          Top = 58
+          Width = 73
+          Caption = 'Server Address'
+          ParentColor = False
+        end
+        object Label13: TLabel
+          Left = 220
+          Height = 14
+          Top = 58
+          Width = 20
+          Caption = 'Port'
+          ParentColor = False
+        end
+        object Label30: TLabel
+          Left = 4
+          Height = 14
+          Top = 108
+          Width = 61
+          Caption = 'Module Host'
+          ParentColor = False
+        end
+        object eModule: TEdit
+          Left = 84
+          Height = 21
+          Top = 78
+          Width = 197
+          OnExit = eModuleChange
+          TabOrder = 6
+          Text = '/TEST'
+        end
+        object eServer: TEdit
+          Left = 84
+          Height = 21
+          Top = 53
+          Width = 129
+          OnChange = eServerChange
+          TabOrder = 0
+          Text = 'localhost'
+        end
+        object xProxy: TCheckBox
+          Left = 87
+          Height = 19
+          Top = 5
+          Width = 66
+          Caption = 'use Proxy'
+          OnClick = xProxyClick
+          TabOrder = 5
+          TabStop = False
+        end
+        object ePort: TEdit
+          Left = 244
+          Height = 21
+          Top = 53
+          Width = 37
+          OnChange = eServerChange
+          TabOrder = 1
+          Text = '81'
+        end
+        object xSSL: TCheckBox
+          Left = 167
+          Height = 19
+          Top = 5
+          Width = 60
+          Caption = 'use SSL'
+          OnClick = xSSLClick
+          TabOrder = 4
+          TabStop = False
+        end
+        object eModuleHost: TEdit
+          Left = 84
+          Height = 21
+          Top = 103
+          Width = 197
+          OnExit = eModuleChange
+          TabOrder = 3
+          Text = 'localhost'
+        end
+        object xUseXML: TCheckBox
+          Left = 7
+          Height = 19
+          Top = 29
+          Width = 185
+          Caption = 'Use XML-RPC for remote functions'
+          OnClick = xUseXMLClick
+          ParentBidiMode = False
+          TabOrder = 7
+        end
+        object xBlocking: TCheckBox
+          Left = 7
+          Height = 19
+          Top = 5
+          Width = 61
+          Caption = 'Blocking'
+          OnClick = xBlockingClick
+          TabOrder = 2
+          TabStop = False
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'User Test'
+        ClientHeight = 275
+        ClientWidth = 308
+        ImageIndex = 1
+        object Label1: TLabel
+          Left = 76
+          Height = 14
+          Top = 90
+          Width = 7
+          Caption = '+'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 164
+          Height = 14
+          Top = 90
+          Width = 7
+          Caption = '='
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 4
+          Height = 14
+          Top = 110
+          Width = 34
+          Caption = 'waiting'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 4
+          Height = 14
+          Top = 155
+          Width = 34
+          Caption = 'waiting'
+          ParentColor = False
+        end
+        object Label5: TLabel
+          Left = 76
+          Height = 14
+          Top = 135
+          Width = 6
+          Caption = 'x'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 164
+          Height = 14
+          Top = 135
+          Width = 7
+          Caption = '='
+          ParentColor = False
+        end
+        object Label7: TLabel
+          Left = 212
+          Height = 14
+          Top = 110
+          Width = 7
+          Caption = '+'
+          ParentColor = False
+        end
+        object Label8: TLabel
+          Left = 212
+          Height = 14
+          Top = 155
+          Width = 7
+          Caption = '='
+          ParentColor = False
+        end
+        object Label9: TLabel
+          Left = 212
+          Height = 14
+          Top = 200
+          Width = 34
+          Alignment = taRightJustify
+          Caption = 'waiting'
+          ParentColor = False
+        end
+        object Label10: TLabel
+          Left = 4
+          Height = 14
+          Top = 45
+          Width = 75
+          Caption = 'Not connected.'
+          ParentColor = False
+        end
+        object lblCount: TLabel
+          Left = 40
+          Height = 14
+          Top = 177
+          Width = 7
+          Caption = '--'
+          ParentColor = False
+        end
+        object lblTotal: TLabel
+          Left = 124
+          Height = 14
+          Top = 175
+          Width = 7
+          Caption = '--'
+          ParentColor = False
+        end
+        object Label14: TLabel
+          Left = 4
+          Height = 14
+          Top = 177
+          Width = 32
+          Caption = 'To do:'
+          ParentColor = False
+        end
+        object Label15: TLabel
+          Left = 92
+          Height = 14
+          Top = 175
+          Width = 30
+          Caption = 'Done:'
+          ParentColor = False
+        end
+        object Label22: TLabel
+          Left = 4
+          Height = 14
+          Top = 65
+          Width = 242
+          Caption = 'Enter values to get results from the Server'
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object Edit1: TEdit
+          Left = 4
+          Height = 21
+          Top = 85
+          Width = 61
+          OnChange = Edit1Change
+          TabOrder = 3
+        end
+        object Edit2: TEdit
+          Left = 92
+          Height = 21
+          Top = 85
+          Width = 61
+          OnChange = Edit1Change
+          TabOrder = 4
+        end
+        object Edit3: TEdit
+          Left = 180
+          Height = 21
+          Top = 85
+          Width = 65
+          Color = clBtnFace
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 10
+        end
+        object Edit4: TEdit
+          Left = 4
+          Height = 21
+          Top = 130
+          Width = 61
+          OnChange = Edit4Change
+          TabOrder = 5
+        end
+        object Edit5: TEdit
+          Left = 92
+          Height = 21
+          Top = 130
+          Width = 61
+          OnChange = Edit4Change
+          TabOrder = 6
+        end
+        object Edit6: TEdit
+          Left = 180
+          Height = 21
+          Top = 130
+          Width = 65
+          Color = clBtnFace
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 11
+        end
+        object Edit7: TEdit
+          Left = 180
+          Height = 21
+          Top = 175
+          Width = 65
+          Color = clBtnFace
+          ReadOnly = True
+          TabStop = False
+          TabOrder = 12
+        end
+        object btnFlood: TButton
+          Left = 0
+          Height = 25
+          Top = 220
+          Width = 197
+          Caption = 'User Flood Test: Send 1.000 requests'
+          OnClick = btnFloodClick
+          TabOrder = 9
+        end
+        object xFlood: TCheckBox
+          Left = 92
+          Height = 19
+          Top = 195
+          Width = 71
+          Caption = 'Auto-Flood'
+          TabOrder = 8
+          TabStop = False
+        end
+        object xRepost: TCheckBox
+          Left = 4
+          Height = 19
+          Top = 195
+          Width = 79
+          Caption = 'Auto-Repost'
+          OnClick = xRepostClick
+          TabOrder = 7
+          TabStop = False
+        end
+        object btnConnect: TButton
+          Left = 212
+          Height = 25
+          Top = 10
+          Width = 63
+          Caption = 'Connect'
+          OnClick = btnConnectClick
+          TabOrder = 2
+        end
+        object xAutoConnect: TCheckBox
+          Left = 104
+          Height = 19
+          Top = 5
+          Width = 82
+          Caption = 'AutoConnect'
+          OnClick = xAutoConnectClick
+          TabOrder = 1
+          TabStop = False
+        end
+        object xMultiThreaded: TCheckBox
+          Left = 4
+          Height = 19
+          Top = 5
+          Width = 91
+          Caption = 'Multi-Threaded'
+          OnClick = xMultiThreadedClick
+          TabOrder = 0
+          TabStop = False
+        end
+        object btnConnDisconn: TButton
+          Left = 200
+          Height = 25
+          Top = 220
+          Width = 101
+          Caption = '10 x conn/disconn'
+          OnClick = btnConnDisconnClick
+          TabOrder = 13
+        end
+        object xEncrypt: TCheckBox
+          Left = 4
+          Height = 19
+          Top = 25
+          Width = 70
+          Caption = 'Encryption'
+          OnClick = xEncryptClick
+          TabOrder = 14
+        end
+        object xCompress: TCheckBox
+          Left = 104
+          Height = 19
+          Top = 25
+          Width = 80
+          Caption = 'Compression'
+          OnClick = xCompressClick
+          TabOrder = 15
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'Multi-connection Flooding'
+        ClientHeight = 275
+        ClientWidth = 308
+        ImageIndex = 2
+        object Label16: TLabel
+          Left = 116
+          Height = 14
+          Top = 218
+          Width = 63
+          Caption = 'Connections:'
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label17: TLabel
+          Left = 8
+          Height = 14
+          Top = 30
+          Width = 95
+          Caption = 'Connections to use:'
+          ParentColor = False
+        end
+        object Label18: TLabel
+          Left = 12
+          Height = 14
+          Top = 53
+          Width = 90
+          Caption = 'Requests per loop:'
+          ParentColor = False
+        end
+        object lblFlood: TLabel
+          Left = 196
+          Height = 14
+          Top = 235
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object lblClients: TLabel
+          Left = 184
+          Height = 14
+          Top = 218
+          Width = 13
+          Caption = '----'
+          ParentColor = False
+        end
+        object Label25: TLabel
+          Left = 116
+          Height = 14
+          Top = 235
+          Width = 76
+          Caption = 'Requests done:'
+          ParentColor = False
+        end
+        object Label26: TLabel
+          Left = 9
+          Height = 14
+          Top = 80
+          Width = 93
+          Alignment = taRightJustify
+          Caption = 'Update graph after:'
+          ParentColor = False
+        end
+        object Label27: TLabel
+          Left = 8
+          Height = 14
+          Top = 5
+          Width = 292
+          Caption = 'Open X connections and flood server with requests'
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label28: TLabel
+          Left = 216
+          Height = 14
+          Top = 55
+          Width = 63
+          Caption = 'Manual Test:'
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label29: TLabel
+          Left = 12
+          Height = 14
+          Top = 220
+          Width = 76
+          Caption = 'Auto-flood Test:'
+          ParentColor = False
+        end
+        object Label31: TLabel
+          Left = 116
+          Height = 14
+          Top = 252
+          Width = 72
+          Caption = 'Memory in use:'
+          ParentColor = False
+        end
+        object lblMemTotal: TLabel
+          Left = 196
+          Height = 14
+          Top = 252
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object Label32: TLabel
+          Left = 172
+          Height = 14
+          Top = 30
+          Width = 66
+          Caption = 'Max Threads:'
+          ParentColor = False
+        end
+        object eConCnt: TEdit
+          Left = 112
+          Height = 21
+          Top = 25
+          Width = 49
+          TabOrder = 0
+          Text = '300'
+        end
+        object eReqCnt: TEdit
+          Left = 112
+          Height = 21
+          Top = 50
+          Width = 49
+          TabOrder = 1
+          Text = '200'
+        end
+        object btnMultiFlood: TButton
+          Left = 4
+          Height = 29
+          Top = 235
+          Width = 101
+          Caption = 'Start Flooding'
+          Default = True
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          OnClick = btnMultiFloodClick
+          ParentFont = False
+          TabOrder = 14
+        end
+        object xReqAutoRepeat: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 200
+          Width = 112
+          Caption = 'Auto-Repeat Loops'
+          TabOrder = 8
+        end
+        object eUpdCnt: TEdit
+          Left = 112
+          Height = 21
+          Top = 75
+          Width = 33
+          TabOrder = 2
+          Text = '5'
+        end
+        object xAutoDisconnect: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 100
+          Width = 148
+          Caption = 'Disconnect after each loop'
+          TabOrder = 7
+        end
+        object xReqAutoConnect: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 120
+          Width = 107
+          Caption = 'Use Auto-Connect'
+          TabOrder = 4
+        end
+        object btnMultiCreate: TButton
+          Left = 196
+          Height = 25
+          Top = 75
+          Width = 101
+          Caption = 'Create'
+          OnClick = btnMultiCreateClick
+          TabOrder = 9
+        end
+        object btnMultiConnect: TButton
+          Left = 196
+          Height = 26
+          Top = 99
+          Width = 101
+          Caption = 'Connect'
+          Enabled = False
+          OnClick = btnMultiConnectClick
+          TabOrder = 10
+        end
+        object btnMultiSend: TButton
+          Left = 196
+          Height = 26
+          Top = 124
+          Width = 101
+          Caption = 'Send requests'
+          Enabled = False
+          OnClick = btnMultiSendClick
+          TabOrder = 11
+        end
+        object btnMultiDisconnect: TButton
+          Left = 196
+          Height = 26
+          Top = 149
+          Width = 101
+          Caption = 'Disconnect'
+          Enabled = False
+          OnClick = btnMultiDisconnectClick
+          TabOrder = 12
+        end
+        object btnMultiFree: TButton
+          Left = 196
+          Height = 26
+          Top = 174
+          Width = 101
+          Caption = 'Free'
+          Enabled = False
+          OnClick = btnMultiFreeClick
+          TabOrder = 13
+        end
+        object xReqMultiThread: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 140
+          Width = 120
+          Caption = 'Multi-Threaded mode'
+          TabOrder = 3
+        end
+        object xEncrypt2: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 180
+          Width = 70
+          Caption = 'Encryption'
+          TabOrder = 5
+        end
+        object xCompress2: TCheckBox
+          Left = 92
+          Height = 19
+          Top = 180
+          Width = 80
+          Caption = 'Compression'
+          TabOrder = 6
+        end
+        object eThreads: TEdit
+          Left = 248
+          Height = 21
+          Top = 25
+          Width = 41
+          TabOrder = 15
+          Text = '16'
+        end
+        object xExtensiveTest: TCheckBox
+          Left = 8
+          Height = 19
+          Top = 160
+          Width = 182
+          Caption = 'Extensive Test (complex structure)'
+          TabOrder = 16
+        end
+      end
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    left = 256
+    top = 366
+  end
+end

@@ -1,0 +1,46 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = FishFactServer.exe FishFactServer2.exe FishFactServer3.exe \
+  FishFactClient.exe FishFactClient2.exe FishFactClient3.exe BDEDemoServer.exe \
+  MasterDetailClient.exe MasterDetailClient2.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+FishFactServer.exe: DB_Access\FishFactServer.dpr
+  $(DCC)
+
+FishFactServer2.exe: DB_Access\FishFactServer2.dpr
+  $(DCC)
+
+FishFactServer3.exe: DB_Access\FishFactServer3.dpr
+  $(DCC)
+
+FishFactClient.exe: DB_Access\FishFactClient.dpr
+  $(DCC)
+
+FishFactClient2.exe: DB_Access\FishFactClient2.dpr
+  $(DCC)
+
+FishFactClient3.exe: DB_Access\FishFactClient3.dpr
+  $(DCC)
+
+BDEDemoServer.exe: DB_Access\BDEDemoServer.dpr
+  $(DCC)
+
+MasterDetailClient.exe: DB_Access\MasterDetailClient.dpr
+  $(DCC)
+
+MasterDetailClient2.exe: DB_Access\MasterDetailClient2.dpr
+  $(DCC)
+
+

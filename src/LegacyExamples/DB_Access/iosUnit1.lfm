@@ -1,0 +1,162 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'Fish Fact Test Client (iOS version)'
+  ClientHeight = 480
+  ClientWidth = 320
+  Visible = False
+  OnDestroy = FormDestroy
+  StyleLookup = 'backgroundstyle'
+  object btnCall: TButton
+    Position.Point = '(208,72)'
+    Width = 97.000000000000000000
+    Height = 49.000000000000000000
+    OnClick = btnCallClick
+    TabOrder = 0
+    Text = 'Call'
+  end
+  object Label1: TLabel
+    Position.Point = '(32,128)'
+    Width = 63.500000000000000000
+    Height = 15.500000000000000000
+    TabOrder = 1
+    AutoSize = True
+    Text = 'Nothing yet.'
+    WordWrap = False
+  end
+  object xBlocking: TCheckBox
+    Position.Point = '(32,72)'
+    Width = 120.000000000000000000
+    Height = 19.000000000000000000
+    TabOrder = 2
+    IsChecked = True
+    Text = 'Blocking'
+    OnChange = eAddrChange
+  end
+  object xMultiThreaded: TCheckBox
+    Position.Point = '(32,96)'
+    Width = 120.000000000000000000
+    Height = 19.000000000000000000
+    TabOrder = 3
+    IsChecked = True
+    Text = 'Multi-Threaded'
+    OnChange = eAddrChange
+  end
+  object ePort: TEdit
+    Position.Point = '(208,40)'
+    Width = 100.000000000000000000
+    Height = 22.000000000000000000
+    TabOrder = 4
+    KeyboardType = vktDefault
+    OnChange = eAddrChange
+    Password = False
+    Text = '81'
+  end
+  object eAddr: TEdit
+    Position.Point = '(16,40)'
+    Width = 169.000000000000000000
+    Height = 22.000000000000000000
+    TabOrder = 5
+    KeyboardType = vktDefault
+    OnChange = eAddrChange
+    Password = False
+    Text = '192.168.0.112'
+  end
+  object Label2: TLabel
+    Position.Point = '(16,16)'
+    Width = 77.500000000000000000
+    Height = 15.500000000000000000
+    TabOrder = 6
+    AutoSize = True
+    Text = 'Server Address'
+    WordWrap = False
+  end
+  object Label3: TLabel
+    Position.Point = '(208,16)'
+    Width = 57.500000000000000000
+    Height = 15.500000000000000000
+    TabOrder = 7
+    AutoSize = True
+    Text = 'Server Port'
+    WordWrap = False
+  end
+  object ImageControl1: TImageControl
+    Position.Point = '(16,208)'
+    Width = 289.000000000000000000
+    Height = 217.000000000000000000
+    TabOrder = 8
+  end
+  object btnPrior: TButton
+    Position.Point = '(88,152)'
+    Width = 73.000000000000000000
+    Height = 41.000000000000000000
+    OnClick = btnPriorClick
+    TabOrder = 9
+    Text = 'Prior Row'
+  end
+  object btnNext: TButton
+    Position.Point = '(160,152)'
+    Width = 73.000000000000000000
+    Height = 41.000000000000000000
+    OnClick = btnNextClick
+    TabOrder = 10
+    Text = 'Next Row'
+  end
+  object btnFirst: TButton
+    Position.Point = '(16,152)'
+    Width = 73.000000000000000000
+    Height = 41.000000000000000000
+    OnClick = btnFirstClick
+    TabOrder = 11
+    Text = 'First Row'
+  end
+  object btnLast: TButton
+    Position.Point = '(232,152)'
+    Width = 73.000000000000000000
+    Height = 41.000000000000000000
+    OnClick = btnLastClick
+    TabOrder = 12
+    Text = 'Last Row'
+  end
+  object lCategory: TLabel
+    Position.Point = '(16,432)'
+    Width = 120.000000000000000000
+    Height = 15.000000000000000000
+    TabOrder = 28
+    Text = 'lCategory'
+  end
+  object lCommonName: TLabel
+    Position.Point = '(16,448)'
+    Width = 120.000000000000000000
+    Height = 15.000000000000000000
+    TabOrder = 29
+    Text = 'lCommonName'
+  end
+  object RtcHttpClient1: TRtcHttpClient
+    MultiThreaded = True
+    ServerAddr = '192.168.0.112'
+    ServerPort = '81'
+    ReconnectOn.ConnectError = True
+    ReconnectOn.ConnectLost = True
+    ReconnectOn.ConnectFail = True
+    AutoConnect = True
+    Blocking = True
+    Left = 40
+    Top = 208
+  end
+  object RtcClientModule1: TRtcClientModule
+    AutoSyncEvents = True
+    Client = RtcHttpClient1
+    Compression = cDefault
+    AutoRepost = 2
+    ModuleFileName = '/biolife'
+    Left = 40
+    Top = 256
+  end
+  object RtcResult1: TRtcResult
+    OnReturn = RtcResult1Return
+    RequestAborted = RtcResult1RequestAborted
+    Left = 40
+    Top = 304
+  end
+end

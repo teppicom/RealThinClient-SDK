@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <General>
+      <Flags>
+        <LRSInOutputDirectory Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+    </General>
+    <VersionInfo>
+      <Language Value=""/>
+      <CharSet Value=""/>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <CommandLineParams Value="-helloworld"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="12">
+      <Unit0>
+        <Filename Value="AppClient.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <CursorPos X="27" Y="15"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="AppClient_Unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="47" Y="6"/>
+        <UsageCount Value="26"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="AppClient_Unit.lrs"/>
+        <TopLine Value="146"/>
+        <CursorPos Y="185"/>
+        <SyntaxHighlighter Value="Delphi"/>
+        <UsageCount Value="10"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="AppClient_Unit.lfm"/>
+        <CursorPos X="8"/>
+        <SyntaxHighlighter Value="LFM"/>
+        <UsageCount Value="10"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../../Lib/rtcsdk_fpc.lrs"/>
+        <CursorPos X="17"/>
+        <SyntaxHighlighter Value="Delphi"/>
+        <UsageCount Value="10"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="../../Lib/rtcTypes.pas"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="4"/>
+        <CursorPos X="14" Y="8"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="../../Lib/rtcDefs.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="314"/>
+        <CursorPos X="7" Y="331"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="104"/>
+        <CursorPos X="24" Y="112"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../../../lazarus/fpc/2.4.3/source/packages/zlib/src/zlib.pp"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="32" Y="10"/>
+        <UsageCount Value="10"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../../Lib/rtcThrPool.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="380"/>
+        <CursorPos X="14" Y="476"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../../Lib/rtcLog.pas"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="168"/>
+        <CursorPos X="42" Y="183"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="../../Lib/rtcInfo.pas"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="7306"/>
+        <CursorPos X="3" Y="7321"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+    </Units>
+    <JumpHistory Count="25" HistoryIndex="24">
+      <Position1>
+        <Filename Value="../../Lib/rtcTypes.pas"/>
+      </Position1>
+      <Position2>
+        <Filename Value="../../Lib/rtcTypes.pas"/>
+        <Caret Line="35" Column="6" TopLine="16"/>
+      </Position2>
+      <Position3>
+        <Filename Value="../../Lib/rtcTypes.pas"/>
+        <Caret Line="8" Column="14" TopLine="4"/>
+      </Position3>
+      <Position4>
+        <Filename Value="AppClient.lpr"/>
+        <Caret Line="6" Column="16"/>
+      </Position4>
+      <Position5>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+      </Position5>
+      <Position6>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="38" Column="8" TopLine="22"/>
+      </Position6>
+      <Position7>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="15" Column="5"/>
+      </Position7>
+      <Position8>
+        <Filename Value="AppClient.lpr"/>
+        <Caret Line="22"/>
+      </Position8>
+      <Position9>
+        <Filename Value="../../Lib/rtcThrPool.pas"/>
+      </Position9>
+      <Position10>
+        <Filename Value="AppClient.lpr"/>
+        <Caret Line="22"/>
+      </Position10>
+      <Position11>
+        <Filename Value="../../Lib/rtcThrPool.pas"/>
+        <Caret Line="1019" Column="37" TopLine="1000"/>
+      </Position11>
+      <Position12>
+        <Filename Value="AppClient.lpr"/>
+        <Caret Line="22"/>
+      </Position12>
+      <Position13>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="116" TopLine="109"/>
+      </Position13>
+      <Position14>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="117" Column="3" TopLine="99"/>
+      </Position14>
+      <Position15>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="421" Column="25" TopLine="412"/>
+      </Position15>
+      <Position16>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="384" TopLine="354"/>
+      </Position16>
+      <Position17>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="432" Column="67" TopLine="413"/>
+      </Position17>
+      <Position18>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="175" Column="15" TopLine="163"/>
+      </Position18>
+      <Position19>
+        <Filename Value="../../Lib/rtcZLib.pas"/>
+        <Caret Line="118" TopLine="100"/>
+      </Position19>
+      <Position20>
+        <Filename Value="../../Lib/rtcThrPool.pas"/>
+        <Caret Line="1015" Column="19" TopLine="1000"/>
+      </Position20>
+      <Position21>
+        <Filename Value="../../Lib/rtcLog.pas"/>
+      </Position21>
+      <Position22>
+        <Filename Value="../../Lib/rtcInfo.pas"/>
+      </Position22>
+      <Position23>
+        <Filename Value="../../Lib/rtcInfo.pas"/>
+        <Caret Line="7274" Column="5" TopLine="7261"/>
+      </Position23>
+      <Position24>
+        <Filename Value="../../Lib/rtcInfo.pas"/>
+        <Caret Line="7321" Column="3" TopLine="7306"/>
+      </Position24>
+      <Position25>
+        <Filename Value="../../Lib/rtcThrPool.pas"/>
+        <Caret Line="476" Column="14" TopLine="398"/>
+      </Position25>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <SearchPaths>
+      <IncludeFiles Value="../../Lib"/>
+      <OtherUnitFiles Value="../../Lib"/>
+      <SrcPath Value="../../Lib"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+        <CStyleOperator Value="False"/>
+        <CPPInline Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
+    <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
+      <SmallerCode Value="True"/>
+    </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <UseLineInfoUnit Value="False"/>
+      </Debugging>
+      <LinkSmart Value="True"/>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="2">
+      <Item1>
+        <Name Value="ECodetoolError"/>
+      </Item1>
+      <Item2>
+        <Name Value="EFOpenError"/>
+      </Item2>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

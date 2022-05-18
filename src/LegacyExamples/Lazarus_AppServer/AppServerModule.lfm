@@ -1,0 +1,8 @@
+object AppSrv_Module: TAppSrv_Module
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 300
+  HorizontalOffset = 601
+  VerticalOffset = 127
+  Width = 400
+end

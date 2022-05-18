@@ -1,0 +1,176 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{8E9BF74F-F7BF-4F49-B90B-905C88BEE310}</ProjectGuid>
+			<ProjectVersion>12.0</ProjectVersion>
+			<MainSource>wwwClientApp.cpp</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<LinkPackageStatics>rtl.lib;vcl.lib;rtcSDK_C.lib;xmlrtl.lib;vclactnband.lib;vclx.lib</LinkPackageStatics>
+			<Multithreaded>true</Multithreaded>
+			<ProjectType>CppVCLApplication</ProjectType>
+			<PackageImports>vclx.bpi;vcl.bpi;vclimg.bpi;dbrtl.bpi;Rave77VCL.bpi;bdertl.bpi;rtl.bpi;vclactnband.bpi;xmlrtl.bpi;bcbsmp.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;vclie.bpi;inet.bpi;inetdb.bpi;webdsnap.bpi;websnap.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;DbxCommonDriver.bpi;DbxClientDriver.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;dbexpress.bpi;dbxcds.bpi;dxCoreC14.bpi;dxGDIPlusC14.bpi;cxLibraryC14.bpi;dxThemeC14.bpi;dxComnC14.bpi;dxsbC14.bpi;cxEditorsC14.bpi;cxDataC14.bpi;cxExtEditorsC14.bpi;cxPageControlC14.bpi;dxBarC14.bpi;cxBarEditItemC14.bpi;dxBarDBNavC14.bpi;dxBarExtDBItemsC14.bpi;dxBarExtItemsC14.bpi;dxRibbonC14.bpi;cxGridC14.bpi;cxExportC14.bpi;cxSchedulerC14.bpi;cxTreeListC14.bpi;cxTreeListdxBarPopupMenuC14.bpi;cxVerticalGridC14.bpi;dxmdsC14.bpi;dxSpellCheckerC14.bpi;cxSpreadSheetC14.bpi;dxDockingC14.bpi;dxNavBarC14.bpi;dxLayoutControlC14.bpi;dxLayoutControlcxEditAdaptersC14.bpi;cxPivotGridC14.bpi;cxPivotGridChartC14.bpi;cxPivotGridOLAPC14.bpi;dxdbtrC14.bpi;dxtrmdC14.bpi;dxOrgCC14.bpi;dxDBOrC14.bpi;dxFlowChartC14.bpi;dxSkinsCoreC14.bpi;dxSkinscxScheduler3PainterC14.bpi;dxSkinscxPCPainterC14.bpi;dxSkinsdxBarPainterC14.bpi;dxSkinsdxLCPainterC14.bpi;dxSkinsdxNavBar2PainterC14.bpi;dcldxSkinscxPCPainterC14.bpi;dcldxSkinscxScheduler3PainterC14.bpi;dxSkinsdxDLPainterC14.bpi;dxSkinsdxRibbonPainterC14.bpi;dcldxSkinsdxLCPainterC14.bpi;dcldxSkinsdxNavBar2PainterC14.bpi;dcldxSkinsdxBarsPaintersC14.bpi;dxPSCoreC14.bpi;dxPSLnksC14.bpi;dxPScxCommonC14.bpi;dxPScxGrid6LnkC14.bpi;dxPScxPCProdC14.bpi;dxPScxPivotGrid2LnkC14.bpi;dxPScxScheduler3LnkC14.bpi;dxPScxSSLnkC14.bpi;dxPScxTL5LnkC14.bpi;dxPScxVGridLnkC14.bpi;dxPSTeeChartC14.bpi;Tee.bpi;dxPSdxOCLnkC14.bpi;dxPSdxDBTVLnkC14.bpi;dxPSdxFCLnkC14.bpi;dxPSdxLCLnkC14.bpi;dxPSdxDBOCLnkC14.bpi;dxPScxExtCommonC14.bpi;dxPSPrVwAdvC14.bpi;dxPSDBTeeChartC14.bpi;TeeDB.bpi;TcppWebBrowser.bpi;dclZipForged13.bpi;vclZipForged13.bpi;dbisam429p2010r.bpi;rtcSDK_C.bpi;WordProcessor1.bpi;XLSReadWrite.bpi;ecComnC14.bpi;TeeUI.bpi;intrawebdb_100_140.bpi;Intraweb_100_140.bpi;zDesign14c.bpi;XLSSpreadSheet.bpi;TVidGrab.bpi;CBuilder2010.bpi;sfcb2010.bpi;PKIECtrl14.bpi;PKIEDB14.bpi;TccComponents.bpi;dclFlexCompressd13.bpi;vclFlexCompressd13.bpi;bsfcb2010.bpi;BE4.bpi;ECLPackd13.bpi;SyntEdit14c.bpi</PackageImports>
+			<AllPackageLibs>rtl.lib;vcl.lib;rtcSDK_C.lib;xmlrtl.lib;vclactnband.lib;vclx.lib</AllPackageLibs>
+			<BCC_AutoDepCheck>false</BCC_AutoDepCheck>
+			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+			<DynamicRTL>true</DynamicRTL>
+			<IncludePath>$(CG_BOOST_ROOT)\boost\tr1\tr1;$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(CG_BOOST_ROOT);C:\Program Files\RealThinClient\Lib;$(IncludePath)</IncludePath>
+			<ILINK_LibraryPath>$(BDS)\lib\obj;C:\Program Files\RealThinClient\Lib\Debug_Build;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<BCC_wpar>false</BCC_wpar>
+			<BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+			<BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
+			<BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<Defines>_DEBUG;$(Defines)</Defines>
+			<BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+			<IntermediateOutputDir>Debug</IntermediateOutputDir>
+			<BCC_UseRegisterVariables>None</BCC_UseRegisterVariables>
+			<DCC_Define>DEBUG</DCC_Define>
+			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+			<TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+			<BCC_StackFrames>true</BCC_StackFrames>
+			<ILINK_LibraryPath>$(BDS)\lib\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+			<TASM_Debugging>Full</TASM_Debugging>
+			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<Defines>NDEBUG;$(Defines)</Defines>
+			<IntermediateOutputDir>Release</IntermediateOutputDir>
+			<ILINK_LibraryPath>$(BDS)\lib\release;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<TASM_Debugging>None</TASM_Debugging>
+		</PropertyGroup>
+		<ItemGroup>
+			<CppCompile Include="wwwClientApp.cpp">
+				<BuildOrder>0</BuildOrder>
+			</CppCompile>
+			<ResFiles Include="wwwClientApp.res">
+				<ModuleName>wwwClientApp.res</ModuleName>
+				<BuildOrder>1</BuildOrder>
+			</ResFiles>
+			<CppCompile Include="wwwClientAppMain.cpp">
+				<Form>Form1</Form>
+				<DependentOn>wwwClientAppMain.h</DependentOn>
+				<BuildOrder>2</BuildOrder>
+			</CppCompile>
+			<FormResources Include="wwwClientAppMain.dfm"/>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+			<Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<CPlusPlusBuilder.Personality>
+					<Source>
+						<Source Name="MainSource">wwwClientApp.cpp</Source>
+					</Source>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Debugging>
+						<Debugging Name="DebugSourceDirs"/>
+					</Debugging>
+					<Parameters>
+						<Parameters Name="RunParams"/>
+						<Parameters Name="Launcher"/>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="DebugCWD"/>
+						<Parameters Name="HostApplication"/>
+						<Parameters Name="RemoteHost"/>
+						<Parameters Name="RemotePath"/>
+						<Parameters Name="RemoteParams"/>
+						<Parameters Name="RemoteLauncher"/>
+						<Parameters Name="UseRemoteLauncher">False</Parameters>
+						<Parameters Name="RemoteCWD"/>
+						<Parameters Name="RemoteDebug">False</Parameters>
+						<Parameters Name="Debug Symbols Search Path"/>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\Bpl\XLSReadWrite.bpl">XLSReadWrite</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\Bpl\ecComnC14.bpl">EControl Common Library</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclact140.bpl">Embarcadero ActionBar Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcltee8140.bpl">TeeChart Standard 8 Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclIntraweb_100_140.bpl">VCL for the Web 10.0  Design Package for CodeGear RAD Studio</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\zDesign14c.bpl">zDesign14c</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\XLSSuit4\CBuilder2010\Package\XLSSpreadSheet.bpl">XLSSpreadSheet</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\TVVideoGrabber\CBuilder\CBuilder2010\TVidGrab.bpl">TVideoGrabber v8.0</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\CBuilder2010.bpl">CBuilder2010</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\sfcb2010.bpl">sfcb2010</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\HiComponents\Delphi2010\DPKIECTRL14.bpl">ImageEn Controls</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\HiComponents\Delphi2010\DPKIEDB14.bpl">ImageEn DB Controls</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\TccComponents.bpl">TccComponents</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\ComponentAce\CompressionMaster\FlexCompress\Lib\Delphi 2010 and C++ Builder 2010\dclFlexCompressd13.bpl">FlexCompress - Design package</Excluded_Packages>
+						<Excluded_Packages Name="C:\WINDOWS\system32\vclFlexCompressd13.bpl">FlexCompress Package</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\bsfcb2010.bpl">BusinessSkinForm VCL</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\BEff4\D14\Lib\BE4DsgD14.bpl">Billenium Effects 4.2</Excluded_Packages>
+						<Excluded_Packages Name="C:\WINDOWS\System32\acntCB2010.bpl">acntCB2010</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\ComponentAce\CompressionMaster\EasyCompressionLibrary\Lib\Delphi 2010 and C++ Builder 2010\ECLPackd13.bpl">EasyCompression Library</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\BPL\SyntEditDcl14c.bpl">EControl Syntax Editor, Design</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcbie140.bpl">Embarcadero C++Builder Internet Explorer Components Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcboffice2k140.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcbofficexp140.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+					</Excluded_Packages>
+					<ProjectProperties>
+						<ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+						<ProjectProperties Name="ManagePaths">False</ProjectProperties>
+						<ProjectProperties Name="VerifyPackages">False</ProjectProperties>
+					</ProjectProperties>
+				</CPlusPlusBuilder.Personality>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

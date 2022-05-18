@@ -1,0 +1,7 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TAppSrv_Module','FORMDATA',[
+  'TPF0'#14'TAppSrv_Module'#13'AppSrv_Module'#8'OnCreate'#7#16'DataModuleCreate'
+  +#9'OnDestroy'#7#17'DataModuleDestroy'#6'Height'#3','#1#16'HorizontalOffset'#3
+  +'Y'#2#14'VerticalOffset'#2''#5'Width'#3#144#1#0#0
+]);

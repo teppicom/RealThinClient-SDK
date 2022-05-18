@@ -1,0 +1,237 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'RTC Fish Facts Client (FMX with RtcMemDataSet version)'
+  ClientHeight = 557
+  ClientWidth = 745
+  Visible = False
+  OnCreate = FormCreate
+  StyleLookup = 'backgroundstyle'
+  object StringGrid1: TStringGrid
+    Align = alClient
+    Position.Point = '(0,326)'
+    Width = 745.000000000000000000
+    Height = 231.000000000000000000
+    StyleLookup = 'gridstyle'
+    TabOrder = 0
+    RowHeight = 21.000000000000000000
+    RowCount = 0
+  end
+  object Panel1: TPanel
+    Align = alTop
+    Width = 745.000000000000000000
+    Height = 321.000000000000000000
+    TabOrder = 1
+    object Memo1: TMemo
+      Align = alClient
+      Position.Point = '(414,0)'
+      Width = 331.000000000000000000
+      Height = 321.000000000000000000
+      TabOrder = 0
+      WordWrap = True
+      KeyboardType = vktDefault
+    end
+    object Panel2: TPanel
+      Align = alLeft
+      Width = 409.000000000000000000
+      Height = 321.000000000000000000
+      TabOrder = 1
+      object ImageControl1: TImageControl
+        Align = alClient
+        Position.Point = '(0,113)'
+        Width = 409.000000000000000000
+        Height = 208.000000000000000000
+        OnClick = ImageControl1Click
+        TabOrder = 0
+        Bitmap.PNG = {
+          89504E470D0A1A0A0000000D49484452000000FA000000960806000000F7DA95
+          1C000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+          000970485973000011AF000011AF01F7FD4B84000002A549444154785EEDD081
+          00000000C3A0F9531FE4855061C0800103060C183060C0800103060C183060C0
+          800103060C183060C0800103060C183060C0800103060C183060C0800103060C
+          183060C0800103060C183060C0800103060C183060C0800103060C183060C080
+          0103060C183060C0800103060C183060C0800103060C183060C0800103060C18
+          3060C0800103060C183060C0800103060C183060C0800103060C183060C08001
+          03060C183060C0800103060C183060C0800103060C183060C0800103060C1830
+          60C0800103060C183060C0800103060C183060C0800103060C183060C0800103
+          060C183060C0800103060C183060C0800103060C183060C0800103060C183060
+          C0800103060C183060C0800103060C183060C0800103060C183060C080010306
+          0C183060C0800103060C183060C0800103060C183060C0800103060C183060C0
+          800103060C183060C0800103060C183060C0800103060C183060C0800103060C
+          183060C0800103060C183060C0800103060C183060C0800103060C183060C080
+          0103060C183060C0800103060C183060C0800103060C183060C0800103060C18
+          3060C0800103060C183060C0800103060C183060C0800103060C183060C08001
+          03060C183060C0800103060C183060C0800103060C183060C0800103060C1830
+          60C0800103060C183060C0800103060C183060C0800103060C183060C0800103
+          060C183060C0800103060C183060C0800103060C183060C0800103060C183060
+          C0800103060C183060C0800103060C183060C0800103060C183060C080010306
+          0C183060C0800103060C183060C0800103060C183060C0800103060C183060C0
+          800103060C183060C0800103060C183060C0800103060C183060C0800103060C
+          183060C0800103060C183060C0800103060C183060C0800103BF03034AA40001
+          83DEAD4E0000000049454E44AE426082}
+      end
+      object Panel3: TPanel
+        Align = alTop
+        Width = 409.000000000000000000
+        Height = 113.000000000000000000
+        TabOrder = 1
+        object BindNavigator1: TBindNavigator
+          Align = alClient
+          Position.Point = '(0,81)'
+          Width = 409.000000000000000000
+          Height = 32.000000000000000000
+          BindScope = BindScopeDB1
+          VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel]
+          xRadius = 4.000000000000000000
+          yRadius = 4.000000000000000000
+        end
+        object Panel4: TPanel
+          Align = alTop
+          Width = 409.000000000000000000
+          Height = 81.000000000000000000
+          TabOrder = 1
+          object Label1: TLabel
+            Position.Point = '(8,8)'
+            Width = 120.000000000000000000
+            Height = 15.000000000000000000
+            TabOrder = 0
+            Text = 'Server Address'
+          end
+          object eAddr: TEdit
+            Position.Point = '(8,32)'
+            Width = 161.000000000000000000
+            Height = 22.000000000000000000
+            TabOrder = 1
+            KeyboardType = vktDefault
+            OnChange = eAddrChange
+            Password = False
+            Text = 'localhost'
+          end
+          object ePort: TEdit
+            Position.Point = '(184,32)'
+            Width = 100.000000000000000000
+            Height = 22.000000000000000000
+            TabOrder = 2
+            KeyboardType = vktDefault
+            OnChange = eAddrChange
+            Password = False
+            Text = '81'
+          end
+          object Label2: TLabel
+            Position.Point = '(184,8)'
+            Width = 97.000000000000000000
+            Height = 15.000000000000000000
+            TabOrder = 3
+            Text = 'Server Port'
+          end
+          object btnRefresh: TButton
+            Position.Point = '(304,16)'
+            Width = 97.000000000000000000
+            Height = 33.000000000000000000
+            OnClick = btnRefreshClick
+            TabOrder = 4
+            Text = 'Load DataSet'
+          end
+          object Label3: TLabel
+            Position.Point = '(8,61)'
+            Width = 306.500000000000000000
+            Height = 15.500000000000000000
+            TabOrder = 5
+            AutoSize = True
+            Text = 'Click the image field (below) to Load a new image from Disk.'
+            WordWrap = False
+          end
+        end
+      end
+    end
+    object Splitter2: TSplitter
+      Align = alLeft
+      Cursor = crHSplit
+      Position.Point = '(409,0)'
+      Width = 5.000000000000000000
+      Height = 321.000000000000000000
+      TabOrder = 2
+      MinSize = 20.000000000000000000
+    end
+  end
+  object Splitter1: TSplitter
+    Align = alTop
+    Cursor = crVSplit
+    Position.Point = '(0,321)'
+    Width = 745.000000000000000000
+    Height = 5.000000000000000000
+    TabOrder = 2
+    MinSize = 20.000000000000000000
+  end
+  object OpenDialog1: TOpenDialog
+    Options = [ofEnableSizing]
+    Left = 342
+    Top = 120
+  end
+  object BindScopeDB1: TBindScopeDB
+    DataSource = DataSource1
+    Left = 176
+    Top = 160
+  end
+  object RtcMemDataSet1: TRtcMemDataSet
+    TrackChanges = True
+    OnDataChange = RtcMemDataSet1DataChange
+    Left = 176
+    Top = 112
+  end
+  object DataSource1: TDataSource
+    DataSet = RtcMemDataSet1
+    Left = 176
+    Top = 208
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    UseAppManager = True
+    Left = 172
+    Top = 253
+    object DBLinkStringGrid11: TBindDBGridLink
+      Category = 'DB Links'
+      DataSource = BindScopeDB1
+      GridControl = StringGrid1
+      Columns = <>
+    end
+    object DBLinkMemo1Notes1: TBindDBMemoLink
+      Category = 'DB Links'
+      DataSource = BindScopeDB1
+      FieldName = 'Notes'
+      MemoControl = Memo1
+    end
+    object DBLinkImageControl1Graphic1: TBindDBImageLink
+      Category = 'DB Links'
+      DataSource = BindScopeDB1
+      FieldName = 'Graphic'
+      ImageControl = ImageControl1
+    end
+  end
+  object RtcHttpClient1: TRtcHttpClient
+    ServerAddr = 'localhost'
+    ServerPort = '81'
+    ReconnectOn.ConnectError = True
+    ReconnectOn.ConnectLost = True
+    ReconnectOn.ConnectFail = True
+    AutoConnect = True
+    Left = 40
+    Top = 112
+  end
+  object RtcClientModule1: TRtcClientModule
+    AutoSyncEvents = True
+    Client = RtcHttpClient1
+    Compression = cDefault
+    AutoRepost = 2
+    ModuleFileName = '/biolife'
+    Left = 40
+    Top = 160
+  end
+  object RtcResult1: TRtcResult
+    OnReturn = RtcResult1Return
+    RequestAborted = RtcResult1RequestAborted
+    Left = 40
+    Top = 208
+  end
+end

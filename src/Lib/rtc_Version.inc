@@ -1,4 +1,4 @@
 const
   // RealThinClient SDK version
-  RTCSDK_VERSION='v9.50';
+  RTCSDK_VERSION='v9.52';
 

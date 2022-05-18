@@ -2,7 +2,7 @@
   @html(<b>)
   ISAPI Application Component
   @html(</b>)
-  - Copyright 2004-2019 (c) Teppi Technology (https://rtc.teppi.net)
+  - Copyright 2004-2020 (c) Teppi Technology (https://rtc.teppi.net)
   @html(<br><br>)
 
   Partial Copyright (c) Borland Inc.
@@ -150,18 +150,28 @@ procedure HandleServerException(E: Exception; var ECB: TEXTENSION_CONTROL_BLOCK)
   ECB.WriteClient(ECB.ConnID, Addr(ResultText[0]), Size, 0);
   end;
 
+function IsPackage: Boolean;
+var
+  AFileName: String;
+begin
+  AFileName := GetModuleName(HInstance);
+  Result := SameText(ExtractFileExt(AFileName), '.bpl');
+end;
+
 constructor TRtcISAPIApplication.Create(AOwner: TComponent);
-  begin
+begin
   inherited Create(AOwner);
+
   if IsLibrary then
-    begin
+  begin
     IsMultiThread := True;
     OldDllProc := DLLProc;
     DLLProc := @DLLExitProc;
-    end
-  else
+  end else if not IsPackage then
+  begin
     AddExitProc(DoneVCLApplication);
   end;
+end;
 
 destructor TRtcISAPIApplication.Destroy;
   begin
@@ -252,6 +262,14 @@ procedure InitApplication;
   Application := TRtcISAPIApplication.Create(nil);
   end;
 
+procedure DoneApplication;
+begin
+  if IsPackage then
+  begin
+    DoneVCLApplication;
+  end;
+end;
+
 initialization
 {$IFDEF RTC_DEBUG} StartLog; Log('rtcISAPIApp Initializing ...','DEBUG');{$ENDIF}
 
@@ -260,6 +278,6 @@ InitApplication;
 {$IFDEF RTC_DEBUG} Log('rtcISAPIApp Initialized.','DEBUG');{$ENDIF}
 finalization
 {$IFDEF RTC_DEBUG} Log('rtcISAPIApp Finalized.','DEBUG');{$ENDIF}
-
+DoneApplication;
 {$ENDIF} // {$IFDEF WINDOWS}
 end.

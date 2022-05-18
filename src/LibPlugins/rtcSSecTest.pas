@@ -11,10 +11,12 @@ unit rtcSSecTest;
 interface
 
 uses
-  SysUtils, Forms, SyncObjs, Classes,
+  SysUtils, SyncObjs, Classes,
   rtcSystem, rtcPlugins, rtcLog,
 
   {$IFNDEF STREAMSECMOBILE}
+  // Required for "Application.ProcessMessages" ...
+  Forms,
   // StreamSec Tools II ...
   MpX509, TlsInternalServer, rtcSSecPlugin,
   SecUtils, StreamSecII, MPYarrow, SecComp,
@@ -71,6 +73,13 @@ var
     use 1024 bit RSA keys. }
   LeastPublicKeySize:integer = 2048;
   {$ENDIF}
+{ As of March 2020, the major browsers no longer support TLS 1.0 and TLS 1.1.
+  StreamSec Tools version 2.3 and version 4.0 both support TLS 1.2, so your
+  server will continue to function, even without any changes to the settings.
+  However, if you need security certification, you might have to show that your
+  server only supports TLS 1.2 and up, and in such case you have to use
+  StreamSec Tools 4.0 or later and set EnableLegacyTLS to False. }
+  EnableLegacyTLS:boolean=true;
 
 { A server root cert file serves two purposes: It allows you to load
   intermediary CA certificate issued by the root when present in the server PFX,
@@ -465,8 +474,17 @@ function GetServerCryptPlugin:TRtcCryptPlugin;
               {$ENDIF}
               LeastKeyBitSize := 2048;
             end;
-            Options.HashAlgorithmMD5 := prAllowed;
-            Options.HashAlgorithmSHA1 := prPrefer;
+            if EnableLegacyTLS then begin
+              Options.HashAlgorithmMD5 := prAllowed;
+              Options.HashAlgorithmSHA1 := prAllowed;
+            end else begin
+              Options.HashAlgorithmMD5 := prNotAllowed;
+              Options.HashAlgorithmSHA1 := prNotAllowed;
+              Options.BulkCipherARC4 := prNotAllowed;
+              Options.BulkCipherAES128 := prNotAllowed;
+              Options.BulkCipherAES256 := prNotAllowed;
+            end;
+            Options.HashAlgorithmSHA256 := prPrefer;
           end else begin
             Options.BulkCipherAES128CTR := prPrefer;
             Options.BulkCipherAES256CTR := prAllowed;
@@ -479,14 +497,20 @@ function GetServerCryptPlugin:TRtcCryptPlugin;
             Options.HashAlgorithmSHA1 := prNotAllowed;
             LeastKeyBitSize := 2048;
           end;
-          if ExpectOldBrowsers then begin
-            Options.BulkCipherAES128 := prNotAllowed;
-            Options.BulkCipherAES192 := prNotAllowed;
-            Options.BulkCipherAES256 := prNotAllowed;
+          if EnableLegacyTLS then begin
+            if ExpectOldBrowsers then begin
+              Options.BulkCipherAES128 := prNotAllowed;
+              Options.BulkCipherAES192 := prNotAllowed;
+              Options.BulkCipherAES256 := prNotAllowed;
+            end else begin
+              Options.BulkCipherARC4 := prNotAllowed;
+              Options.BulkCipherAES192 := prAllowed;
+              Options.BulkCipherAES256 := prAllowed;
+            end;
           end else begin
             Options.BulkCipherARC4 := prNotAllowed;
-            Options.BulkCipherAES192 := prAllowed;
-            Options.BulkCipherAES256 := prAllowed;
+            Options.BulkCipherAES128 := prNotAllowed;
+            Options.BulkCipherAES256 := prNotAllowed;
           end;
           Options.BulkCipherTripleDES := prNotAllowed;
           {$IFNDEF STREAMSECMOBILE}
@@ -629,8 +653,13 @@ function GetClientCryptPlugin:TRtcCryptPlugin;
               Options.BulkCipherAES128 := prPrefer;
               {$ENDIF}
             end;
-            Options.HashAlgorithmMD5 := prAllowed;
-            Options.HashAlgorithmSHA1 := prPrefer;
+            if EnableLegacyTLS then begin
+              Options.HashAlgorithmMD5 := prAllowed;
+              Options.HashAlgorithmSHA1 := prAllowed;
+            end else begin
+              Options.HashAlgorithmMD5 := prNotAllowed;
+              Options.HashAlgorithmSHA1 := prNotAllowed;
+            end;
           end else begin
             Options.BulkCipherAES128CTR := prPrefer;
             Options.BulkCipherAES256CTR := prAllowed;
@@ -642,14 +671,20 @@ function GetClientCryptPlugin:TRtcCryptPlugin;
             Options.HashAlgorithmMD5 := prNotAllowed;
             Options.HashAlgorithmSHA1 := prNotAllowed;
           end;
-          if ExpectOldBrowsers then begin
-            Options.BulkCipherAES128 := prNotAllowed;
-            Options.BulkCipherAES192 := prNotAllowed;
-            Options.BulkCipherAES256 := prNotAllowed;
+          if EnableLegacyTLS then begin
+            if ExpectOldBrowsers then begin
+              Options.BulkCipherAES128 := prNotAllowed;
+              Options.BulkCipherAES192 := prNotAllowed;
+              Options.BulkCipherAES256 := prNotAllowed;
+            end else begin
+              Options.BulkCipherARC4 := prNotAllowed;
+              Options.BulkCipherAES192 := prAllowed;
+              Options.BulkCipherAES256 := prAllowed;
+            end;
           end else begin
             Options.BulkCipherARC4 := prNotAllowed;
-            Options.BulkCipherAES192 := prAllowed;
-            Options.BulkCipherAES256 := prAllowed;
+            Options.BulkCipherAES128 := prNotAllowed;
+            Options.BulkCipherAES256 := prNotAllowed;
           end;
           Options.BulkCipherTripleDES := prNotAllowed;
           {$IFNDEF STREAMSECMOBILE}

@@ -1,7 +1,7 @@
 RealThinClient SDK
 https://rtc.teppi.net
 
-Copyright 2004-2019 (c) Teppi Technology
+Copyright 2004-2022 (c) Teppi Technology
 All rights reserved.
 
 --------------------------------
@@ -28,9 +28,7 @@ All rights reserved.
 1.) License Agreement
 ---------------------
 
-Please read the RTC SDK License Agreement before using RTC SDK components.
-
-You will find the RTC SDK License Agreement in the "License.txt" file.
+Please read the "License.txt" file.
 
 --------------------------------
 2.) INSTALL RTC SDK components in Delphi
@@ -108,27 +106,27 @@ need to Build and Install all related packages again, after you reinstall the RT
 For the FPC compiler to find RTC SDK files, you can either copy the complete "Lib" folder (with sub-folders)
 from the RTC SDK package into the "/Developer/Embarcadero/fmi" folder (quick and dirty solution), or ... 
 
-You can add the path to the RTC SDK ìLibî folder (located on your Windows PC, made accessible to Mac over LAN) 
-to the FPC search path. Unfortunatelly, there  is no ìparameterî for adding FPC search paths in XCode directly, 
+You can add the path to the RTC SDK ìLibÅEfolder (located on your Windows PC, made accessible to Mac over LAN) 
+to the FPC search path. Unfortunatelly, there  is no ìparameterÅEfor adding FPC search paths in XCode directly, 
 so you will need to do this manually for every XCode Project. And not only once, but every time you recreate 
-XCode Project files by using the ìdpr2xcodeî tool, because all your changes will be overwritten by "dpr2xcode". 
+XCode Project files by using the ìdpr2xcodeÅEtool, because all your changes will be overwritten by "dpr2xcode". 
 
 To avoid having to make these changes too often, use "dpr2xcode" ONLY if you have made changes to the Project 
 file itself (changed the Project icon, for example). There is no need to recreate XCode Project files if you 
 have only changed forms or units inside the Project.
 
 To add the RTC SDK paths to FPC, you will need to modify the file "xcode/<ProjectName>.xcodeproj/project.pbxproj". 
-The path to the RTC SDK ìLibî folder needs to be added as two new ì-Fuî parameters. Once for iOS-Simulator and 
-once for iOS-Device compilation, both of are configured through the ìshellScriptî parameter.
+The path to the RTC SDK ìLibÅEfolder needs to be added as two new ÅEFuÅEparameters. Once for iOS-Simulator and 
+once for iOS-Device compilation, both of are configured through the ìshellScriptÅEparameter.
 
 The best place to add the RTC SDK Lib path is after the FireMonkey path, so you should search for 
-ì-Fu/Developer/Embarcadero/fmiî in the above mentioned XCode Project file. You will find 2 such 
+ÅEFu/Developer/Embarcadero/fmiÅEin the above mentioned XCode Project file. You will find 2 such 
 instances in the "ShellScript" line and you should add the path to the RTC SDK Lib folder directly 
 after each "-Fu/Developer/Embarcadero/fmi" instance.
 
 For example, if you have made the complete RTC SDK folder on your Windows PC available to your Mac OSX 
-through a network share named ìRTC_SDKî (read/write access rights to that folder will be required for FPC 
-compilation to work), you should add ì-Fu/Volumes/RTC_SDK/Libî after both ì-Fu/Developer/Embarcaedro/fmiî locations. 
+through a network share named ìRTC_SDKÅE(read/write access rights to that folder will be required for FPC 
+compilation to work), you should add ÅEFu/Volumes/RTC_SDK/LibÅEafter both ÅEFu/Developer/Embarcaedro/fmiÅElocations. 
 One is for the iOS-Simulator, the other one for the iOS device. 
 
 That will be enough to let FPC know where to look for RTC SDK files.
@@ -163,7 +161,7 @@ specific (use Sessions, accept form post data, write and call remote functions, 
 continually being extended, as more questions come in.
 
 If you have a question for which you were unable to find the answer in the QuickStart guide, QuickStart 
-examples or the FAQ Ö and searching through the Help files didn't give you the answers you need, don't 
+examples or the FAQ ÅEand searching through the Help files didn't give you the answers you need, don't 
 hesitate to post your question(s) on Developer Support groups.
 
 The latest Help file for Off-line viewing is in the "Help" folder:
@@ -194,14 +192,3 @@ Projects for DLLs, Console- and VCL-Applications are compatible with all Delphi 
   * Examples\SDKTools_VCL - A collection of simple RTC Tools with focus on RTC development and testing
   
 Descriptions of most Examples can be found in the "Examples\Readme_Examples.txt" file.
-
--------------
-7.) Support
--------------
-
-More information on RTC SDK:
-> https://rtc.teppi.net/details/
-
-Download commercial versions of the RealThinClient SDK from the "Downloads" area
-and ask for Support on using the components in the "Support" area of the RTC Forums:
-> https://rtcforum.teppi.net/

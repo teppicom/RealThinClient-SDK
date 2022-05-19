@@ -39,6 +39,7 @@ Copyright (C) 2004-2014 by Wolfgang Ehrhardt
 Portions from LibTomMath 0.30+, Copyright (C) Tom St Denis
 Portions from MPI 1.8.6+, Copyright (C) 1998 Michael J. Fromberger
 Portions from IMATH 1.1+, Copyright (C) 2002-2007 Michael J. Fromberger
+Read the source code file "rtcCrypt.pas" for detailed information.
 
 * "rtcISAPIApp.pas" unit,ISAPI interface:
 Copyright (c) Borland Inc.

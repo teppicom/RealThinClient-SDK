@@ -83,10 +83,10 @@ have only changed forms or units inside the Project.
 
 To add the RTC SDK paths to FPC, you will need to modify the file "xcode/<ProjectName>.xcodeproj/project.pbxproj". 
 The path to the RTC SDK "Lib" folder needs to be added as two new parameters. Once for iOS-Simulator and 
-once for iOS-Device compilation, both of are configured through the shellScript parameter.
+once for iOS-Device compilation, both of are configured through the shellScript parameter.
 
-The best place to add the RTC SDK Lib path is after the FireMonkey path, so you should search for 
-"/Developer/Embarcadero/fmi" in the above mentioned XCode Project file. You will find 2 such 
+The best place to add the RTC SDK Lib path is after the FireMonkey path, so you should search for
+"/Developer/Embarcadero/fmi" in the above mentioned XCode Project file. You will find 2 such 
 instances in the "ShellScript" line and you should add the path to the RTC SDK Lib folder directly 
 after each "/Developer/Embarcadero/fmi" instance.
 

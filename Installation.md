@@ -73,22 +73,22 @@ For the FPC compiler to find RTC SDK files, you can either copy the complete "Li
 from the RTC SDK package into the "/Developer/Embarcadero/fmi" folder (quick and dirty solution), or ... 
 
 You can add the path to the RTC SDK "Lib" folder (located on your Windows PC, made accessible to Mac over LAN) 
-to the FPC search path. Unfortunatelly, there  is no “parameterEfor adding FPC search paths in XCode directly, 
+to the FPC search path. Unfortunatelly, there  is no parameter for adding FPC search paths in XCode directly, 
 so you will need to do this manually for every XCode Project. And not only once, but every time you recreate 
-XCode Project files by using the “dpr2xcodeEtool, because all your changes will be overwritten by "dpr2xcode". 
+XCode Project files by using the "dpr2xcode" tool, because all your changes will be overwritten by "dpr2xcode". 
 
 To avoid having to make these changes too often, use "dpr2xcode" ONLY if you have made changes to the Project 
 file itself (changed the Project icon, for example). There is no need to recreate XCode Project files if you 
 have only changed forms or units inside the Project.
 
 To add the RTC SDK paths to FPC, you will need to modify the file "xcode/<ProjectName>.xcodeproj/project.pbxproj". 
-The path to the RTC SDK “LibEfolder needs to be added as two new parameters. Once for iOS-Simulator and 
-once for iOS-Device compilation, both of are configured through the “shellScriptEparameter.
+The path to the RTC SDK "Lib" folder needs to be added as two new parameters. Once for iOS-Simulator and 
+once for iOS-Device compilation, both of are configured through the shellScript parameter.
 
 The best place to add the RTC SDK Lib path is after the FireMonkey path, so you should search for 
-EFu/Developer/Embarcadero/fmiEin the above mentioned XCode Project file. You will find 2 such 
+"/Developer/Embarcadero/fmi" in the above mentioned XCode Project file. You will find 2 such 
 instances in the "ShellScript" line and you should add the path to the RTC SDK Lib folder directly 
-after each "-Fu/Developer/Embarcadero/fmi" instance.
+after each "/Developer/Embarcadero/fmi" instance.
 
 For example, if you have made the complete RTC SDK folder on your Windows PC available to your Mac OSX 
 through a network share named "RTC_SDK" (read/write access rights to that folder will be required for FPC 

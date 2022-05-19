@@ -10,6 +10,16 @@ RealThinClient SDK is a flexible and modular framework for building reliable and
 
 [Product web page](https://rtc.teppi.net)
 
+[QuickStart Guide](https://rtc.teppi.net/sdkarchive/index30eb30eb.html)
+
+[FAQ](https://rtc.teppi.net/sdkarchive/indexa316a316.html)
+
+
+
+
+
+
+
 
 #### Multi-Deployment: target Windows, Mac OSX, iOS and Android from a single code-base
 

@@ -112,11 +112,11 @@ either inside the iOS-Simulator or directly on your iOS device (iPhone or iPad).
 Documentation
 -------------
 
-The best place to start learning about RTC SDK is the [online tutorials]( https://rtc.teppi.net/classroom/ ) and the Quick Start Guide.
+The best place to start learning about RTC SDK is the [online tutorials]( https://rtc.teppi.net/classroom/ ) and the [Quick Start Guide](https://rtc.teppi.net/sdkarchive/index30eb30eb.html).
 
 After going through the online lessons, you should also go through the  examples included in the RTC SDK package. 
 
-When you are done examining online lessons' examples, I suggest browsing through the FAQ. Even if you won't
+When you are done examining online lessons' examples, I suggest browsing through the [FAQ](https://rtc.teppi.net/sdkarchive/indexa316a316.html). Even if you won't
 be reading all the articles, you should at least get the feeling about the information included there.
 
 RTC SDK Demos are another good source of information, including a lot of examples and best practices 

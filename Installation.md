@@ -2,6 +2,7 @@
 
 INSTALL RTC SDK components in Delphi
 --------------------------------
+Clone the repository to your working folder with your git client.
 
 After you have unpacked the files in a folder of your choice and started Delphi,
 you should add the path to the RTC SDK's "Lib" folder to "Library paths" in Delphi.

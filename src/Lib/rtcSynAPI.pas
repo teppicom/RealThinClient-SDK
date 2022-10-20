@@ -89,7 +89,7 @@ type
     procedure Sock_SetSin(var Sin: TSockAddr; const vAddr,vPort:RtcString; PreferIP4, PreferIPDef:boolean);
     procedure Sock_CreateSocket(Sin: TSockAddr);
     procedure Sock_SetLinger(vEnable: Boolean; vLinger: Integer);
-    procedure Sock_SetDelay;
+    procedure Sock_SetDelay(reuseAddr:boolean);
     procedure Sock_SetTimeouts(const TOA:TRtcTimeoutsOfAPI);
 
     procedure Sock_Connect(const vAddr,vPort: RtcString; const TOA:TRtcTimeoutsOfAPI; PreferIP4, PreferIPDef:boolean);
@@ -1497,7 +1497,7 @@ procedure TRtcSocket.Sock_SetLinger(vEnable: Boolean; vLinger: Integer);
 {$ENDIF}{$ENDIF}{$ENDIF}{$ENDIF}
   end;
 
-procedure TRtcSocket.Sock_SetDelay;
+procedure TRtcSocket.Sock_SetDelay(reuseAddr:boolean);
   var
     optval: integer;
     buf: pointer;
@@ -1512,8 +1512,11 @@ procedure TRtcSocket.Sock_SetDelay;
   optval  := -1;
   _SetSockOpt(FSocket, SOL_SOCKET, SO_KEEPALIVE, buf, SizeOf(optval));
   // REUSE ADDR.
-  optval  := -1;
-  _SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+  if reuseAddr then
+    begin
+    optval  := -1;
+    _SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+    end;
   // Set READ Buffer
   optval := SOCK_READ_BUFFER_SIZE;
   _SetSockOpt(FSocket, SOL_SOCKET, SO_RCVBUF, buf, SizeOf(optval));
@@ -1528,8 +1531,11 @@ procedure TRtcSocket.Sock_SetDelay;
   optval  := -1;
   fpSetSockOpt(FSocket, SOL_SOCKET, SO_KEEPALIVE, buf, SizeOf(optval));
   // REUSE ADDR.
-  optval  := -1;
-  fpSetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+  if reuseAddr then
+    begin
+    optval  := -1;
+    fpSetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+    end;
   // Set READ Buffer
   optval := SOCK_READ_BUFFER_SIZE;
   fpSetSockOpt(FSocket, SOL_SOCKET, SO_RCVBUF, buf, SizeOf(optval));
@@ -1544,8 +1550,11 @@ procedure TRtcSocket.Sock_SetDelay;
   optval  := -1;
   SetSockOpt(FSocket, SOL_SOCKET, SO_KEEPALIVE, buf, SizeOf(optval));
   // REUSE ADDR.
-  optval  := -1;
-  SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+  if reuseAddr then
+    begin
+    optval  := -1;
+    SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+    end;
   // Set READ Buffer
   optval := SOCK_READ_BUFFER_SIZE;
   SetSockOpt(FSocket, SOL_SOCKET, SO_RCVBUF, buf, SizeOf(optval));
@@ -1563,8 +1572,11 @@ procedure TRtcSocket.Sock_SetDelay;
   optval  := -1;
   WSA_SetSockOpt(FSocket, SOL_SOCKET, SO_KEEPALIVE, buf, SizeOf(optval));
   // REUSE ADDR.
-  optval  := -1;
-  WSA_SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+  if reuseAddr then
+    begin
+    optval  := -1;
+    WSA_SetSockOpt(FSocket, SOL_SOCKET, SO_REUSEADDR, buf, SizeOf(optval));
+    end;
   // Set READ Buffer
   optval := SOCK_READ_BUFFER_SIZE;
   WSA_SetSockOpt(FSocket, SOL_SOCKET, SO_RCVBUF, buf, SizeOf(optval));
@@ -1786,7 +1798,7 @@ procedure TRtcSocket.Sock_Listen(const vAddr, vPort: RtcString; const TOA:TRtcTi
     Sock_CreateSocket(Sin);
     if FErrCode<>0 then Exit;
     end;
-  Sock_SetDelay;
+  Sock_SetDelay(false);
   Sock_SetTimeouts(TOA);
   Sock_SetLinger(False,0);
 
@@ -1860,7 +1872,7 @@ procedure TRtcSocket.Sock_Connect(const vAddr, vPort: RtcString; const TOA:TRtcT
     Sock_CreateSocket(Sin);
     if FErrCode<>0 then Exit;
     end;
-  Sock_SetDelay;
+  Sock_SetDelay(true);
   Sock_SetTimeouts(TOA);
   Sock_SetLinger(False,0);
 

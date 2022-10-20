@@ -1447,14 +1447,6 @@ procedure TRtcWinSocket.Listen;
     end
   else
     begin
-    optval  := -1;
-    // this might fail, if we do NOT have Administrative privileges ...
-    iStatus := _setsockopt(FHSocket, SOL_SOCKET, -5 {SO_EXCLUSIVEADDRUSE}, @optval, SizeOf(optval));
-    if iStatus <> 0 then
-      begin
-      // RealSocketError('setsockopt(SO_EXCLUSIVEADDRUSE)',False);
-      // Exit;
-      end;
     optval := -1; { -1=true, 0=false }
     iStatus := _setsockopt(FHSocket, IPPROTO_TCP, TCP_NODELAY, @optval, SizeOf(optval));
     if iStatus <> 0 then

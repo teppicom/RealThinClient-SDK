@@ -36,8 +36,8 @@ implementation
 
 function IsServiceStarting(const ServiceName:String): Boolean;
   var
-    Svc: Integer;
-    SvcMgr: Integer;
+    Svc: THandle;
+    SvcMgr: THandle;
     ServSt: TServiceStatus;
   begin
   Result := False;
